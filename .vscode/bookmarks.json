@@ -1,0 +1,22 @@
+[
+	{
+		"path": "$ROOTPATH$/main.tex",
+		"bookmarks": [
+			{
+				"line": 62,
+				"column": 0,
+				"label": "privacy coins"
+			},
+			{
+				"line": 116,
+				"column": 0,
+				"label": "our contribution"
+			},
+			{
+				"line": 531,
+				"column": 0,
+				"label": "bibliography"
+			}
+		]
+	}
+]
