@@ -1,19 +1,19 @@
 [
 	{
-		"path": "$ROOTPATH$/main.tex",
+		"path": "$ROOTPATH$/yellowpaper.tex",
 		"bookmarks": [
 			{
-				"line": 62,
+				"line": 66,
 				"column": 0,
 				"label": "privacy coins"
 			},
 			{
-				"line": 116,
+				"line": 120,
 				"column": 0,
 				"label": "our contribution"
 			},
 			{
-				"line": 531,
+				"line": 541,
 				"column": 0,
 				"label": "bibliography"
 			}

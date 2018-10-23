@@ -6,6 +6,9 @@
 \usepackage{tikz}
 \usetikzlibrary{positioning,shadows,arrows}
 
+\usepackage{xcolor}
+\newcommand\todo[1]{\textcolor{red}{\textbf{TODO}: [#1]}}
+
 \IEEEoverridecommandlockouts
 \overrideIEEEmargins
 
@@ -56,7 +59,8 @@ Here we give definitions for miscellaneous terms that we are using troughout thi
 \item \textbf{Interactivity}: senders and recipients of transactions must interact with each other \textit{off-chain} before posting a transaction to the blockchain.
 \item \textbf{Trusted Setup}: blockchain participants need to trust someone to generate some initial parameters and then destroy those parameters.
 \item \textbf{PoW}: Proof-of-Work, an original consensus protocol for Bitcoin, where each node participating in the protocol should present a piece of data which is difficult (costly, time-consuming) to produce but easy for others to verify and which satisfies certain requirements. Due to complexity of computations needed and amount of miners, the current energy consumption by Bitcoin PoW consensus is approximately 73TWh per year\footnote{https://digiconomist.net/bitcoin-energy-consumption}.
-\item \textbf{PoS}: Proof-of-Stake
+\item \textbf{PoS}: Proof-of-Stake \todo{insert def.}
+\item \textbf{UTXO}: Unspent Transaction Output \todo{insert def.}
 
 \end{itemize}
 
@@ -103,45 +107,51 @@ Mimblewimble is based on the ideas of Greg Maxwell's design for Confidential Tra
 
 Untraceability of transactions in Mimblewimble is building on the ideas of CoinJoin and is implemented by breaking transaction boundaries and storing only inputs and outputs of all transactions verified by miner in a new mined block.
 
-The only existing implementation of the protocol known to the moment is Grin project\footnote{https://github.com/mimblewimble/grin}, which has recently released the third iteration of their testnet. Grin uses UTXO model and PoW consensus. Spent UTXOs in Grin can be pruned, by recursively applying simple pruning algorithm for each UTXO referenced in inputs of the new minted block --- using the idea of pruning, originally proposed by Satoshi Nakamoto in {c1}.
+The only existing implementation of the protocol known to the moment is Grin project\footnote{https://github.com/mimblewimble/grin}, which has recently released the third iteration of their testnet. Grin uses UTXO model and PoW consensus. Spent UTXOs in Grin can be pruned, by recursively applying simple pruning algorithm for each UTXO referenced in inputs of the new minted block.
 
 There are several drawbacks in the design of Mimblewimble and Grin:
 
 \begin{itemize}
 
 \item{First is related to the transaction creation mechanism of Mimblewible and Grin --- in order to create a transaction, a sender and recipient must interact with each other. The sender cannot post a transaction to the blockchain without first contacting the recipient with half-baked transaction data and receiving that data updated by applying a blinding factor back from the recipient.}
-\item{Second is very similar to the problem that Dash has with the need of trust to its masternodes. Currently, users of Grin should trust miners that they will not trace the history of moving coins from transaction inputs to outpus, and discard this data completely after mining a block. Therefore there is a potential threat to coin's fungibility and privacy of the users.}
+\item{Second is very similar to the problem that Dash where users should trust Dash masternodes. Currently, users of Grin should trust Grin miners that miners will not trace the history of moving coins inputs to outpus in transactions, and discard this data completely after mining a block. Therefore there is a potential threat to coin's fungibility and privacy of the users.}
 
 \end{itemize}
 
 \subsection{Our contribution}
 
-Stegos uses the \textit{UTXO} (coin) model and \textit{PoS} (Proof-of-Stake) consensus.
+In this paper we propose a design of \textit{Stegos}, a blockchain which uses the \textit{UTXO} (coin) model and \textit{PoS} (Proof-of-Stake) consensus.
 
-Transactions in Stegos are \textit{unlinkable}, \textit{untraceable}, and completely \textit{confidential}. Stegos makes it impossible to identify recipients of a transaction (in another words, to link addresses of recipients to their identities) because all transactions are directed to new and unique addresses.
+Transactions in Stegos are \textit{unlinkable}, \textit{untraceable}, and \textit{confidential}:
 
-Stegos makes it impossible to trace history of transactions since many individual transactions are joined together to form a super-transaction. This is done in a secure and privacy-preserving way, before submitting the transaction to blockchain validators.
+\begin{itemize}
 
-All amounts in Stegos are hidden using cryptographic commitments and zero-knowledge proofs. Validator stakes and transaction fees are the only exception since these must be visible for blockchain validation.
+\item{Stegos uses one-time payment addresses which make it impossible to identify recipients of a transaction (in another words, to link addresses of recipients to their identities) because all transactions are directed to new and unique addresses. The technique used for one-time addresses is very similar to stealth addresses used in Monero and ZCash.}
 
-Many projects claim to be able to process a million transactions per second (TPS) but none of them explain how they are going to maintain all the accumulated data! Bitcoin provides for 7-10 TPS and the Bitcoin blockchain is expected to grow past 170 gigabytes by the end of 2018. If we assume that Bitcoin suddenly supports 16,000 TPS, the Bitcoin blockchain will grow by 350 gigabytes every day, or 127 terabytes every year. This amount of data is completely unsustainable unless the blockchain will be centralized on a few supercomputers, something that’s contrary to blockchain’s decentralization ethos!
+\item{Stegos makes it impossible to trace history of transactions since many individual transactions are pooled together to form a super-transaction. For this purpose we adopted and enhanced ValueShuffle protocol\cite{c7}, the first coin mixing protocol compatible with Confidential Transactions.}
 
-Stegos is a fast and highly scalable blockchain and, unlike other blockchains, it’s kept small. Spent coins and consumed data are safely removed from the blockchain using secure cryptographic pruning. 
+\item{All amounts in Stegos are hidden using Pedersen commitments\cite{c8} and Bulletproofs range proofs\cite{c4}. Validator stakes and transaction fees are the only exception since these must be visible for blockchain validation.}
 
-Stegos uses transactional sharding to scale. Separate gro\-ups of Stegos validators keep the whole blockchain state but verify only a subset of incoming transactions, using cross-shard atomic commits to eliminate double-spending. This scalability approach lets Stegos process hundreds of thousands of transactions per second.
+\end{itemize}
 
-Stegos is friendly to the environment and does not require megawatts of electricity to be spent for mining blocks. Stegos is using PoS (Proof-of-Stake) consensus, building on advancements in distributed systems theory and cryptography. Each new Stegos block must be verified and confirmed by a group of validators, all of which must put coins in escrow (stake).
+Stegos is a \textit{compact} blockchain. Spent coins are safely removed from the blockchain using secure cryptographic pruning. To keep our blockchain free of spent coins we are using the technique proposed originally by Satoshi Nakamoto in Bitcoin paper\cite{c1}.
 
-The size of the coins staked has a direct effect on the probability of a validator to win a block and earn transaction fees. Stegos does not have block rewards but replaces them with the Jackpot.
+Stegos uses transactional \textit{sharding} to scale. Separate gro\-ups of Stegos validators keep the whole blockchain state but verify only a subset of incoming transactions, using cross-shard atomic commits to eliminate double-spending. This scalability approach lets Stegos process hundreds of thousands of transactions per second.
+
+Stegos is friendly to the environment and does not require terawatts of electricity to be spent for mining blocks. Stegos is using PoS (Proof-of-Stake) consensus, building on ideas of pBFT\cite{c9} and Collective Signing\cite{c10}\cite{c11}. Each new Stegos block must be verified and confirmed by a group of validators, all of which must put coins in escrow (stake).
+
+The size of the coins staked has a direct effect on the probability of a validator to become a leader of the consensus and earn transaction fees. Stegos does not have block rewards but replaces them with the \textit{Jackpot}.
 
 This is a feature unique to Stegos and a lottery concept that everyone is familiar with. A portion of the fees from each block are added to the Jackpot and any stake forfeited by a validator caught cheating goes into the Jackpot as well.
 
-The Jackpot is distributed every few thousand blocks when validators run a cryptographic lottery based on verifiable distributed randomness. The amount in the Jackpot is then transferred to the winner. The longer a validator keeps its stake and participates in consensus, the higher the probability of winning the Jackpot lottery!
+The Jackpot is distributed every few thousand blocks when validators run a cryptographic lottery based on verifiable distributed randomness. The amount in the Jackpot is then transferred to the winner. The longer a validator keeps its stake and participates in consensus, the higher the probability of winning the Jackpot lottery.
 
-In the following sections we will explain each of the Stegos features listed above in more details.
+Electing a leader of the consensus and choosing a winner in the Jackpot lottery use our algorithm for generating distributed, untainted, unbiasable randomness, in the spirit of the RandHound protocol\cite{c12}. Our algorithm actually derives much of its protocol from SCRAPE\cite{c13} as its primary deviation from original RandHound. SCRAPE defines a PVSS\cite{c14} protocol using symmetric bilinear pairing based cryptography and coding theory. But beyond SCRAPE, we had to adjust the algorithm to deal with asymmetric pairings which offer necessary stronger cryptographic security.
+
+In the following sections we will explain each of the Stegos features presented above in more details. In Section \ref{transactions}, we describe how UTXOs and basic transactions composed in Stegos. \todo{add descriptions of other sections}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Transactions}
+\section{Transactions} \label{transactions}
 
 \subsection{UTXO composition}
 
@@ -537,13 +547,28 @@ During the scan through the blockchain for matching UTXO's, these markers must b
 
 \bibitem{c3} Shen Noether, Adam Mackenzie and Monero Core Team. ``Ring Confidential Transactions,'' https://lab.getmonero.org/pubs/MRL-0005.pdf, February, 2016.
 
-\bibitem{c4} Benedikt Buenz, Jonathan Bootle†, Dan Boneh, Andrew Poelstra, Pieter Wuille, and Greg Maxwell. ``Bulletproofs: Short Proofs for Confidential Transactions and More,'' https://eprint.iacr.org/2017/1066, November 1, 2017. 
+\bibitem{c4} Benedikt Buenz, Jonathan Bootle†, Dan Boneh, Andrew Poelstra, Pieter Wuille, and Greg Maxwell. ``Bulletproofs: Short Proofs for Confidential Transactions and More,'' Cryptology ePrint Archive, Report 2017/1066, 2017. URL: https://eprint.iacr.org/2017/1066.
 
-\bibitem{c5} I. Miers, C. Garman, M. Green and A. D. Rubin, ``Zerocoin: Anonymous Distributed E-Cash from Bitcoin,'' 2013 IEEE Symposium on Security and Privacy, Berkeley, CA, 2013, pp. 397-411. URL: https://ieeexplore.ieee.org/document/6547123
+\bibitem{c5} I. Miers, C. Garman, M. Green and A. D. Rubin. ``Zerocoin: Anonymous Distributed E-Cash from Bitcoin,'' 2013 IEEE Symposium on Security and Privacy, Berkeley, CA, 2013, pp. 397-411. URL: https://ieeexplore.ieee.org/document/6547123
 
 \bibitem{c6} Nir Bitansky, Ran Canetti, Alessandro Chiesa, and Eran Tromer. 2012. ``From extractable collision resistance to succinct non-interactive arguments of knowledge, and back again,'' in Proceedings of the 3rd Innovations in Theoretical Computer Science Conference (ITCS '12). ACM, New York, NY, USA, 326-349. URL: https://dl.acm.org/citation.cfm?id=2090263
 
+\bibitem{c7} Tim Ruffing and Pedro Moreno-Sanchez. ``Mixing Confidential Transactions: Comprehensive Transaction Privacy for Bitcoin,'' Cryptology ePrint Archive, Report 2017/238, 2017. URL: https://eprint.iacr.org/2017/238
 
+\bibitem{c8} Torben Pryds Pedersen. ``Non-Interactive and Information-Theoretic Secure Verifiable Secret Sharing,'' Advances in Cryptology --- CRYPTO '91", Springer Berlin Heidelberg, 1992, pages 129--140.
+
+\bibitem{c9} Miguel Castro and Barbara Liskov. ``Practical Byzantine Fault Tolerance,'' Proceedings of the Third Symposium on Operating Systems Design and Implementation, 1999, pages 173--186. 
+
+\bibitem{c10} Ewa Syta, Iulia Tamas, Dylan Visher, David Isaac Wolinsky, Philipp Jovanovic, Linus Gasser, Nicolas Gailly, Ismail Khoffi, Bryan Ford. ``Keeping Authorities “Honest or Bust” with Decentralized Witness Cosigning,'' arXiv:1503.08768v4 [cs.CR], 30 May 2016. URL: https://arxiv.org/pdf/1503.08768.pdf
+
+\bibitem{c11} Eleftherios Kokoris-Kogias, Philipp Jovanovic, Nicolas Gailly,
+Ismail Khoffi, Linus Gasser, and Bryan Ford. ``Enhancing Bitcoin Security and Performance with Strong Consistency via Collective Signing,'' arXiv:1602.06997v3 [cs.CR], 1 Aug 2016. URL: https://arxiv.org/pdf/1602.06997v3.pdf
+
+\bibitem{c12} Ewa Syta, Philipp Jovanovic, Eleftherios Kokoris Kogias, Nicolas Gailly, Linus Gasser, Ismail Khoffi, Michael J. Fischer, Bryan Ford. ``Scalable Bias-Resistant Distributed Randomness,'' Cryptology ePrint Archive, Report 2016/1067, 2016. URL: https://eprint.iacr.org/2016/1067.
+
+\bibitem{c13} Ignacio Cascudo, Bernardo David. ``SCRAPE: Scalable Randomness Attested by Public Entities,'' Applied Cryptography and Network Security, Springer International Publishing, 2017, pages 537--556.
+
+\bibitem{c14} Youliang Tian, Changgen Peng, Renping Zhang, Yuling Chen. ``A practical publicly verifiable secret sharing scheme based on bilinear pairing,'' 2nd International Conference on Anti-counterfeiting, Security and Identification, IEEE, 2008.
 
 \end{thebibliography}
 
