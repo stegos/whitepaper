@@ -287,6 +287,10 @@ All validators should pay attention to leader election messages:
 	\item{\textit{Call For New Election Message}: Increment the count, $n$, of such calls seen from different validators, and if $n \ge 2 f +1$, then run another election round based on the last election's random value, with a decision tree that excludes current leader. Determine new leader and next role for this validator. Reset the counter of calls for new election.}
 \end{itemize}
 
+\subsection{Key Blocks}
+
+\todo{Key Blocks section}
+
 \section{Basic Transactions}\label{transactions}
 
 In previous sections, we explained the high-level concepts of Stegos, including networking, randomness and consensus. Now it's time to describe the inner details of Stegos, such as the composition of its coins and basic transactions.
@@ -409,71 +413,84 @@ Moreover, in order to defend zk-SNARKs-based cryptocurrency from the double-spen
 CoinJoin inspired researchers from Saarland University to develop a completely decentralized protocol they called CoinShuffle\cite{c17} in 2014, that also allows users to mix their coins with those of other interested users. It ensures security against theft and by the accountable anonymous group communication protocol Dissent to ensure anonymity as
 well as robustness against DoS attacks. Continuing their research, the same researchers in 2016 presented echanced version of the protocol, which they called CoinShuffle++\cite{c18}. The key innovation of CoinShuffle++ was the use of a more efficient mechanism for anonymity: it uses Dining Cryptographers Networks (DC-nets)\cite{c20} instead of mix-nets. A mix-net requires sequential processing. Thus, the original CoinShuffle needs a number of communication rounds linear in the number of users, even if everybody is honest. CoinShuffle++ instead uses DC-nets and thus allows users to process mixing in parallel. As a result, CoinShuffle++ requires only a constant number of communication rounds independently of the number of users in this case. 
 
-ValueShuffle\cite{c19} is an extension of CoinShuffle++ which is compatible with confidential transactions. 
+In Stegos, we are improving on ValueShuffle\cite{c19}, an extension of CoinShuffle++ which is compatible with confidential transactions. ValueShuffle ensures the
+anonymity of mixing participants as well as the confidentiality of their
+payment values even against other possibly malicious mixing participants. ValueShuffle paper does not provide details on forming a pool of senders wishing to mix their transaction, as well as details on how to form a signature on the resulting, pooled transaction. 
 
-\todo{why we've chosen ValueShuffle and what is our contribution}
+We have developed a protocol where a \textit{facilitator} elected among the validators is providing services of \textit{Bulletin Board}, as defined in ValueShuffle paper. We have also defined a protocol for a collective Schnorr signature\cite{c22} formation on the resulting transaction. Details of these protocols, as well as brief explanation of our implementation of ValueShuffle will be given in the rest of this section.
 
-\todo{have to edit heavily all sections below}
+\subsection{Formation of senders pool}
+Each epoch, besides selecting new witnesses, a leader, and a winner of the Jackpot, all validators select a node among them which must serve as a \textit{Bulletin Board} in ValueShuffle protocol and include the public key of this node into the sealed keyblock for the new epoch. We call that Bulletin Board node \textit{a facilitator}.
 
-\subsection{Our Pooling Protocol}
-A wallet signals its desire to join a pooling group by advertising a fresh ephemeral public key, along with signature proof of validity, on a bulletin board. Once a group forms, the key will become part of an advertised key collection. This key collection is then sorted in ascending numerical order, the hash of the collection is formed, and that hash becomes a random seed for the session.
+Each node intending to submit a transaction should broadcast a \textit{Transaction Intent} message with a fresh ephemeral public key along with the signature proof of validity.
 
-A leader is selected by forming the XOR of the hash value with their public key, and if the resulting value is the minimum in the list, that node has been chosen as leader. Leader is responsible for publication of final super-transaction. All other communications are P2P between members of the group.
+\textit{Facilitator} should listen to transaction intent messages from the nodes and pool public keys from those messages into collections of $K$ keys each. $K$ defines a cardinality of the anonymity set by defining how many participants should form a transaction mixing pool. This is a tunable parameter which can be set for an each epoch of the blockchain. 
 
-All nodes in the group will broadcast their list of TXIN's along with signatures validating ownership of the TXIN's. Every participant can validate the lists from other participants by verifying the signature attesting to TXIN ownership. Participants should check that the public key in the signature is from one of the group members.
+Upon collection of $K$ keys or on the timeout of $T$ seconds, \textit{the facilitator} broadcasts \textit{Transactions Pool} message (signed with its private key), containing all collected ephemeral public keys and corresponding signatures.
 
-A valid signature on the TXIN's from one participant is formed by sending a Schnorr signature on the sum of the cloaked public keys shown in the referenced UTXO's in the blockchain:
+Each node that recognize its key in \textit{Transactions Pool} message should sort the collection of keys from it in the ascending numerical order, form the hash of the collection, and use that hash as a random seed for the \textit{Pooled Transactions Session}.
+
+\textit{A pool leader} is elected by participating nodes by forming the XOR of the hash value defined above with the public key of the each pool participant and, if the resulting value is the minimum in the list, then that noide should be chosen as a \textit{pool leader}.
+
+\textit{A pool leader} is responsible for publication of a final pooled transaction, that we call a \textit{super-transaction}.
+
+\subsection{Pooled Transactions Session}
+
+All communications, including broadcasting, within the pooled transactions session should be contained within the group of the pool participants.  All nodes of the pool will broadcast their lists of TXINs along with signatures validating ownership of their TXINs. Every participant can validate the lists from other participants by verifying the signature attesting to TXIN ownership. Participants should check that the public key in the signature is from one of the group members.
+
+\subsubsection{Collecting inputs} A valid signature on the TXINs from one participant is formed by creating a Schnorr signature on the sum of the cloaked public keys shown in the UTXOs referenced in the TXINs:
 
 \begin{align*}
 TXIN &= \{ID_1, ID_2, ..., ID_N\}\\
 Sig &= (u, K)\\
 K &= k \, G \\
-u &= k + H(K | ID_1 | ID_2 | ...) \, (N \, s + \sum_i{\delta_i})
+u &= k + H(K | ID_1 | ID_2 | ...) \, (N \, s + \sum_i{\delta_i}),
 \end{align*}
 
-where the sum is over the list of TXIN's, $s$ is the owner's secret key, and the $\delta_i$ were the cloaking factors used on the public key of the owner. $N$ refers to how many TXIN there are in the list. Value $k$ is chosen randomly from the field, $Z_r$. 
+where the sum is over the list of TXINs, $s$ is the owner's secret key, and the $\delta_i$ are the cloaking factors used on the public key of the owner. $N$ refers to how many TXINs there are in the list. Value $k$ is chosen randomly from the field, $Z_r$. 
 
 Verification of a signature is by seeing that:
-$$u \, G = K + H(K | \mathit{ID}_1 | \mathit{ID}_2 | ...) \sum_i{P_i}$$
-where the $P_i$ are the cloaked public keys shown in the UTXO's corresponding to each $\mathit{ID}_i$. This signature proves ownership of the stated TXIN UTXO's.
+$$u \, G = K + H(K | ID_1 | ID_2 | ...) \sum_i{P_i}$$
+where the $P_i$ are the cloaked public keys shown in the UTXO's corresponding to each $ID_i$. This signature proves ownership of the stated UTXOs referenced in TXINs.
 
-Nothing in this broadcast identifies the sender, but one cannot count on that to hold. In the event of misbehavior, a blame cycle will require each node to submit all their shared secret keys, which effectively reveals their full transactions. A restart will compute new TXOUT so that a successful run ensures anonymity of participants. But if a blame cycle is performed there is no way to cloak the associations to TXIN's again.
+Nothing in this broadcast identifies the sender, but one cannot count on that to hold. In the event of misbehavior, a blame cycle will require each node to submit all their shared secret keys, which effectively reveals their full transactions. A restart will compute new TXOUTs, so that a successful run ensures anonymity of participants. But if a blame cycle is performed there is no way to cloak the associations to TXINs again.
 
-Once contributions have been received from each participant, or a timeout occurs, the resulting pool of TXIN is known to all participants. Since these are merely UTXO ID's pointing into the immutable blockchain, no further changes can occur to this list except for removal of individual TXIN references as some participants are found to go offline during the protocol, or else when a cheater is detected and then excluded for a restart of the protocol.
+Once contributions have been received from each participant, or a timeout occurs, the resulting pool of TXINs is known to all participants. Since these are merely UTXO $ID$s pointing into the immutable blockchain, no further changes can occur to this list except for removal of individual TXIN references as some participants are found to go offline during the protocol, or else when a cheater is detected and then excluded for a restart of the protocol.
 
-All participants will establish pair-wise shared secret keys between themselves and every other participant in the P2P network. These shared keys are used to form cloaking factors in the anonymizing protocol, such that, only after pooling results from all participants, will the collection of data shared among them become apparent. Until that time, all information remains cloaked. And after that time, the data will be known, but no associations can be inferred regarding who supplied which portions of the data. 
+\subsubsection{Establishing pair-wise shared keys} All participants will establish pair-wise shared secret keys between themselves and every other participant of the pooled transactions session. These shared keys are used to form cloaking factors in the anonymizing protocol, such that, only after pooling results from all participants, will the collection of data shared among them become apparent. Until that time, all information remains cloaked. And after that time, the data will be known, but no associations can be inferred regarding who supplied which portions of the data. 
 
 It is important to the protocol, that between any two users, both of them are using the same shared secret cloaking key. Only then will the sum of all cloaking factors, from all participants, cancel out in the DiceMix arrays. But users are prevented from seeing each other's secrets since the total cloaking factor also sums contributions related to all other participants, and those keys are unknown to the other party.
 
-Shared keys can be securely established between every pair of participants using Diffie-Hellman secure key exchange. With two participants, $A$ and $B$, this can be established by having $A$ send to $B$
-$$A \rightarrow B: (\alpha \, P_B, \mathit{Sig}(P_A))$$
-for $\alpha$ randomly chosen by $A$, and where $\mathit{Sig}(P_A)$ securely authenticates this information as having come from $A$. The signature includes the public key, $P_A$. 
+Shared keys can be securely established between every pair of participants using Diffie-Hellman secure key exchange\cite{c21}. With two participants, $A$ and $B$, this can be established by having $A$ send to $B$
+$$A \rightarrow B: (\alpha \, P_B, Sig(P_A))$$
+for $\alpha$ randomly chosen by $A$, and where $Sig(P_A)$ securely authenticates this information as having come from $A$. The signature includes the public key, $P_A$. 
 
 Then $B$ responds to $A$ with
-$$B \rightarrow A: (\beta \, P_A, \mathit{Sig}(P_B))$$
+$$B \rightarrow A: (\beta \, P_A, Sig(P_B))$$
 with $\beta$ being chosen randomly by $B$. 
 
 After the exchange, the shared key is a hash of the product:
 $$key = H(\alpha \beta \, G)$$ 
+
 But since neither side knows both factors, at $A$ we compute:
 $$\beta \, G = (\beta \, P_A) / s_A$$
 since $P_A = s_A \, G$. And at $B$ we compute
 $$\alpha \, G = (\alpha \, P_B) / s_B$$
 Then each side can multiply their result by their chosen randomness to reveal $(\alpha \beta \, G)$. Nobody watching the exchange can deduce the shared secret key.
 
-Next, each participant computes their TXOUT records with fresh randomness, chooses random $k$-factors for an eventual collective Schnorr signature, and produces both a DiceMix array containing the fragmented TXOUT records, and cloaked running sums of their $\gamma_{\mathit{adj}}$ and $K$-signature values. The hash commitment of this information is signed and broadcast to all participants. This commitment will be used to verify information during the following passes to verify that information was properly transmitted.
+\subsubsection{Producing DiceMix arrays for outputs} Next, each participant computes their TXOUTs with \textit{fresh randomness}, chooses random $k$-factors for an eventual collective Schnorr signature, and produces both a DiceMix array containing the fragmented TXOUTs, and cloaked running sums of their $\gamma_{adj}$ and $K$-signature values. The hash commitment of this information is signed and broadcasted to all participants. This commitment will be used to verify information during the following passes to verify that information was properly transmitted.
 
-The DiceMix array contains successive powers of their TXOUT record fragments, cloaked with self-canceling seeds that zero out after all participants pool their results from the next pass. After forming the DiceMix array and running sums, this information is signed and broadcast to all participants. Anonymity is assured because of the DiceMix cryptographic mixing process. Even though all participants can see, from the accompanying signature, who delivered a DiceMix array, they cannot see which components of the collection were contributed by any participant. The entire collection is revealed only after summing the DiceMix arrays from all participants.
+The DiceMix array contains successive powers of TXOUTs fragments, cloaked with self-canceling seeds that zero-out after all participants pool their results from the next pass. After forming the DiceMix array and running sums, this information is signed and broadcasted to all participants. Anonymity is assured because of the DiceMix cryptographic mixing process. Even though all participants can see, from the accompanying signature, who delivered a DiceMix array, they cannot see which components of the collection were contributed by any participant. The entire collection is revealed only after summing the DiceMix arrays from all participants.
 
-The individual $K$-signature terms from each participant are summed in a blind sum. We do this to prevent combinatorial exploration, once signature $u$-values are disclosed, which could lead to associations between TXIN and TXOUT.
+The individual $K$-signature terms from each participant are summed in a blind sum. We do this to prevent combinatorial exploration, once signature $u$-values are disclosed, which could lead to associations between TXINs and TXOUTs.
 
-On receipt of all DiceMix arrays and the running sums, each participant can form the polynomial, using Newton's Identities, whose roots are the individual contributions. Solving that polynomial for its roots reveals each component of participant TXOUT's. These TXOUT's are reassembled, and a super-transaction is formed containing all TXIN's, TXOUT's, the $\gamma_{\mathit{adj}}$ sum needed to show zero balance, and the $K$-signature sum needed for a collective Schnorr signature.
+\subsubsection{Formation of the super-transaction} On receipt of all DiceMix arrays and the running sums, each participant can form the polynomial, using Newton's Identities, whose roots are the individual contributions. Solving that polynomial for its roots reveals each component of participants' TXOUTs. These TXOUTs are reassembled, and a \textit{super-transaction} is formed containing all TXINs, TXOUT's, the $\gamma_{adj}$ sum needed to show zero balance, and the $K$-signature sum needed for a collective Schnorr signature.
 
-Each participant validates the entire transaction for correctness by examining the $\gamma$ sums for zero balance, and verifying the TXOUT Bulletproofs. They must also find their own contributions in the list of TXIN and TXOUT. If the super-transaction does not properly validate, then someone has cheated, and we enter a blame discovery cycle. Otherwise we proceed to the formation of the collective signature. 
+Each participant validates the entire transaction for correctness by examining the $\gamma$ sums for zero balance, and verifying the TXOUTs Bulletproofs. They must also find their own contributions in the lists of TXINs and TXOUTs. If the super-transaction does not properly validate, then someone has cheated, and we enter a \textit{blame discovery cycle}. Otherwise we proceed to the formation of the collective signature. 
 
-Knowing the super-transaction, and the collective $K_{\mathit{sum}}$ signature term, each participant broadcasts their $u$-signature component to be summed with those of other participants, yielding a collective Schnorr signature on the whole super-transaction.
+\subsubsection{Formation of collective Schnorr signature} Knowing the super-transaction, and the collective $K_{sum}$ signature term, each participant broadcasts their $u$-signature component to be summed with those of other participants, yielding a collective Schnorr signature on the whole super-transaction.
 
-Signature formation on the super-transaction for each participant is done as follows;
+Signature formation on the super-transaction for each participant is done as follows:
 
 \begin{align*}
 T &= \text{super-transaction} \\
@@ -483,227 +500,159 @@ s_{cmp} &= N \, s_i + \sum_{j \in \text{ins}} {\delta_j} + \sum_{j \in \text{ins
 u_i &= k_i + H(K_{sum} | T) \,  s_{cmp}\\
 \end{align*}
 
-where index, $i$, labels each participant, index, $j$, labels every TXIN, for $N$ of them, belonging to the participant, and index, $k$, labels each TXOUT belonging to that participant. On summation from all participants, the multi-signature $(u_{\mathit{sum}}, K_{\mathit{sum}})$ represents a valid signature on the super-transaction in the same manner that would hold if this were a simple transaction.
+where index $i$, labels each participant, index $j$, labels every TXIN, for $N$ of them, belonging to the participant, and index $k$, labels each TXOUT belonging to that participant. On summation from all participants, the multi-signature $(u_{sum}, K_{sum})$ represents a valid signature on the super-transaction in the same manner that would hold if this were a simple transaction.
 
-At the end of this final signature pass, each participant should have a super-transaction that can be validated by public witnesses. But all connections between TXIN's and TXOUT's have been broken. All that anyone can see is that all TXIN are being spent, and each TXOUT must have derived from one or more of those TXIN, but no way to see which ones are associated. The leader node then publishes the super-transaction.
+\subsubsection{Publishing the super-tranaction} At the end of this final signature pass, each participant should have a super-transaction that can be validated by public witnesses. But all connections between TXINs and TXOUTs have been broken. All that anyone can see is that all TXIN are being spent, and each TXOUT must have derived from one or more of those TXIN, but no way to see which ones are associated. \textit{The session leader} then sends the super-transaction into the network using gossip protocol for validation and inclusion into the block.
 
-If a blame cycle must happen, each participant must divulge their shared secret keys. Then all other nodes can verify that all stages of the computation were performed correctly, according to the information sent previously. We then have known associations between TXIN's and TXOUT's. Any participant which cannot or will not do this is blamed for the fault, and the protocol restarts after taking note of the TXIN's associated with the cheating node.
+\subsubsection{Blame cycle} If a blame cycle must happen, each participant must divulge their shared secret keys. Then all other nodes can verify that all stages of the computation were performed correctly, according to the information sent previously. We then have known associations between TXINs and TXOUTs. Any participant which cannot or will not do this is blamed for the fault, and the protocol restarts after taking note of the TXINs associated with the cheating node.
 
 But since secret shared keys were divulged during blame discovery, all participants must restart the protocol from the point of establishing new shared keying.
 
-%%%%%%%%%%%%%%%%%%%
-\subsection{Group Formation}
-Each N epochs, the current Cosi leader and validators elect a validator which must serve as a bulletin board (bulletin board service provider, BBSP) for N next epochs, and include the public key of BBSP in the sealed block.
+\section{Validation of Transactions and Blocks}\label{tx_processing}
 
-BBSP elections are the lottery based on distributed randomness, similar to the elections of the CoSi leader.
-
-Each wallet intending to submit a transaction should broadcast a transaction intent message with a fresh ephemeral public key along with the signature proof of validity.
-
-BBSP should listen to transaction intent messages from wallets and pool public keys from that messages into collections of P keys each.
-
-On collection of P keys or on timeout of ?T? seconds, BBSP broadcasts transactions pool message, containing ephemeral public keys and signatures.
-
-Each wallet that recognize its key in transaction pool message should sort the collection of keys from it in the ascending numerical order, form the hash of the collection, and use that hash as a random seed for the SPT session.
-
-An SPT Session Leader is elected by forming the XOR of the hash value with the public key of each pool participant, and if the resulting value is the minimum in the list, that wallet should be chosen as an SPT Session Leader.
-
-SPT Session Leader is responsible for publication of final super-transaction.
-
-All other communications are p2p between members of the SPT pool.
-
-TBD:
-
-Values of N, P and T
-Concrete design of p2p broadcast protocol
-Should BBSP sign its transactions pool messages? Possibly, yes.
-
-
-
-
-
-
-\section{Transaction Processing}\label{tx_processing}
-
-\subsection{Validation of New Transactions}
+\subsection{Validation of Transactions}
 On entry to the witness pool, a transaction needs to be validated. The steps are:
+
 \begin{itemize}
-\item{For each TXIN, witness must locate the UTXO referred to by the $\mathit{ID}$, to find the public key, Bulletproof, and Pedersen commitment, used for signature formation. If any $\mathit{ID}$ do not point to extant UTXOs, then the entire transaction is invalid.}
-\item{No two TXIN $\mathit{ID}$ can point to the same UTXO, to prevent double-spend attempts.}
-\item{All of the cloaked public keys must be summed, along with all of the Pedersen commitments from the TXINs. Then all of the Pedersen commitments from the Bulletproofs in the TXOUT's must be subtracted from the sum, as well as $\mathit{Fee}$ times the $A$ curve generator. The Schnorr signature in the transaction must be checked against this summed public key.
+	\item{For each TXIN, witness must locate the UTXO referred to by the $ID$, to find the public key, Bulletproof, and Pedersen commitment, used for signature formation. If any $ID$ does not point to existing UTXO, then the entire transaction is invalid.}
+	\item{No two TXINs can point to the same UTXO, to prevent double-spend attempts.}
+	\item{All of the cloaked public keys must be summed, along with all of the Pedersen commitments from the TXINs. Then all of the Pedersen commitments from the Bulletproofs in the TXOUTs must be subtracted from the sum, as well as $Fee$ times the $A$ curve generator. The Schnorr signature in the transaction must be checked against this summed public key:
 
-\begin{align}
-\text{TXIN} &= \{ID\} \\
-ID &\rightarrow P_{M, \delta}, \text{as a result of UTXO lookup}\\
-ID &\rightarrow C(x, \gamma)\\
-P_{eff} &= \sum_{i \in \text{ins}}{P_i} + \sum_{i \in \text{ins}}{C_i}  - \sum_{j \in \text{outs}}{C_j} - Fee\,A\\
-Sig(M, T) &= (u, K)\\
-T &= \text{Entire transaction sans signature}
-\end{align}
+	\begin{align*}
+		\text{TXIN} &= \{ID\} \\
+		ID &\rightarrow P_{M, \delta}, \text{as a result of UTXO lookup}\\
+		ID &\rightarrow C(x, \gamma)\\
+		P_{eff} &= \sum_{i \in \text{ins}}{P_i} + \sum_{i \in \text{ins}}{C_i}  - \sum_{j \in \text{outs}}{C_j} - Fee\,A\\
+		Sig(M, T) &= (u, K)\\
+		T &= \text{Entire transaction sans signature}
+	\end{align*}
 
-Now check that
-$$u \, G = K + H_r(T, K) \, P_{\mathit{eff}}$$
-If this equation holds true, then the transaction body has not been mutated, Mary has proven ownership of all UTXO mentioned in her TXIN's, and the transaction represents a proper zero balance.}
-\item{The Bulletproofs in every TXOUT must be validated to ensure that amounts are within proper range, that no money is being created on credit.}
+	Now check that
+	$$u \, G = K + H_r(T, K) \, P_{eff}$$
+	
+	If this equation holds true, then the transaction body has not been mutated, the sender has proven ownership of all UTXOs referenced in TXINs, and the transaction represents a proper zero balance.}
+	\item{The Bulletproofs in every TXOUT must be validated to ensure that amounts are within proper range, that no money is being created on credit.}
 \end{itemize}
 
 At this point, we now have a valid transaction to consider. Commitments are held inside each Bulletproof.
 
-The paired TXIN's and their UTXO's must be marked as pending extinction, so that the UTXO's will not be available for matching with the next transaction. This prevents future double-spend attempts.
+The paired TXINs and their UTXOs must be marked as pending extinction, so that the UTXOs will not be available for matching with the next transaction. This prevents future double-spend attempts.
 
-Because network communications do not guarantee message arrival order, it may be necessary to form the topological sort of incoming transactions, in case some of their TXIN's refer to UTXO's created elsewhere in the batch. An example would be where Mary spends some of her tokens, receives change back to herself, then spends that change in another transaction.
+Because network communications do not guarantee message arrival order, it may be necessary to form the topological sort of incoming transactions, in case some of their TXINs refer to UTXOs created elsewhere in the batch. An example would be where Alice spends some of her tokens, receives change back to herself, then spends that change in another transaction.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Block Validation}
-The leader node of the witness group is tasked with forming a tentative block for extension of the blockchain:
+\subsection{Formation and Validation of Blocks}
 
-\begin{itemize}
-\item{Collect transactions from its mempool, validate each of them, discarding invalid transactions, and collect the remaining valid transactions into an ordered list of pending additions. 
-
-The order must be such that all TXIN's must refer to UTXO's that are either already in the blockchain, or else the transactions containing the UTXO's must precede the TXIN transaction.}
-\item{The leader sums all $\mathit{Fee}$ terms from the transactions and produces a new fee distribution transaction to send portions of the fees to deserving participants. That transaction is prepended to the ordered list of validated transactions proposed for the block. But unlike the other transactions, it will be sent in whole form to witnesses for validation since they won't have seen copies of it in their mempool.
-
-The leader node then constructs a tentative blockchain block from this list.}
-\item{The block body is constructed by stripping the TXINs and TXOUTs from each transaction, collecting these two components into two separate Merkel trees, and planting those two trees into the proposed block body.
-
-TXIN's only need to record the UTXO $ID$ that they reference. Hence the TXIN Merkel tree is just a tree of hashes.
-
-Since UTXO $ID$ is already a hash of the data, it can stand in for the initial hash codes in the leaf nodes. The TXOUT tree is a Merkel tree with UTXO's stored in each leaf node.
-
-To support eventual trimming of matching TXIN and UTXO from the blockchain, the TXOUT Merkel tree needs to tag its recorded data in the leaf nodes, to indicate whether data are physically present, or just the hash of what once was there. Internal nodes of Merkel trees always point to two child nodes and carry only a hash value. Leaf nodes may, or may not, have data, and never have children.}
-\item{The block header is constructed by filling in slots:
-\begin{itemize}
-\item{Version number}
-\item{Epoch number - a monotonically increasing value that represents the height of the blockchain.}
-\item{Previous block hash, computed as the hash of the block header of the current blockchain tip block.}
-\item{Leader public key}
-\item{
-$\gamma_{blk} = \sum{\gamma_{adj}}$, the sum of all $\gamma_{adj}$ terms found in the block transactions, which includes the $\gamma_{adj}$ from the leader's fee distribution transaction.}
-\item{Top hash of TXIN Merkel tree in block body}
-\item{Top hash of UXTO Merkel tree in block body}
-\item{Ordered list of witness public keys for current epoch. The leader node is also considered a witness during the current epoch.}
-\item{BLS Multi-signature slot - to be filled in as a result of consensus on block. Note that we will be using pairing-based cryptography to support the use of short, fast, BLS signatures. BLS signatures allow the formation of multi-signatures in one pass over the witness pool.}
-\item{Bitmap of signers in the multi-signature}
-\end{itemize}}
-
-The initial contents of the BLS multi-signature slots should be zero filled and, even after being filled in, never contribute to the computation of any \textit{block header hash}. All other slots are concatenated to form a header hash pre-image. But when a full hash of the block is formed for messaging purposes, the entire block, consisting of block header and block body, are considered for the hash pre-image.
-
-\item{Form a message which contains:
-\begin{itemize}
-\item{The proposed block,}
-\item{The fee distribution transaction,}
-\item{An ordered list of transaction ID's that went into the block. Transaction ID's are computed as the hash of the transactions. Each witness should have copies of them in their own mempool.}
-\item{The hash of this message. All communications about this proposed block will reference this hash value.}
-\end{itemize}
-The leader will sign and broadcast this message to all witnesses. The witnesses will attempt to validate the proposed block construction.}
-\end{itemize}
-
-Once constructed, the witness leader must then seek consensus for its proposed block from all the other witnesses. This happens in two passes among the witness group.
+\subsubsection{Block formation} \textit{The leader} of the witness group is tasked with forming a tentative block for extension of the blockchain:
 
 \begin{itemize}
-\item{\textbf{PrePrepare Phase}: The leader broadcasts the signed prepared message, and its hash, to all witnesses in a PrePrepare message. This is the only time that the entire message will be transmitted. All further communications will refer only to its hash value.}
-\item{Each witness will attempt to validate the block construction from the ordered list of transactions. 
-\begin{itemize}
-\item{The message must carry a valid signature from the leader node, to prevent spoofing attacks.}
-\item{The message must be the first and only PrePrepare message seen from the leader for the current epoch.}
-\item{The hash of the proposed block and transaction list must agree with the hash value shown in the message. This hash value will serve as a message identifier for all related messages during this epoch.}
-\item{The version number shown in the block header must show the expected value.}
-\item{The epoch shown in the block header must agree with the witness node's sense of the current epoch.}
-\item{The previous block hash slot in the header must equal the block header hash of the current blockchain tip block.}
-\item{The leader key shown in the header must match the leader known for the current epoch.}
-\item{The list of known witnesses for the current epoch must agree with the list of witness keys shown in the block header.}
-\item{The fee distribution transaction must be valid.}
-\item{Every transaction indicated in the list of constituent transactions must be looked up in the mempool, found, validated if not already known to be valid, and the two Merkel trees must be reconstructed as the transaction list is examined. At the end of transaction examination, the two Merkel trees in the block body must be seen as constructed in the same manner.
+	\item {Collect transactions from its mempool, validate each of them, discarding invalid transactions, and collect the remaining valid transactions into an ordered list of pending additions.
 
-If a witness does not have an indicated transaction in its local mempool, then it cannot validate the proposed block.}
-\item{The $\gamma_{blk}$ sum in the header must equal the sum of all $\gamma_{adj}$ terms shown in the transactions.}
-\item{The top hash values for the TXIN and UTXO Merkel trees, must match the values recorded in the block header.}
+	The order must be such that all TXINs must refer to UTXOs that are either already in the blockchain, or else the transactions containing the UTXOs must precede the TXIN transaction.}
+	\item {The leader sums all $Fee$ terms from the transactions and produces a new fee distribution transaction to send portions of the fees to itself and to the Jackpot. That transaction is prepended to the ordered list of validated transactions proposed for the block. But unlike the other transactions, it will be sent in whole form to witnesses for validation since they won't have seen copies of it in their mempool.
+
+	The leader node then constructs a tentative blockchain block from this list.}
+	\item {The block body is constructed by stripping the TXINs and TXOUTs from each transaction, collecting these two components into two separate Merkle trees, and planting those two trees into the proposed block's body.
+
+	TXINs only need to record the UTXO $ID$s that they reference. Hence the TXIN Merkle tree is just a tree of hashes. The TXOUT tree is a Merkle tree with UTXOs stored in each leaf node.
+
+	To support eventual trimming of matching TXINs and UTXOs from the blockchain, the TXOUT Merkle tree needs to tag its recorded data in the leaf nodes, to indicate whether data are physically present, or just the hash of what once was there. Internal nodes of Merkle trees always point to two child nodes and carry only a hash value. Leaf nodes may, or may not, have data, and never have children.}
+	\item {The block header is constructed by filling in the following slots:
+
+		\begin{itemize}
+			\item {Version number}
+			\item {Epoch number}
+			\item {Previous block hash, computed as the hash of the block header of the current blockchain tip block}
+			\item {$\gamma_{blk} = \sum{\gamma_{adj}}$, the sum of all $\gamma_{adj}$ terms found in the block transactions, which includes the $\gamma_{adj}$ from the leader's fee distribution transaction.}
+			\item {Root hash of TXIN Merkle tree}
+			\item {Root hash of TXOUT Merkle tree}
+			\item {BLS Multi-signature, to be filled in as a result of the consensus on the block.\footnote{We are using pairing-based cryptography to support the use of short, fast, BLS signatures. BLS signatures allow the formation of multi-signatures in one pass over the witness pool.}}
+			\item {Bitmap of signers in the multi-signature}
+			\item \todo{next two slots have to go into a keyblock --- move to Key Blocks section}
+			\item {\textit{Leader} public key}
+			\item {Ordered list of witness public keys for current epoch. The leader node is also considered a witness during the current epoch.}
+		\end{itemize}}
+
+	The initial contents of the BLS multi-signature slots should be zero filled and, even after being filled in, never contribute to the computation of any \textit{block header hash}. All other slots are concatenated to form a header hash pre-image. But when a full hash of the block is formed for messaging purposes, the entire block, consisting of block header and block body, are considered for the hash pre-image.
+
+	\item{Form a \textit{Block Proposal} message which contains:
+		\begin{itemize}
+			\item {The proposed block}
+			\item {The fee distribution transaction}
+			\item {An ordered list of transaction $ID$s that went into the block. Transaction $ID$s are computed as the hash of the transactions. Each witness should have copies of them in their own mempool.}
+			\item {The hash of this message. All communications about this proposed block will reference this hash value.}
+		\end{itemize}
+	The leader will sign and broadcast this message to all witnesses. The witnesses will attempt to validate the proposed block construction.}
 \end{itemize}
 
-If a witness agrees with the proposed block construction, they sign the hash of the \textit{block header} with a BLS signature, and reply to the leader node with a Prepare message that contains the original message hash value, their signature, and a value that represents the position of their public key among the list of witnesses. 
+\subsubsection{Block validation} Once constructed, the witness leader must then seek consensus for its proposed block from all the other witnesses according to the protocol described on the high-level in the Section \ref{consensus}. 
 
-No signature on the message is required, as that is effectively already done with the block header signature provided in the message. The leader node will protect itself from spoofing attacks by checking that the returned signature on the block header is valid, using the public key looked up in the witness list at the indicated position.
-
-If a witness disagrees or is unable to validate the proposed block, then they should simply refrain from responding. Responses from witnesses are expected to arrive within some timeout window. At the end of that window period, the responses obtained are collected together to form a multi-signature and bitmap.
-
-The hash being signed covers only the block header, which contains top hashes of the body Merkel trees. By signing only the block header hash, we leave allowance for future block trimming actions, without disturbing the validity of the block. Trimmed Merkel trees always continue to show the same top hash value. When forming the block header hash, the slots which will contain the eventual multi-signature and signature bitmap are excluded from the hash.
-
-An affirmative response from a witness signifies its willingness to commit the new block to their copy of the blockchain, when asked to do so. If the epoch changes to a new epoch before they receive a valid Commit message, then they will drop the block from further consideration. 
-
-\item{During the \textbf{PrePrepare timeout period}, the leader node accumulates valid Prepare responses from the witnesses.
-
-Every response is checked to see if it is a valid signature on the block header hash value. The public key for the signature is looked up in the list of witnesses according to the indicated position from the response message. If the signature is valid, and the response has not already been seen, then the signature is accumulated into an accumulating multi-signature, and the position of the witness is recorded as a bit in the multi-signature bitmap. 
-
-At the end of the PrePrepare timeout period, the leader examines the census in the multi-signature bitmap. If that witness count is above a BFT threshold for the witness pool, then we consider that a consensus has been reached. If not, then the blockchain extension is aborted. The next epoch will elect a new leader, and the process will be retried then.
-
-If consensus has been reached, the multi-signature and the bitmap are stored in the block header. A Commit message is formed, containing the multi-signature, the bitmap, and the block message hash code. This message is signed by the leader and broadcast to all witnesses while we await another timeout period for responses.}
-
-\item{\textbf{Commit Phase}: All witnesses receive the Commit message and attempt to validate it:
+In this section we are going to clarify the details of the Stegos consensus protocol, which happens in two passes among the witness group.
 
 \begin{itemize}
-\item{The message hash code must agree with the message hash code from the PrePrepare message seen during this epoch.}
-\item{The message should have been sent from the epoch leader node. The signature on the message must be valid for the known leader public key.}
-\item{The census shown in the multi-signature bitmap must exceed the BFT threshold for the witness pool.}
-\item{The muilti-signature should be a valid signature against the hash of the proposed block header. To obtain the public key for the signature validation, simply add up all the public keys from the witness list as indicated by the multi-signature bitmap.}
-\end{itemize}
+	\item {\textbf{PrePrepare Phase}: \textit{The leader} broadcasts the contents of the signed \textit{Block Proposal} message, and its hash, to all witnesses in a \textit{PrePrepare} message. This is the only time that the entire message will be transmitted. All further communications will refer only to its hash value.}
+	\item {Each witness will attempt to validate the block construction from the ordered list of transactions:
+		\begin{itemize}
+			\item {The message must carry a valid signature from the \textit{leader}, to prevent spoofing attacks}
+			\item {The message must be the first and only PrePrepare message seen from the leader for the current epoch}
+			\item {The hash of the proposed block and transaction list must agree with the hash value shown in the message; this hash value will serve as a message identifier for all related messages during this epoch}
+			\item {The version number shown in the block header must show the expected value}
+			\item {The epoch shown in the block header must agree with the witness node's sense of the current epoch}
+			\item {The previous block hash slot in the header must equal the block header hash of the current blockchain tip block}
+			\item {The leader key shown in the header must match the leader known for the current epoch}
+			\item {The list of known witnesses for the current epoch must agree with the list of witness keys shown in the block header}
+			\item {The fee distribution transaction must be valid}
+			\item {Every transaction indicated in the list of constituent transactions must be looked up in the mempool, found, validated if not already known to be valid, and the two Merkle trees must be reconstructed as the transaction list is examined; at the end of transaction examination, the two Merkle trees in the block body must be seen as constructed in the same manner}
+			\item {If a witness does not have an indicated transaction in its local mempool, then it cannot validate the proposed block}
+			\item {The $\gamma_{blk}$ sum in the header must equal the sum of all $\gamma_{adj}$ terms shown in the transactions}
+			\item {The root hashes for the TXIN and TXOUT Merkle trees, must match the values recorded in the block header}
+		\end{itemize}
 
-If the Commit message is seen as valid, then the witness stores the mutli-signature and its bitmap into its local copy of the block header, and commits the block to its local copy of the blockchain. A confirmation response is formed from their BLS signature on the block header hash, their position in the list of witnesses, and the message hash code. This response is sent back to the leader.
+	\item{If a witness agrees with the proposed block construction, they sign the hash of the \textit{block header} with a \textit{BLS signature}, and reply to the \textit{leader} with a \textit{Prepare} message that contains the original message hash value, their signature, and a value that represents the position of their public key among the list of witnesses. 
 
-If the witness is unable to validate the Commit message, they simply refrain from sending back a response, and discard the pending block update.}
+	No signature on the message is required, as that is effectively already done with the block header signature provided in the message. The \textit{leader} will protect itself from spoofing attacks by checking that the returned signature on the block header is valid, using the public key looked up in the witness list at the indicated position.}
 
-\item{At completion of the Commit phase timeout period, the leader node accumulates all the response signatures into a multi-signature and signature bitmap. If the census of the bitmap exceeds the BFT threshold for the witness pool, and the mulit-signature is a valid signature on the hash of the block header, then a successful Commit has occurred. The leader and a BFT threshold number of witnesses have reached consensus on the block, and that block has now extended the blockchain.}
-}
+	\item{If a witness disagrees or is unable to validate the proposed block then they should simply refrain from responding. Responses from witnesses are expected to arrive within some timeout window. At the end of that timeout period, the responses obtained are collected together to form a multi-signature and bitmap.}
+
+	\item{The hash being signed covers only the block header, which contains root hashes of the Merkle trees. By signing only the block header hash, we leave allowance for future block pruning actions, without disturbing the validity of the block. Pruned Merkle trees always continue to show the same root hash value. When forming the block header hash, the slots which will contain the eventual multi-signature and signature bitmap are excluded from the hash.}
+
+	\item{An affirmative response from a witness signifies its willingness to commit the new block to their copy of the blockchain, when asked to do so. If the epoch changes to a new epoch before they receive a valid Commit message, then they will drop the block from further consideration.} 
+
+	\item{During the \textbf{PrePrepare timeout period}, the \textit{leader} accumulates valid \textit{Prepare} responses from the witnesses:
+
+		\begin{itemize}
+			\item {Every response is checked to see if it is a valid signature on the block header hash value. The public key for the signature is looked up in the list of witnesses according to the indicated position from the response message. If the signature is valid, and the response has not already been seen, then the signature is accumulated into an accumulating multi-signature, and the position of the witness is recorded as a bit in the multi-signature bitmap.} 
+
+			\item {At the end of the \textit{PrePrepare timeout period}, the leader examines the census in the multi-signature bitmap. If that witness count is above a BFT threshold for the witness pool, then we consider that a consensus has been reached. If not, then the blockchain extension is aborted. The next epoch will elect a new leader, and the process will be retried then.}
+
+			\item {If consensus has been reached, the multi-signature and the bitmap are stored in the block header. A Commit message is formed by the \textit{leader}, containing the multi-signature, the bitmap, and the block message hash code. This message is signed by the leader and broadcast to all witnesses while we await another timeout period for responses.}
+		\end{itemize}}
+
+	\item {\textbf{Commit Phase}: All witnesses receive the Commit message and attempt to validate it:
+
+		\begin{itemize}
+			\item {The message hash code must agree with the message hash code from the PrePrepare message seen during this epoch}
+			\item{The message should have been sent from the epoch \textit{leader}, the signature on the message must be valid for the known \textit{leader} public key}
+			\item{The census shown in the multi-signature bitmap must exceed the BFT threshold for the witness pool}
+			\item{The muilti-signature should be a valid signature against the hash of the proposed block header; to obtain the public key for the signature validation, simply add up all the public keys from the witness list as indicated by the multi-signature bitmap}
+		\end{itemize}
+
+	\item{If the Commit message is seen as valid, then the witness stores the mutli-signature and its bitmap into its local copy of the block header, and commits the block to its local copy of the blockchain. A confirmation response is formed from their BLS signature on the block header hash, their position in the list of witnesses, and the message hash code. This response is sent back to the leader.}
+
+	\item{If the witness is unable to validate the Commit message, they simply refrain from sending back a response, and discard the pending block update.}}
+
+	\item{At completion of the Commit phase timeout period, the leader node accumulates all the response signatures into a multi-signature and signature bitmap. If the census of the bitmap exceeds the BFT threshold for the witness pool, and the mulit-signature is a valid signature on the hash of the block header, then a successful Commit has occurred. The leader and a BFT threshold number of witnesses have reached consensus on the block, and that block has now extended the blockchain.}
+	}
 \end{itemize}
 
 A successful return from each phase, and the validation of multi-signatures, checks to be sure that the multi-signature is valid, and that the number of signing witnesses exceeds a Byzantine threshold for the group. If not, then the validation round is terminated, and no consensus has been reached in this round.
 
-Since the blockchain is an accumulating history, and each block is an immutable record, it is not possible at this stage to discard matching TXIN and UTXO's. Rather, the posted TXIN's represent a marker that, when the blockchain will next be compressed, serve to indicate which UTXO's can be discarded in the compressed chain.
+\section{Blockchain Pruning}
 
-During the scan through the blockchain for matching UTXO's, these markers must be noted, and if a UTXO is found which matches a noted extinction, that UTXO must be ignored in the search.
+\todo{Blockchain Pruning section}
 
+\section{Conslusion and Next Steps}
 
-
-%%%%%%%%%%%%%%%%%%%
-\section{Prevention of Direct Fraud}
-Fraud can work two ways. We have already shown how it would be impossible for someone else to redirect a spending transaction in one of Mary's TXOUT UTXO's. And to steal one of her TXIN UTXO's they would need her secret key to sign the transaction, and to learn the exact amount and cloaking factor involved. So the risk is dependent on the quality of her key management.
-
-But what about the case when Mary is the dishonest one? Or suppose she just has faulty computer code and produces an errant UTXO? What can happen?
-
-There are two places in a UTXO where a recipient is specified without any oversight from validation witnesses. Those are in the stated ephemeral public key of the recipient, $P_{S, \delta_2}$, and in the keying for the encrypted payload which provides amount, $x$, and cloaking factors, $\gamma$ and $\delta$. 
-
-There are a number of ways to form the encrypted payload in the UTXO's. Sam may, or may not, be able to detect an improper decryption without also forming his own Pedersen commitment with the values he recovers for $x$ and $\gamma$, and checking to see that his Pedersen commitment matches the one carried in the Bulletproof in the UTXO.
-
-If the encrypted payload were keyed incorrectly, then Sam would not be able to read proper values for $x$ and $\gamma$, and whatever values he might obtain would not produce the same Pedersen commitment value, $C$, as carried in the Bulletproof. Sam would be unable to spend the UTXO, even if he could produce a valid signature.
-
-And if the public key were incorrectly stated, then nobody would be able to produce a valid signature on the UTXO. 
-
-A correct public key implies that the public key belongs to Sam, and he owns a corresponding secret key, $s_S$, so he can form a valid signature against the UTXO $\mathit{ID}$.
-
-If Mary accidentally misstates his public key, then nobody would be able to form a signature on the UTXO $\mathit{ID}$. Or she might intentionally misstate the public key, perhaps to one of her own. Either way, there is nothing that could be detected about these situations by public witnesses. 
-
-Suppose Mary provides Sam's correct ephemeral public key, and suppose further that she encrypted the payload in a manner that allows Sam to read amount, $x$, and $\gamma$. If she misstates either of those two values, then Sam cannot spend the UTXO because they won't match the Pedersen commitment, $C$, stored in the Bulletproof. He can't sign a transaction with that UTXO, and so he cannot spend it. Again, no witnesses could detect these kinds of errors in the UTXO. Sam will find out later when he tries to spend the UTXO.
-
-If Mary actually sent the money back to herself, through an alias key, and she tells Sam that she sent him the money, then it becomes a dispute between two individuals. But the UTXO will be properly formed, and Mary will be able to spend her own money, and the blockchain witnesses will be satisfied that a proper transaction had been formed. There is nothing fraudulent about sending money to yourself. The fraud in this case is confined to private communication.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Prevention of Indirect Fraud}
-We have shown that it is mathematically intractable to try subverting the system with witnesses watching and verifying every step of transaction formation. But what about the situation where witnesses have either been prevented from validating or else subverted by attackers into overlooking obvious invalid transactions?
-
-If nobody were watching, then actors could fabricate arbitrary amounts of new money. The blockchain would become horribly corrupted. So witnesses are needed to police the state of blockchain integrity. How many witnesses? One seems too few, it might be possible to corrupt them. But is 1,000 witness enough? or too many? I don't think one can give a black or white answer to such questions.
-
-Cosi networks attempt to police the state of the blockchain by requiring a BFT threshold of consensus on transaction validity. But even that cannot guarantee with certainty. 
-
-Witnesses also offer some semblance of comfort to honest users, that their own transactions will not be mauled by attackers, or that their transactions won't be retracted after some later witness discovers corrupt blockchain state and attempts recovery.
-
-So now we begin to approach the question of certification of blockchain state, and every transaction accepted into the blockchain needs to maintain an integral state. But what happens if that state maintenance facility becomes broken?
-
-In the end, we have shown how to validate transactions in the blockchain. It is probably incumbent on all users to validate transactions that they are associated with before forming a new transaction based on those inputs. If every user did this, there would be no need of separate witness patrols. But even if there are witness pools, the possibility of corruption looms, and users should still rely on self-verification against party transactions that they rely upon. Users who do not perform their own validation will always run the risks of trust.
-
-It would seem that a well policed blockchain can only offer best attempt service. There can be no absolute guarantees. But the mathematical machinery of our cryptography will provide absolute guarantees of correctness when they are used. The machinery will not corrupt. But it must be used to gain from its safety offerings.
-
-But even here, the mathematical machinery is a hypothetical universe in which all computations are correctly carried out. Multiplication and addition never have bit errors. Real machines do suffer sporadic errors. And the best we have to overcome such errors are FEC (forward error correction) codes. The most notable is Reed-Solomon encoding which takes advantage of massive redundancy to detect and correct bit errors. Other codes perform better in some noise conditions, e.g., burst noise versus occasional bit errors.
-
-The mathematical machinery of finite field arithmetic depends on each operation being correct. There are other kinds of crypto-systems that function more like fuzzy rendering systems, and allow for some level of noise corruption without invalidating the outcomes. Lattice-based crypto-systems come to mind here. But they are not compact systems. And our kind of cryptography would need to be adapted to a completely different paradigm, where Schnorr signatures may not even be possible.
+\todo{Conclusion and Next Steps section}
 
 \begin{thebibliography}{99}
 
@@ -748,6 +697,10 @@ Ismail Khoffi, Linus Gasser, and Bryan Ford. ``Enhancing Bitcoin Security and Pe
 
 \bibitem{c20} David Chaum. ``The dining cryptographers problem: Unconditional sender and recipient untraceability,'' Journal of Cryptology", 1988, volume 1, pages 65--75.
 
+\bibitem{c21} Whitfield Diffie, , Martin E. Hellman. ``New Directions in Cryptography,''   in IEEE Transactions on Information Theory, volume 22 (6), pages 644--654. 
+
+\bibitem{c22} C.P. Schnorr. ``Efficient Identification and Signatures for Smart Cards,''
+in Advances in Cryptology --- CRYPTO' 89, 1990, Springer, pages 239--252.
 
 \end{thebibliography}
 
