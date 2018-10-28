@@ -4,7 +4,8 @@
 \usepackage{graphicx}
 \usepackage{pgf-pie}
 \usepackage{tikz}
-\usetikzlibrary{positioning,shadows,arrows}
+\usepackage{hyperref}
+\usetikzlibrary{positioning,shadows,arrows,backgrounds}
 
 \usepackage{xcolor}
 \newcommand\todo[1]{\textcolor{red}{\textbf{TODO}: [#1]}}
@@ -20,7 +21,7 @@ Stegos  -- a design for a private, confidential and scalable cryptocurrency}
 
 \maketitle
 \thispagestyle{empty}
-\pagestyle{empty}
+\pagestyle{plain}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -52,8 +53,8 @@ Here we give definitions for miscellaneous terms that we are using throughout th
 	\item \textbf{Interactivity}: senders and recipients of transactions must interact with each other \textit{off-chain} before posting a transaction to the blockchain.
 	\item \textbf{Trusted Setup}: blockchain participants need to trust someone to generate some initial parameters and then destroy those parameters.
 	\item \textbf{PoW}: Proof-of-Work, an original consensus protocol for Bitcoin, where each node participating in the protocol should present a piece of data which is difficult (costly, time-consuming) to produce but easy for others to verify and which satisfies certain requirements. Due to complexity of computations needed and amount of miners, the current energy consumption by Bitcoin PoW consensus is approximately 73TWh per year\footnote{https://digiconomist.net/bitcoin-energy-consumption}.
-	\item \textbf{PoS}: Proof-of-Stake \todo{insert def.}
-	\item \textbf{UTXO}: Unspent Transaction Output \todo{insert def.}
+	\item \textbf{PoS}: Proof-of-Stake is a consensus algorithm, where the creator of the next block is chosen via various combinations of random selection, wealth, age and staked funds. PoS blockchains can be more energy efficient than currencies based on PoS algorithms\footnote{http://cfa-consulting.ch/dlfiles/NxtEnergyandCostEfficiencyAnalysis.pdf}.
+	\item \textbf{UTXO}: An Unspent Transaction Output that can be spent as an input in a new transaction.
 \end{itemize}
 
 \subsection{Existing privacy coins}
@@ -67,8 +68,7 @@ Despite the recent introduction of Bulletproofs\cite{c4} which replaced Monero's
 
 For establishing confidentiality and untraceability, ZCash implements ``Zero-Knowledge Succinct Non-Interactive Argument of Knowledge'' (zk-SNARKS)\cite{c6}. For providing unlinkability of recipients, ZCash employs the stealth addresses.
 
-\todo{explain what anonymity set and ever-growing accumulator are}
-zk-SNARKS enable a large anonymity set of all minted coins, providing a high degree of privacy. However, the size of up to 2 kB for average transaction and ever-growing accumulator that cannot be pruned, makes ZCash much less scalable. The issue of scalability is the main reason why the privacy is currently optional, not by default. At the time of writing, less than 25\% of all transactions were shielded.
+zk-SNARKS enable a large anonymity set of all minted coins\footnote{The \textit{anonymity set} here defined as the set of participants who could be a sender in ZCash transaction, as seen by a global observer who has also compromised a set of nodes.}, providing a high degree of privacy. However, the size of up to 2 kB for average transaction and ever-growing accumulator, holding serial numbers of all spent coins, that cannot be pruned, makes ZCash much less scalable. The issue of scalability is the main reason why the privacy is currently optional, not by default. At the time of writing, less than 25\% of all transactions were shielded.
 
 The questionable part of zk-SNARKS protocol is the initial trusted setup. ZCash utilized a multi-party ceremony involving a several trusted people. This is controversial, as you have to trust any of these people that they destroyed the initial parameters and also trust that the ceremony was carried out correctly. 
 
@@ -110,7 +110,7 @@ Transactions in Stegos are \textit{unlinkable}, \textit{untraceable}, and \texti
 	\item {All amounts in Stegos are hidden using Pedersen commitments\cite{c8} and Bulletproofs range proofs\cite{c4}. Validator stakes and transaction fees are the only exception since these must be visible for blockchain validation.}
 \end{itemize}
 
-\todo{write why compaction is important}
+Many projects claim to be able to process a million transactions per second (TPS) but none of them explain how they are going to maintain all the accumulated data! Bitcoin provides for 7--10 TPS and the Bitcoin blockchain is expected to grow past 170 gigabytes by the end of 2018. If we assume that Bitcoin suddenly supports 16,000 TPS, the Bitcoin blockchain will grow by 350 gigabytes every day\footnote{https://hackernoon.com/if-we-lived-in-a-bitcoin-future-how-big-would-the-blockchain-have-to-be-bd07b282416f}, or 127 terabytes every year. This amount of data is completely unsustainable unless the blockchain will be centralized on a few supercomputers, something that’s contrary to blockchain’s decentralization ethos!
 
 Stegos is a \textit{compact} blockchain. Spent coins are safely removed from the blockchain using secure cryptographic pruning. To keep our blockchain free of spent coins we are using the technique proposed originally by Satoshi Nakamoto in Bitcoin paper\cite{c1}.
 
@@ -151,7 +151,7 @@ We use RandHound++ for multiple purposes:
 \begin{itemize}
 	\item {to form validators groups;}
 	\item {to elect leaders of validators groups;} 
-	\item {to choose transactions pooling facilitators among validators;}
+	\item {to choose pooled transactions facilitators among validators;}
 	\item {to find a winner of the Jackpot lottery.}
 \end{itemize}
 
@@ -192,6 +192,7 @@ We adopt \textit{CoSi}\cite{c10}\cite{c11}, a scalable witness cosigning protoco
 CoSi builds on existing cryptographic multisignature methods, scaling them to support thousands of witnesses via signature aggregation over efficient communications. The default implementation of CoSi uses Schnorr signatures which we replace with BLS signatures for performance reasons.
 
 More details on using CoSi protocol for sealing blocks in Stegos blockchain will be given later in this document, it the Section \ref{tx_processing}.
+
 
 \subsection{Leader Elections}
 
@@ -289,7 +290,31 @@ All validators should pay attention to leader election messages:
 
 \subsection{Key Blocks}
 
-\todo{Key Blocks section}
+Stegos blockchain is able to accommodate multiple kinds of blocks. The kind of the block is defined by the \textit{Block Type ID} slot in the block header. In this paper we define two types of blocks: $0 (KeyBlock)$ and $1 (MonetaryBlock)$.
+
+Monetary blocks, the blocks that carry all cryptocurrency transactions data and coins, will be described in details in Section \ref{block}. We will be referring to them simply as \textit{blocks} throughout this paper. 
+
+The purpose of Key blocks is to deliver the administrative information to blockchain participants. Any node, searching through key blocks, can see who is current or past epoch \textit{leader}, who are witnesses (validators) for the current or past epoch. Nodes wishing to submit a transaction should consult with the latest key block to find who is the current pooled transactions \textit{facilitator}.
+
+The key block header is constructed by the current \textit{leader} filling in the following slots:
+
+\begin{itemize}
+	\item {Block Type ID -- 0}
+	\item {Version Number}
+	\item {Epoch Number}
+	\item {Previous block hash, computed as the hash of the block header of the current blockchain tip block}
+	\item {\textit{Leader} public key}
+	\item {Ordered list of witness public keys; the leader node is also considered a witness}
+	\item {Pooled Transactions \textit{facilitator} public key}
+	\item {BLS Multi-signature, to be filled in as a result of the consensus on the block.}
+	\item {Bitmap of signers in the multi-signature}
+\end{itemize}
+
+There is no body in the key block.
+
+The initial contents of the BLS Multi-signature slots should be zero filled and, even after being filled in, never contribute to the computation of any \textit{block header hash}. All other slots are concatenated to form a header hash pre-image.
+
+The key block verification and sealing should be done using the same consensus protocol as for the monetary blocks. We will describe this protocol in details later on in this paper, in Section \ref{block}.
 
 \section{Basic Transactions}\label{transactions}
 
@@ -540,7 +565,7 @@ The paired TXINs and their UTXOs must be marked as pending extinction, so that t
 
 Because network communications do not guarantee message arrival order, it may be necessary to form the topological sort of incoming transactions, in case some of their TXINs refer to UTXOs created elsewhere in the batch. An example would be where Alice spends some of her tokens, receives change back to herself, then spends that change in another transaction.
 
-\subsection{Formation and Validation of Blocks}
+\subsection{Formation and Validation of Monetary Blocks}\label{block}
 
 \subsubsection{Block formation} \textit{The leader} of the witness group is tasked with forming a tentative block for extension of the blockchain:
 
@@ -559,6 +584,7 @@ Because network communications do not guarantee message arrival order, it may be
 	\item {The block header is constructed by filling in the following slots:
 
 		\begin{itemize}
+			\item {Block Type ID -- 1}
 			\item {Version number}
 			\item {Epoch number}
 			\item {Previous block hash, computed as the hash of the block header of the current blockchain tip block}
@@ -567,9 +593,6 @@ Because network communications do not guarantee message arrival order, it may be
 			\item {Root hash of TXOUT Merkle tree}
 			\item {BLS Multi-signature, to be filled in as a result of the consensus on the block.\footnote{We are using pairing-based cryptography to support the use of short, fast, BLS signatures. BLS signatures allow the formation of multi-signatures in one pass over the witness pool.}}
 			\item {Bitmap of signers in the multi-signature}
-			\item \todo{next two slots have to go into a keyblock --- move to Key Blocks section}
-			\item {\textit{Leader} public key}
-			\item {Ordered list of witness public keys for current epoch. The leader node is also considered a witness during the current epoch.}
 		\end{itemize}}
 
 	The initial contents of the BLS multi-signature slots should be zero filled and, even after being filled in, never contribute to the computation of any \textit{block header hash}. All other slots are concatenated to form a header hash pre-image. But when a full hash of the block is formed for messaging purposes, the entire block, consisting of block header and block body, are considered for the hash pre-image.
@@ -648,11 +671,34 @@ A successful return from each phase, and the validation of multi-signatures, che
 
 \section{Blockchain Pruning}
 
-\todo{Blockchain Pruning section}
+As we described in Section \ref{block}, a block in Stegos blockchain is composed of a header and a body, where the header contains root hashes of two Merkle trees, that comprise the body of the block. Those two trees are a tree of all inputs (TXIN Merkle Tree) and a tree of all outputs (TXOUT Merkle Tree). 
 
-\section{Conslusion and Next Steps}
+When a new block is verified and sealed by multi-signature of CoSi witnesses, those signatures are computed over only the block header. The body of the block is not signed by the witnesses, because it is already sealed by the nature of the Merkle tree --- it will be impossible to modify the body of the block without invalidating the root hashes contained in the sealed header.
 
-\todo{Conclusion and Next Steps section}
+Upon verification and signing of a new block, a \textit{leader} of the witness group broadcasts the new block to the network. All nodes must process the new block (after validating the multi-signatures) according to the following steps:
+
+\begin{itemize}
+	\item {A full node must retrieve all leaves of TXIN Merkle Tree from the new block body, and for each leaf (UTXO $ID$) do the following:
+	\begin{enumerate}
+		\item {Find the block which contains the UTXO reffered by $ID$}
+		\item {Find a leaf in TXOUT Merkle Tree in that block that contains sought UTXO}
+		\item {Mark that leaf as \textit{SPENT}, not touching the value of the hash that belongs to that leaf}
+		\item {If a sibling leaf is also marked as \textit{SPENT} then delete \textit{both} leaves and their correstonding hashes, and mark the parent node of these two pruned leaves with \textit{SPENT} marker as well, and then restart from the step 4 again, until there will be no \textit{SPENT} sibling}
+	\end{enumerate}} 
+	\item {When the process above will be done for all UTXO IDs in TXIN Merkle Tree in the new block, that tree should be totally wiped from the block body, leaving only the TXIN Root Hash in the block header. The block now can be appended to the full node's copy of the blockchain.}
+\end{itemize}
+
+\addtolength{\textheight}{-6cm}
+
+Therefore, blockchain pruning in Stegos is a continuous process --- each new incoming sealed block is triggering the pruning. As a result of this continuous pruning, the blockchain in Stegos becomes just a database of unspent coins and does not contain any historical data, thus making it impossible (in collaboration with stealh addresses and pooled transactions) to hurt Stegos cryptocurrency fungibility.
+
+\section{Next Steps}
+
+In this paper we laid a design for Stegos - a private, confidential and scalable blockchain that is eco-friendly.
+
+Stegos team is working on implementation of the blockchain and the development progress can be tracked online at \url{https://github.com/orgs/stegos/projects/1}. Our source code is and always be 100\% open.
+
+As our implementation will be progressing, we are going to publish separate, more detailed and focused, papers on our most essential contributions to the blockchain ecosystem, like improved distributed randomness generation (\textit{RandHound++}) and our flavor of collective signing protocol and consensus based on it (\textit{BLS CoSi/pBFT}). 
 
 \begin{thebibliography}{99}
 
