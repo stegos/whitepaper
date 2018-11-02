@@ -126,7 +126,7 @@ The Jackpot is distributed every few thousand blocks when validators run a crypt
 
 Electing a leader of the consensus and choosing a winner in the Jackpot lottery use our algorithm for generating distributed, untainted, unbiasable randomness, in the spirit of the RandHound protocol\cite{c12}. Our algorithm, \textit{RandHound++}, actually derives much of its protocol from SCRAPE\cite{c13} as its primary deviation from original RandHound. SCRAPE defines a PVSS\cite{c14} protocol using symmetric bilinear pairing based cryptography and coding theory. But beyond SCRAPE, we had to adjust the algorithm to deal with asymmetric pairings which offer necessary stronger cryptographic security.
 
-In the following sections we will explain each of the Stegos features presented above in more details. \todo{add descriptions of other sections when they will be done}
+In the following sections we will explain each of the Stegos features presented above in more details.
 
 \section{Networking}\label{networking}
 
@@ -320,7 +320,7 @@ The key block verification and sealing should be done using the same consensus p
 
 In previous sections, we explained the high-level concepts of Stegos, including networking, randomness and consensus. Now it's time to describe the inner details of Stegos, such as the composition of its coins and basic transactions.
 
-\subsection{UTXO Structure}
+\subsection{UTXO Structure}\label{utxo}
 
 For illustrative purposes, suppose that some coins have been sent from Alice to Bob. Alice's public key is $P_A$, while Bob's secret key is $s_B$ and his public key is $P_B$. To help preserve anonymity, all public keys in Stegos are cloaked with a random value chosen from a very large finite field, $Z_r$.
 
@@ -669,7 +669,7 @@ In this section we are going to clarify the details of the Stegos consensus prot
 
 A successful return from each phase, and the validation of multi-signatures, checks to be sure that the multi-signature is valid, and that the number of signing witnesses exceeds a Byzantine threshold for the group. If not, then the validation round is terminated, and no consensus has been reached in this round.
 
-\section{Blockchain Pruning}
+\section{Blockchain Pruning}\label{pruning}
 
 As we described in Section \ref{block}, a block in Stegos blockchain is composed of a header and a body, where the header contains root hashes of two Merkle trees, that comprise the body of the block. Those two trees are a tree of all inputs (TXIN Merkle Tree) and a tree of all outputs (TXOUT Merkle Tree). 
 
@@ -688,17 +688,86 @@ Upon verification and signing of a new block, a \textit{leader} of the witness g
 	\item {When the process above will be done for all UTXO IDs in TXIN Merkle Tree in the new block, that tree should be totally wiped from the block body, leaving only the TXIN Root Hash in the block header. The block now can be appended to the full node's copy of the blockchain.}
 \end{itemize}
 
-\addtolength{\textheight}{-6cm}
-
 Therefore, blockchain pruning in Stegos is a continuous process --- each new incoming sealed block is triggering the pruning. As a result of this continuous pruning, the blockchain in Stegos becomes just a database of unspent coins and does not contain any historical data, thus making it impossible (in collaboration with stealh addresses and pooled transactions) to hurt Stegos cryptocurrency fungibility.
+
+\section{Keeping Arbitrary Data on the Blockchain}
+
+The Stegos blockchain, besides using it for sending coins, can be used for sending and temporary storing the arbitrary data payloads. For this puprose we must slightly modify our UTXO structure by adding an additional slot called \textit{UTXO Type}.
+
+There are two \textit{UTXO Type} values that are supported now: $0$ (\textit{monetary UTXO}) and $1$ (\textit{data UTXO}).
+
+We already described motenary UTXO composition in Section \ref{utxo}. Here we explain the structure of data UTXO and show how transactions can be composed using the mix of monetary and data UTXOs.
+
+\subsection{Data UTXO structure}
+
+Data UTXO structure is following the same design principles as monetary UTXO. Let's consider an example where Alice wants to send Bob some data object. As before, $P_B$ and $s_B$ will stand for Bob's public and private secret key correspondingly. 
+
+Alice should compose the following data UTXO:
+
+\begin{multline*}
+UTXO_D = (ID, Type, TTL, P_{B, \delta}, PC, E_B(\gamma, \delta), \\
+Size_{BLOB}, Key_{BLOB}, E_{BLOB}(data))
+\end{multline*}
+	where:
+\begin{align*}
+	ID &= H_r(Type, TTL, P_{B, \delta}, PC, E_B(\gamma, \delta), \\
+	& \ \ \ \ \ \ \ \ \ Size_{BLOB}, Key_{BLOB}, \\
+	& \ \ \ \ \ \ \ \ \ E_{BLOB}(data)) \in Z_r \\	
+	H_r(arg_1, arg_2, ...) &= \textit{hash mapping of concat args} \rightarrow Z_r \\
+	P_{B, \delta} &= P_B + \delta \, G \\
+	G &= \textit{known generator for group } E_q \\
+	Type &= \textit{UTXO Type}, 1\\
+	TTL &= \textit{UTXO Time-to-Live, in blocks}\\
+	PC &= \textit{Pedersen Commitment to zero}, \gamma \, G \\
+	E_B(\gamma, \delta) &= \textit{Payload encrypted with}\  P_B \\
+	Key_{BLOB} &= \textit{Cloaked data key}, (\alpha \, P_{B} + k \, G, \alpha \, G )\\
+	Size_{BLOB} &= \textit{Size of data object, max $2^{32}$ bytes}\\
+	E_{BLOB}(data) &= \textit{Data object, encrypted with AES}
+\end{align*}
+
+When creating $UTXO_D$, Alice must choose random values $\alpha, k \in Z_r$ that will be used in cloaking symmetric data encryption key, before storing it as $Key_{BLOB}$. Actual symmetric key for the encrypted data object will be $H_r(k \, G)$. Alice encrypts her data with AES using the computed symmetric key and places encrypted object along with its size and time-to-live into $UTXO_D$.
+
+When Bob receives $UTXO_D$, he will take out $Key_{BLOB} = (\alpha \, P_{B} + k \, G, \alpha \, G )$ from it, multiply the second term by his secret key $s_B$, getting $s_B \, \alpha \, G = \alpha \, P_B$, then subtracts that from first term to find $k \, G$. Afterwards he produces $H_r(k \, G)$ thus computing the symmetric key and decrypts the data that Alice sent to him.
+
+\subsection{Transactions involving data UTXOs}
+
+Because data UTXOs have Pedersen Commitments to zero included in their bodies, they can be easily mixed in the same transactions with monetary UTXOs, because they will not influence to the monetary balance of transactions. The algorithms for validating transactions will stay the same, as shown previously in this paper.
+
+There are few differences of transactions with mixed UTXO types from ``normal'' tranactions:
+
+\begin{itemize}
+
+	\item{The first difference is that a value of the $Fee$ slot in a transactions must obey the following:
+
+	\begin{align*}
+		FeeUnit &= \textit{Fee for keeping 1024 bytes for 1 block} \\
+		SizeKB_i &= \frac{Size_{BLOB_i}}{1024}, \textit{rounded up to the next integer}\\
+		Fee_i &= SizeKB_i * TTL_i * FeeUnit\\
+		Fee &= \sum_i Fee_i
+	\end{align*}
+
+	So, for each data UTXO in outputs of the transaction, the fee must be calculated proportionally to the size of the data stored in that UTXO and time-to-live for that data. If there are multiple data UTXOs in outputs of transaction, then these UTXO's fees they must be summed up in order to calculate the final trasaction fee. If there are monetary UTXOs in outputs as well, then ordinary monetary fees must be also added to the final fee of the transaction.}
+
+	\item{The second difference is that it is possible to leave outputs in the trasaction completely empty if only data UTXOs are referenced by the transaction inputs. In this case, $Fee$ slot for such a transaction can be set to $0$.}
+\end{itemize}
+
+\subsection{Pruning of used and expired data}
+
+If UTXO $ID$ of the data UTXO was referenced in inputs of a transaction and subsequently were validated and included into a new sealed block, then all full nodes of the blockchain will process that block according to the pruning procedure decribed in Section \ref{pruning} and delete the corresponding UTXO from the blockchain. So, there is no difference in pruning spent monetary and used data UTXOs.
+
+With that, a special mechanism should be established for deleting expired data --- those data UTXOs which haven't been referenced in inputs to any registered transaction, and whose TTL timers were expired.
+
+The duty to identify expired data UTXOs belongs to the epoch \textit{leader}. In addition to the normal duties of the leader, now, in a presence of data UTXO in the UTXO Database, before proposing the new block to witnesses in the group, it must scan the the database and check in each data UTXO a number of the block in which it has been created and its TTL. If sum of creation block number and TTL is less than number of the new block that the leader is going to propose, then the leader must add this UTXO's $ID$ to the inputs to special data cleaning trasaction which should be added to the proposed block along with other special transaction for collecting fees. 
+\addtolength{\textheight}{-38mm}
+Upon receiving block proposal from the leader, witnesses will validate that UTXOs referenced in the data cleaning transaction are indeed exprired and seal the block with their signatures. Finally, the sealed block will be propagated through the network, and all full nodes will prune expired data UTXOs according to the usual pruning procedure.
 
 \section{Next Steps}
 
-In this paper we laid a design for Stegos - a private, confidential and scalable blockchain that is eco-friendly.
+In this paper we laid a design for Stegos - a private, confidential and scalable blockchain that is eco-friendly, upon which applications for sending monetary values and/or arbitrary data can be built.
 
 Stegos team is working on implementation of the blockchain and the development progress can be tracked online at \url{https://github.com/orgs/stegos/projects/1}. Our source code is and always be 100\% open.
 
-As our implementation will be progressing, we are going to publish separate, more detailed and focused, papers on our most essential contributions to the blockchain ecosystem, like improved distributed randomness generation (\textit{RandHound++}) and our flavor of collective signing protocol and consensus based on it (\textit{BLS CoSi/pBFT}). 
+As our implementation will be progressing, we are going to publish separate, more detailed and focused, papers on our most essential contributions to the blockchain ecosystem, like improved distributed randomness generation (\textit{RandHound++}) , our flavor of collective signing protocol and consensus based on it (\textit{BLS CoSi/pBFT}) and our approach for transactions and data sharding. 
 
 \begin{thebibliography}{99}
 
