@@ -3,17 +3,7 @@
 		"path": "$ROOTPATH$/yellowpaper.tex",
 		"bookmarks": [
 			{
-				"line": 59,
-				"column": 0,
-				"label": "privacy coins"
-			},
-			{
-				"line": 101,
-				"column": 0,
-				"label": "our contribution"
-			},
-			{
-				"line": 771,
+				"line": 769,
 				"column": 0,
 				"label": "bibliography"
 			}
