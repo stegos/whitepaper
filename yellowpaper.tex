@@ -14,7 +14,7 @@
 \overrideIEEEmargins
 
 \title{\LARGE \bf
-Stegos  -- a design for a private, confidential and scalable cryptocurrency}
+Stegos  -- a design for a private, confidential, and scalable cryptocurrency}
 \author{The Stegos Team, October 2018}%
 
 \begin{document}
@@ -26,22 +26,22 @@ Stegos  -- a design for a private, confidential and scalable cryptocurrency}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{abstract}
-    On October 31\textsuperscript{th} of 2008, a person or group named ‘Satoshi Nakamoto’ released a paper called ``Bitcoin: A Peer-to-Peer Electronic Cash System.''\cite{c1} In ten years that passed since that date, Bitcoin became the main cryptocurrency in the world and inspired a lot of researchers and developers to create their own blockchains that are building and improving on Bitcoin and its ideas.
+    On October 31\textsuperscript{st} of 2008, a person or group named ‘Satoshi Nakamoto’ released a paper called ``Bitcoin: A Peer-to-Peer Electronic Cash System.''\cite{c1} In the ten years since that paper was published, Bitcoin has become the main cryptocurrency in the world and inspired many researchers and developers to create their own blockchains, building and improving upon Bitcoin and its ideas.
     
-    One of the areas of improvement is privacy --- despite the fact that payments in Bitcoin are conducted between pseudonymous users, the payment transactions are stored in a public decentralized ledger, from which a lot of information can be deduced. More than a dozen of \textit{privacy coins} exists at the moment, each of which uses sophisticated algorithms in order to keep privacy of its users protected. 
+    One of the areas of improvement is privacy --- while it is true that payments in Bitcoin are conducted between pseudonymous users, the payment transactions are stored in a public decentralized ledger, from which a lot of information can be deduced. More than a dozen \textit{privacy coins} exist at the moment, each of which uses sophisticated algorithms in order to keep the privacy of its users protected. 
     
-    Despite that long list of privacy-centered blockchains, all of them have some substantial drawbacks. Some of the privacy coins protect identities of senders and recipients, but keep transaction amounts in open. Almost all of the existing privacy coins cannot be scaled, because their ledger must be ever-growing and cannot be compacted. Most part of these coins use Proof-of-Work consensus which is obviously unfriendly to the environment because it wastes enormous amounts of electricity. 
+    However, despite the fact that there are many privacy-centered blockchains, all of them have some substantial drawbacks. Some of the privacy coins protect identities of senders and recipients, but keep transaction amounts in the open. Almost all of the existing privacy coins cannot be scaled, because their ledger must be ever-growing and cannot be compacted. Most of these coins use Proof-of-Work consensus which is obviously unfriendly to the environment because it wastes enormous amounts of electricity. 
     
-    In this paper we propose a design for a private, confidential, and scalable blockchain that’s friendly to the environment. This design builds and improves upon other privacy coins and can be used to send payments and data with complete confidentiality. 
+    In this paper, we will propose a design for a private, confidential, and scalable blockchain that is friendly to the environment. Our design builds and improves upon other privacy coins and can be used to send payments and data with complete confidentiality. 
 \end{abstract}
 
 \section{Introduction}
-In this section we give brief overview of most prominent privacy coins and analyze their privacy-protecting and performance characteristics.
+In this section we give a brief overview of most prominent privacy coins and analyze their privacy-protecting and performance characteristics.
 
-We also explain, on a high-level, how Stegos builds and improves on existing privacy coins ideas and employs latest research in cryptography and blockchains in order to create privacy-preserving blockchain that can be scaled. 
+We also explain, on a high level, how Stegos builds and improves on existing privacy coin ideas and employs latest research in cryptography and blockchains in order to create privacy-preserving a blockchain that can be scaled. 
 
 \subsection{Terminology}
-Here we give definitions for miscellaneous terms that we are using throughout this paper:
+Here we give definitions for the miscellaneous terms that we are using throughout this paper:
 
 \begin{itemize}
 	\item \textbf{Privacy}: protection from detection of the identity of blockchain participants and parties to transactions.
@@ -49,7 +49,7 @@ Here we give definitions for miscellaneous terms that we are using throughout th
 	\item \textbf{Unlinkability}: for any two outgoing transactions it is impossible to prove they were sent to the same person\cite{c2}.
 	\item \textbf{Untraceability}: for each incoming transaction all possible senders are equiprobable\cite{c2}.
 	\item \textbf{Compactness}: spent coins can be pruned from the blockchain and the blockchain can be compacted.
-	\item \textbf{Sharding}: a transaction verification and block sealing processes can be partitioned between participants or groups of participants.
+	\item \textbf{Sharding}: a transaction verification and block-sealing process that can be partitioned between participants or groups of participants.
 	\item \textbf{Interactivity}: senders and recipients of transactions must interact with each other \textit{off-chain} before posting a transaction to the blockchain.
 	\item \textbf{Trusted Setup}: blockchain participants need to trust someone to generate some initial parameters and then destroy those parameters.
 	\item \textbf{PoW}: Proof-of-Work, an original consensus protocol for Bitcoin, where each node participating in the protocol should present a piece of data which is difficult (costly, time-consuming) to produce but easy for others to verify and which satisfies certain requirements. Due to complexity of computations needed and amount of miners, the current energy consumption by Bitcoin PoW consensus is approximately 73TWh per year\footnote{https://digiconomist.net/bitcoin-energy-consumption}.
@@ -59,44 +59,44 @@ Here we give definitions for miscellaneous terms that we are using throughout th
 
 \subsection{Existing privacy coins}
 
-\subsubsection{Monero} originated as a Bytecoin fork in 2014 under the name Bitmonero. The cryptocurrency is using UTXO model and PoW consensus, and based on the CryptoNote protocol\cite{c2}, employing the ring signatures method. In 2017 Monero implemented RingCT\cite{c3}, an improved version of the ring signatures. RingCT is enabling a confidentiality of amounts and untraceability of transactions. In combination with the stealth addresses (also introduced in the original CryptoNote paper), which provide unlinkability of recipients, this provides full privacy and confidentiality.
+\subsubsection{Monero} originated as a Bytecoin fork in 2014 under the name Bitmonero. The cryptocurrency is using a UTXO model and PoW consensus, and based on the CryptoNote protocol\cite{c2}, employing the ring signatures method. In 2017, Monero implemented RingCT\cite{c3}, an improved version of the ring signatures. RingCT enables confidentiality of amounts and untraceability of transactions. In combination with the stealth addresses (also introduced in the original CryptoNote paper), which provide unlinkability of recipients, this provides full privacy and confidentiality.
 
-Monero's blockchain cannot be compacted because spent UTXOs cannot be pruned from it. Keeping all UTXOs forever is one of the requirements of RingCT protocol, which obfuscates the fact which particular UTXOs mentioned in transaction inputs were actually spent. 
-Despite the recent introduction of Bulletproofs\cite{c4} which replaced Monero's original zero knowledge range proofs and got a simple transaction size from 13KB down to 2.5KB, the problem with ever-growing blockchain cannot be solved. 
+Monero's blockchain cannot be compacted because spent UTXOs cannot be pruned from it. Keeping all UTXOs forever is one of the requirements of RingCT protocol, which obfuscates the fact that particular UTXOs mentioned in transaction inputs were actually spent. 
+Despite the recent introduction of Bulletproofs\cite{c4} which replaced Monero's original zero-knowledge range proofs and reduced a simple transaction size from 13KB down to 2.5KB, the problem with ever-growing blockchains cannot be solved. 
 
-\subsubsection{ZCash} originated in 2016 as Bitcoin fork and obviously is using UTXO model and PoW consensus. The goal of the project is to improve the flaws of Bitcoin, with a focus on privacy. The project is building on a work done on Zerocoin\cite{c5}, addressing some of its faults, like the size of the proofs, which ZCash decreases to 1KB and speeds up the verification.
+\subsubsection{ZCash} originated in 2016 as a Bitcoin fork and obviously is using a UTXO model and PoW consensus. The goal of the project is to improve on the flaws of Bitcoin, with a focus on privacy. The project is building on work done on Zerocoin\cite{c5}, addressing some of its faults, like the size of the proofs, which ZCash decreases to 1KB and speeds up the verification.
 
-For establishing confidentiality and untraceability, ZCash implements ``Zero-Knowledge Succinct Non-Interactive Argument of Knowledge'' (zk-SNARKS)\cite{c6}. For providing unlinkability of recipients, ZCash employs the stealth addresses.
+For establishing confidentiality and untraceability, ZCash implements ``Zero-Knowledge Succinct Non-Interactive Argument of Knowledge'' (zk-SNARKS)\cite{c6}. For providing unlinkability of recipients, ZCash employs stealth addresses.
 
-zk-SNARKS enable a large anonymity set of all minted coins\footnote{The \textit{anonymity set} here defined as the set of participants who could be a sender in ZCash transaction, as seen by a global observer who has also compromised a set of nodes.}, providing a high degree of privacy. However, the size of up to 2 kB for average transaction and ever-growing accumulator, holding serial numbers of all spent coins, that cannot be pruned, makes ZCash much less scalable. The issue of scalability is the main reason why the privacy is currently optional, not by default. At the time of writing, less than 25\% of all transactions were shielded.
+zk-SNARKS enable a large anonymity set of all minted coins\footnote{The \textit{anonymity set} here defined as the set of participants who could be a sender in ZCash transaction, as seen by a global observer who has also compromised a set of nodes.}, providing a high degree of privacy. However, the size of up to 2KB for an average transaction and ever-growing accumulator, holding serial numbers of all spent coins, that cannot be pruned, makes ZCash much less scalable. The issue of scalability is the main reason why privacy is currently optional, not by default. At the time of writing, less than 25\% of all transactions were shielded.
 
-The questionable part of zk-SNARKS protocol is the initial trusted setup. ZCash utilized a multi-party ceremony involving a several trusted people. This is controversial, as you have to trust any of these people that they destroyed the initial parameters and also trust that the ceremony was carried out correctly. 
+The questionable part of the zk-SNARKS protocol is the initial trusted setup. ZCash utilizes a multi-party ceremony involving a several trusted people. This is controversial, as you have to trust any of these people that they destroyed the initial parameters and also trust that the ceremony was carried out correctly. 
 
-\subsubsection{Dash} originally a codebase fork from Litecoin (which is in turn a codebase fork of Bitcoin), Dash were launched as XCoin in January 2014. Dash is using UTXO model and PoW consensus. 
+\subsubsection{Dash} originally a codebase fork from Litecoin (which is in turn a codebase fork of Bitcoin), Dash were launched as XCoin in January 2014. Dash is using the UTXO model and PoW consensus. 
 
-Besides standard nodes and miners, Dash has \textit{masternodes}, the nodes that must have static IP address and fullfil particular requirements for CPU, RAM, and disk space. Each masternode must have at least 1000DASH in its ownership. A Proof-of-Service protocol ensures that masternodes have the most current blockchain protocol and are online. 
+Besides standard nodes and miners, Dash has \textit{masternodes}, the nodes that must have static IP address and fulfill particular requirements for CPU, RAM, and disk space. Each masternode must have at least 1000DASH in its ownership. A Proof-of-Service protocol ensures that masternodes have the most current blockchain protocol and are online. 
 
-It is important to note that privacy is optional in Dash and the high volume of transactions is driven mainly by the fast public transactions called \textit{InstantSend} which are provided by masternodes.
+It is important to note that privacy is optional in Dash and the high volume of transactions is driven mainly by fast public transactions called \textit{InstantSend} which are provided by masternodes.
 
 \textit{PrivateSend} is an implementation of CoinJoin, the untraceability solution first proposed for Bitcoin by Bitcoin Core developer Gregory Maxwell\footnote{https://bitcointalk.org/index.php?topic=279249.0}. In PrivateSend, three users add their coins together in one big transaction, that sends the coins to freshly generated addresses belonging to the same three users. As such, the coins are effectively mixed between the three participants, breaking the blockchain trail of ownership between them. This process can be automatically repeated up to eight times, with (hopefully) different mixing participants, for extra privacy.
 
-Dash is not providing confidentiality of amounts neither in InstantSend, nor in PrivateSend. Moreover, it is essential requirement of CoinJoin protocol that inputs of users involved in the round of the mixing protocol must have exactly the same denomination (amount of coins). This requirement is impossible to fullfil in case if amounts are cloaked. 
+Dash is not providing confidentiality of amounts either in InstantSend, or in PrivateSend. Moreover, it is an essential requirement of CoinJoin protocol that inputs of users involved in the round of the mixing protocol must have exactly the same denomination (amount of coins). This requirement is impossible to fulfill in case of amounts that are cloaked. 
 
-Users of Dash have to trust masternodes that they will keep users' IP addresses not disclosed and not linked to users' UTXOs when sending transactions in Dash. This adds another privacy vulnerability to Dash.
+Users of Dash have to trust masternodes that they will keep users' IP addresses undisclosed and unlinked to users' UTXOs when sending transactions in Dash. This adds another privacy vulnerability to Dash.
 
-\subsubsection{Mimblewimble (Grin)} is a protocol that was proposed by an anonymous user in a Bitcoin developers chatroom by the name of Tom Elvis Jedusor, that left a link to a paper\footnote{https://download.wpsoftware.net/bitcoin/wizardry/mimblewimble.txt} in which he outlines that by using the Mimblewimble protocol, the scalability, as well as the privacy of the Bitcoin network could significantly be enhanced.
+\subsubsection{Mimblewimble (Grin)} is a protocol that was proposed by an anonymous user in a Bitcoin developers chat room by the name of Tom Elvis Jedusor, that left a link to a paper\footnote{https://download.wpsoftware.net/bitcoin/wizardry/mimblewimble.txt} in which he outlines that by using the Mimblewimble protocol, the scalability, as well as the privacy of the Bitcoin network, could significantly be enhanced.
 
-Mimblewimble is based on the ideas of Greg Maxwell's design for Confidential Transactions\footnote{https://people.xiph.org/\texttt{\~{}}greg/confidential\_values.txt},  except, it is the recipient that generates random blinding factor used to cloak the amount of the transaction. This blinding factor is then used as proof of ownership by the recipient, therefore working simultaneously as recipient's public key. Therefore Mimblewimble provides confidentiality of amounts and unlinkability of recipients in its transactions.
+Mimblewimble is based on the ideas of Greg Maxwell's design for Confidential Transactions\footnote{https://people.xiph.org/\texttt{\~{}}greg/confidential\_values.txt}, except, it is the recipient that generates a random blinding factor used to cloak the amount of the transaction. This blinding factor is then used as proof of ownership by the recipient, therefore working simultaneously as the recipient's public key. Therefore, Mimblewimble provides confidentiality of amounts and unlinkability of recipients in its transactions.
 
-Untraceability of transactions in Mimblewimble is building on the ideas of CoinJoin and is implemented by breaking transaction boundaries and storing only inputs and outputs of all transactions verified by miner in a new mined block.
+Untraceability of transactions in Mimblewimble is building on the ideas of CoinJoin and is implemented by breaking transaction boundaries and storing only inputs and outputs of all transactions verified by miner in a newly mined block.
 
-The only existing implementation of the protocol known to the moment is Grin project\footnote{https://github.com/mimblewimble/grin}, which has recently released the third iteration of their testnet. Grin uses UTXO model and PoW consensus. Spent UTXOs in Grin can be pruned, by recursively applying simple pruning algorithm for each UTXO referenced in inputs of the new minted block.
+The only existing implementation of the protocol known at the moment is Grin project\footnote{https://github.com/mimblewimble/grin}, which has recently released the third iteration of their testnet. Grin uses the UTXO model and PoW consensus. Spent UTXOs in Grin can be pruned by recursively applying a simple pruning algorithm for each UTXO referenced in inputs of the new minted block.
 
 There are several drawbacks in the design of Mimblewimble and Grin:
 
 \begin{itemize}
-	\item {First is related to the transaction creation mechanism of Mimblewible and Grin --- in order to create a transaction, a sender and recipient must interact with each other. The sender cannot post a transaction to the blockchain without first contacting the recipient with half-baked transaction data and receiving that data updated by applying a blinding factor back from the recipient.}
-	\item {Second is very similar to the problem that Dash where users should trust Dash masternodes. Currently, users of Grin should trust Grin miners that miners will not trace the history of moving coins inputs to outpus in transactions, and discard this data completely after mining a block. Therefore there is a potential threat to coin's fungibility and privacy of the users.}
+	\item {The first drawback is related to the transaction creation mechanism of Mimblewible and Grin --- in order to create a transaction, a sender and recipient must interact with each other. The sender cannot post a transaction to the blockchain without first contacting the recipient with half-baked transaction data and receiving that data updated by applying a blinding factor back from the recipient.}
+	\item {The second is very similar to the problem from Dash where users must trust Dash masternodes. Currently, users of Grin must trust Grin miners that they will not trace the history of moving coins inputs to outputs in transactions, and discard this data completely after mining a block. Therefore, there is a potential threat to the coin's fungibility and privacy of the users.}
 \end{itemize}
 
 \subsection{Our contribution}
@@ -106,13 +106,13 @@ Transactions in Stegos are \textit{unlinkable}, \textit{untraceable}, and \texti
 
 \begin{itemize}
 	\item {Stegos uses one-time payment addresses which make it impossible to identify recipients of a transaction (in another words, to link addresses of recipients to their identities) because all transactions are directed to new and unique addresses. The technique used for one-time addresses is very similar to stealth addresses used in Monero and ZCash.}
-	\item {Stegos makes it impossible to trace history of transactions since many individual transactions are pooled together to form a super-transaction. For this purpose we adopted and enhanced ValueShuffle protocol\cite{c7}, the first coin mixing protocol compatible with Confidential Transactions.}
+	\item {Stegos makes it impossible to trace the history of transactions since many individual transactions are pooled together to form a super-transaction. For this purpose, we adopted and enhanced the ValueShuffle protocol\cite{c7}, the first coin mixing protocol compatible with Confidential Transactions.}
 	\item {All amounts in Stegos are hidden using Pedersen commitments\cite{c8} and Bulletproofs range proofs\cite{c4}. Validator stakes and transaction fees are the only exception since these must be visible for blockchain validation.}
 \end{itemize}
 
-Many projects claim to be able to process a million transactions per second (TPS) but none of them explain how they are going to maintain all the accumulated data! Bitcoin provides for 7--10 TPS and the Bitcoin blockchain is expected to grow past 170 gigabytes by the end of 2018. If we assume that Bitcoin suddenly supports 16,000 TPS, the Bitcoin blockchain will grow by 350 gigabytes every day\footnote{https://hackernoon.com/if-we-lived-in-a-bitcoin-future-how-big-would-the-blockchain-have-to-be-bd07b282416f}, or 127 terabytes every year. This amount of data is completely unsustainable unless the blockchain will be centralized on a few supercomputers, something that’s contrary to blockchain’s decentralization ethos!
+Many projects claim to be able to process a million transactions per second (TPS) but none of them explain how they are going to maintain all the accumulated data. Bitcoin provides for 7--10 TPS and the Bitcoin blockchain is expected to grow past 170 gigabytes by the end of 2018. If we assume that Bitcoin suddenly supports 16,000 TPS, the Bitcoin blockchain will grow by 350 gigabytes every day\footnote{https://hackernoon.com/if-we-lived-in-a-bitcoin-future-how-big-would-the-blockchain-have-to-be-bd07b282416f}, or 127 terabytes every year. This amount of data is completely unsustainable unless the blockchain will be centralized on a few supercomputers, something that’s contrary to blockchain’s decentralization ethos.
 
-Stegos is a \textit{compact} blockchain. Spent coins are safely removed from the blockchain using secure cryptographic pruning. To keep our blockchain free of spent coins we are using the technique proposed originally by Satoshi Nakamoto in Bitcoin paper\cite{c1}.
+Stegos is a \textit{compact} blockchain. Spent coins are safely removed from the blockchain using secure cryptographic pruning. To keep our blockchain free of spent coins, we are using the technique proposed originally by Satoshi Nakamoto in the Bitcoin paper\cite{c1}.
 
 Stegos uses transactional \textit{sharding} to scale. Separate gro\-ups of Stegos validators keep the whole blockchain state but verify only a subset of incoming transactions, using cross-shard atomic commits to eliminate double-spending. This scalability approach lets Stegos process hundreds of thousands of transactions per second.
 
@@ -124,33 +124,33 @@ This is a feature unique to Stegos and a lottery concept that everyone is famili
 
 The Jackpot is distributed every few thousand blocks when validators run a cryptographic lottery based on verifiable distributed randomness. The amount in the Jackpot is then transferred to the winner. The longer a validator keeps its stake and participates in consensus, the higher the probability of winning the Jackpot lottery.
 
-Electing a leader of the consensus and choosing a winner in the Jackpot lottery use our algorithm for generating distributed, untainted, unbiasable randomness, in the spirit of the RandHound protocol\cite{c12}. Our algorithm, \textit{RandHound++}, actually derives much of its protocol from SCRAPE\cite{c13} as its primary deviation from original RandHound. SCRAPE defines a PVSS\cite{c14} protocol using symmetric bilinear pairing based cryptography and coding theory. But beyond SCRAPE, we had to adjust the algorithm to deal with asymmetric pairings which offer necessary stronger cryptographic security.
+Electing a leader of the consensus and choosing a winner in the Jackpot lottery uses our algorithm for generating distributed, untainted, unbiasable randomness, in the spirit of the RandHound protocol\cite{c12}. Our algorithm, \textit{RandHound++}, actually derives much of its protocol from SCRAPE\cite{c13} as its primary deviation from original RandHound. SCRAPE defines a PVSS\cite{c14} protocol using symmetric bilinear pairing based cryptography and coding theory. But beyond SCRAPE, we had to adjust the algorithm to deal with asymmetric pairings which offer necessary stronger cryptographic security.
 
-In the following sections we will explain each of the Stegos features presented above in more details.
+In the following sections we will explain each of the Stegos features presented above in more detail.
 
 \section{Networking}\label{networking}
 
-The Stegos network is composed of full nodes and light nodes, e.g. those running on mobile devices or in the browser. Each full node maintains a full copy of the blockchain and associated data structures. Those full nodes which put coins in the escrow, become \textit{validators} and may participate in the collective signing protocol (\textit{CoSi}) and respond to requests of the light nodes. 
+The Stegos network is composed of full nodes and light nodes, e.g. those running on mobile devices or in the browser. Each full node maintains a full copy of the blockchain and associated data structures. Those full nodes which put coins in escrow, become \textit{validators} and may participate in the collective signing protocol (\textit{CoSi}) and respond to requests of the light nodes. 
 
 Light nodes do not maintain the full blockchain, they only keep blockchain headers and know how to talk to validators. 
 
 Stegos maintains the core of the network by running a number of validator nodes, which both simplifies the bootstrap of new nodes and ensures continuity of the network. The addresses of the core nodes are hard-coded into each release of the Stegos blockchain software.
 
-Nodes keep list of addresses of the nodes they know about (peers) and add new peers to the list as they become aware of them. A new node starting will connect to one of the core nodes to fetch a list of peers. Each full node quickly re-broadcasts received transactions to a set of its peers, after only a few light checks. This both ensures that a node cannot be DDOS-ed with transactions to validate and that it does not re-broadcast junk transactions.
+Nodes keep lists of addresses of the nodes they know about (peers) and add new peers to the list as they become aware of them. A new node starting will connect to one of the core nodes to fetch a list of peers. Each full node quickly re-broadcasts received transactions to a set of its peers, after only a few light checks. This both ensures that a node cannot be DDOS-ed with transactions to validate and that it does not re-broadcast junk transactions.
 
-To discourage bad actors, we employ a mechanism to both throttle peers and punish peers for bad transactions, etc. by blocking them from further participation in the network.
+To discourage bad actors, we employ a mechanism to both throttle peers and punish peers for bad transactions, etc., by blocking them from further participation in the network.
 
-The Stegos blockchain uses gossip protocols to spread information without depending on fixed networks of communicating nodes. This protocol does not require every node to be reliable or always up and running and does not require every node to know about every other node. The key to a gossip protocol is that every node knows only a few other nodes (or even just one) in the network, but as long as most nodes know about at least two other nodes besides themselves, information can propagate through the network.
+The Stegos blockchain uses gossip protocols to spread information without depending on fixed networks of communicating nodes. This protocol does not require every node to be reliable or always up and running, and does not require every node to know about every other node. The key to a gossip protocol is that every node knows only a few other nodes (or even just one) in the network, but as long as most nodes know about at least two other nodes besides themselves, information can propagate through the network.
 
 \section{Randomness}\label{randomness}
 
-Bias-resistant distributed randomness is a critical component of the Stegos. We employ \textit{RandHound++}, our own, improved variant of RandHound\cite{c12}, a large-scale distributed protocol that provides publicly-verifiable, unpredictable and unbiased randomness by implementing an efficient and decentralized randomness beacon. The protocol arranges participants into a verifiably unbiased random secret-sharing groups, which repeatedly produce random output at predefined intervals. 
+Bias-resistant distributed randomness is a critical component of Stegos. We employ \textit{RandHound++}, our own, improved variant of RandHound\cite{c12}, a large-scale distributed protocol that provides publicly-verifiable, unpredictable, and unbiased randomness by implementing an efficient and decentralized randomness beacon. The protocol arranges participants into verifiably unbiased random secret-sharing groups, which repeatedly produce random output at predefined intervals. 
 
 We use RandHound++ for multiple purposes:
 
 \begin{itemize}
-	\item {to form validators groups;}
-	\item {to elect leaders of validators groups;} 
+	\item {to form validator groups;}
+	\item {to elect leaders of validator groups;} 
 	\item {to choose pooled transactions facilitators among validators;}
 	\item {to find a winner of the Jackpot lottery.}
 \end{itemize}
@@ -161,48 +161,48 @@ The idea of performing distributed randomness generation is to have many nodes p
 
 RandHound++ is based on the notion of publicly verifiable secret sharing (PVSS)\cite{c15}, which ensures that every step of the process can be audited using zero knowledge proofs (ZKP), while keeping vital details of the process fully cloaked through strong cryptography.
 
-But unlike distributed Consensus Protocols, like pBFT, we don't need full Byzantine threshold participation at every stage. In what follows we assume a maximum number, $f$, of faulty nodes, in a collection of $(3 f + 1)$ participant nodes. 
+But unlike distributed Consensus Protocols, like pBFT, we do not need full Byzantine threshold participation at every stage. In what follows we assume a maximum number, $f$, of faulty nodes, in a collection of $(3 f + 1)$ participant nodes. 
 
 The usual Byzantine Fault Tolerance (BFT) requires responses from a super-majority of $(2 f + 1)$ nodes in order to reach consensus. But in our application, generating randomness, as long as at least one honest participant blends its randomness into the computation, the result will be purely random. We do not need consensus on the result as long as its process can be verified.
 
-Hence we only need $(f + 1)$ responses from participants to overcome any Byzantine faults, where at least one participant will be honest, and supplies true randomness. No need for consensus on the actual value generated. It is sufficient to see only that at least one node was honest. That is clearly true with $(f + 1)$ participants. Attackers can perturb the final value, but it will still become an honest random value by virtue of the inoculation property.
+Hence we only need $(f + 1)$ responses from participants to overcome any Byzantine faults, where at least one participant will be honest, and supplies true randomness. There is no need for consensus on the actual value generated. It is sufficient to see only that at least one node was honest. That is clearly true with $(f + 1)$ participants. Attackers can perturb the final value, but it will still become an honest random value by virtue of the inoculation property.
 
 \subsection{RandHound++}
 
-Our variant of RandHound protocol is implemented with pairing-based cryptography (PBC). As such it departs in a number of significant ways from the original RandHound algorithm. It is a distributed protocol for generating audit\-able untainted and unpredictable randomness, as required for fair stake-weighted elections of the validators group leader, among the other purposes.
+Our variant of the RandHound protocol is implemented with pairing-based cryptography (PBC). As such, it departs in a number of significant ways from the original RandHound algorithm. It is a distributed protocol for generating audit\-able, untainted, and unpredictable randomness, as required for fair stake-weighted elections of the validator group leader, among the other purposes.
 
-After every election, a validators group's \textit{leader} is selected, and then a \textit{beacon} node is chosen among the remaining validators. The \textit{beacon} node is responsible for partitioning all validators (including itself and the \textit{leader} into RandHound++ groups. 
+After every election, a validator group's \textit{leader} is selected, and then a \textit{beacon} node is chosen among the remaining validators. The \textit{beacon} node is responsible for partitioning all validators (including itself and the \textit{leader} into RandHound++ groups. 
 
-The first validator in any group becomes a local group leader who collects randomness from all its group members and itself, and then forwards that result back to the \textit{beacon}. The \textit{beacon} then combines all the group randomness values into into a single result that becomes the seed value for the next elections, then the \textit{beacon} sends a \textit{HOLD-ELECTION} message, with that seed value, to all validators in the network.
+The first validator in any group becomes a local group leader who collects randomness from all its group members and itself, and then forwards that result back to the \textit{beacon}. The \textit{beacon} then combines all the group randomness values into a single result that becomes the seed value for the next elections, then the \textit{beacon} sends a \textit{HOLD-ELECTION} message, with that seed value, to all validators in the network.
 
 A major advantage of PBC is that we can use efficient BLS signatures\cite{c16} in the protocol. Such signatures can be collectively added, along with the group sum of their public keys, to produce a short collective-signature that can be validated just as easily as a single signature. BLS signatures are efficient because multi-signatures can be generated immediately and do not require a second query from participants in order to produce their collective signature.
 
 But PBC entails some complications in translating the RandHound algorithm to asymmetric pairs of elliptic curves. Though these complications are purely conceptual --- the mathematics are more difficult. But PBC performs nicely, with the same efficiencies for producing PVSS data as are to be had with producing BLS signatures.
 
-We are going to publish a separate paper, describing in more details our improvements on the original RandHound protocol in the nearest future.
+We will publish a separate paper describing in more detail our improvements on the original RandHound protocol in the nearest future.
 
 \section{Consensus}\label{consensus}
 
-The Stegos consensus protocol is based on pBFT\cite{c9} but adds strong consistency, which enables all validators to agree on the validity of blocks without wasting computational power resolving inconsistencies. Clients don’t need to wait more than a few seconds to be certain that a submitted transaction is committed; as soon as it appears in the blockchain, the transaction can be considered confirmed. 
+The Stegos consensus protocol is based on pBFT\cite{c9} but adds strong consistency, which enables all validators to agree on the validity of blocks without wasting computational power resolving inconsistencies. Clients do not need to wait more than a few seconds to be certain that a submitted transaction is committed; as soon as it appears in the blockchain, the transaction can be considered confirmed. 
 
 \subsection{Collective Signing}
 
 We adopt \textit{CoSi}\cite{c10}\cite{c11}, a scalable witness cosigning protocol ensuring that every authoritative statement is validated and publicly logged by a diverse group of witnesses before any client will accept it. A statement $S$ collectively signed by $W$ witnesses assures clients that $S$ has been seen, and not immediately found erroneous, by those $W$ observers. Even if $S$ is compromised in a fashion not readily detectable by the witnesses, CoSi still guarantees $S$’s exposure to public scrutiny, forcing secrecy-minded attackers to risk that the compromise will soon be detected by one of the W witnesses. 
 
-CoSi builds on existing cryptographic multisignature methods, scaling them to support thousands of witnesses via signature aggregation over efficient communications. The default implementation of CoSi uses Schnorr signatures which we replace with BLS signatures for performance reasons.
+CoSi builds on existing cryptographic multi-signature methods, scaling them to support thousands of witnesses via signature aggregation over efficient communications. The default implementation of CoSi uses Schnorr signatures which we replace with BLS signatures for performance reasons.
 
-More details on using CoSi protocol for sealing blocks in Stegos blockchain will be given later in this document, it the Section \ref{tx_processing}.
+More details on using CoSi protocol for sealing blocks in Stegos blockchain will be given later in this document, in the Section \ref{tx_processing}.
 
 
 \subsection{Leader Elections}
 
-Stegos is a public decentralized blockchain so anyone can join the network, become a validator and earn rewards for maintaining it. Stegos uses Proof-of-Stake (PoS) consensus and all validators need to post a security bond of a fixed number of coins. Requiring a security bond helps prevent against Sybil attack by requiring a significant financial commitment from each identity.
+Stegos is a public, decentralized blockchain so anyone can join the network, become a validator, and earn rewards for maintaining it. Stegos uses Proof-of-Stake (PoS) consensus and all validators need to post a security bond of a fixed number of coins. Requiring a security bond helps prevent against Sybil attack by requiring a significant financial commitment from each identity.
 
 Any validator caught cheating by their peers loses their stake, which gets transferred into the Jackpot. 
 
-Validator elected to become a leader of the current epoch is rewarded by collecting transaction fees from the blocks it forms.
+Validators elected to become a leader of the current epoch are rewarded by collecting transaction fees from the blocks it forms.
 
-Leader elections are stake-weighted lottery. The larger the validator stake (security bond), the greater the chances of winning the current round of the lottery. After serving one round, the leader relinquishes his right to be re-elected until some number of rounds later.
+Leader elections are done by stake-weighted lottery. The larger the validator stake (security bond), the greater the chances of winning the current round of the lottery. After serving one round, the leader relinquishes his right to be re-elected until some number of rounds later.
 
 In order to produce a stake-weighted lottery, we could imagine dividing a circle into angular sections proportional to individual stakes, with the full circumference of the circle representing the sum of all stakes. A uniformly generated random number over a finite interval (this is where our RandHound++ protocol becomes handy) acts as a spinner in a dial readout, and wherever it points after a spin, that member is selected as the next leader. Larger stakeholders occupy a larger portion of the circumference, and so have a more likely chance of winning.
 
@@ -260,7 +260,7 @@ That this works can be seen by noting that every interior node of the tree serve
 
 \subsubsection{Handling leader failures} Leader elections are held on a schedule and validators recognize the signal to hold a new election. 
 
-The list of validators is publicly known and can be re-built by processing staking transactions starting with the genesis block. Validators keep a number of data structures in memory, including the list of other validators, and update these data structures when accepting blocks to add to the the end of the chain.
+The list of validators is publicly known and can be re-built by processing staking transactions starting with the genesis block. Validators keep a number of data structures in memory, including the list of other validators, and update these data structures when accepting blocks to add to the end of the chain.
 
 Each validator can re-run the election for themselves upon seeing the random value of the election signal, which arrives via RandHound++ protocol. All nodes should be able to agree on election outcome, but if not, then one of two things could happen: 
 
@@ -269,22 +269,22 @@ Each validator can re-run the election for themselves upon seeing the random val
 	\item{Second, a validator may think that someone else had won the election. In that case, it will silently reject signing requests by actual election winner, and never see any requests from the presumed one. The validators will re-sync its list of other validators if this happens for two consecutive election rounds.}
 \end{itemize}
 
-If the election winner is absent or comes under attack, it may not respond to its own election as leader, form the block or broadcast the block for signing. Any validator can call for a new early election, and after $(2 f+1)$ (supermajority) of such calls from different validators have been seen, a new election round will start.
+If the election winner is absent or comes under attack, it may not respond to its own election as leader, form the block, or broadcast the block for signing. Any validator can call for a new early election, and after $(2 f+1)$ (supermajority) of such calls from different validators have been seen, a new election round will start.
 
 \subsubsection{A fault-tolerant and self-healing protocol} Immediately after a leader election, each validator should determine its role for the new epoch:
 
 \begin{itemize}
 	\item If elected leader, then begin next block assembly. 
 	\item If the node should become a member of a RandHound++ group, then start running the protocol within its group.
-	\item If the node should become a facilitator for transaction pooling protocol, then start collecting transaction intent messages.
+	\item If the node should become a facilitator for the transaction pooling protocol, then start collecting transaction intent messages.
 	\item If the node should become a CoSi witness node, then start a timeout timer. If that timeout ever fires, then it is time to call for a new election. Incoming messages can restart or cancel the timeout timer, though.
-	\item Otherwise, the node is on standby for the next election cycle. Nodes on standby can ignore almost all messages, but must pay attention to election related messages.
+	\item Otherwise, the node is on standby for the next election cycle. Nodes on standby can ignore almost all messages, but must pay attention to election-related messages.
 \end{itemize}  
 
 All validators should pay attention to leader election messages:
 
 \begin{itemize}
-	\item{\textit{New Election Message}: run an election with the random value provided in the election message, and determine next role for this validator --- one of leader, witness signer, RandHound++ participant, facilitator or standby. Reset the counter of calls for new election.}
+	\item{\textit{New Election Message}: run an election with the random value provided in the election message, and determine next role for this validator --- one of leader, witness signer, RandHound++ participant, facilitator, or standby. Reset the counter of calls for new election.}
 	\item{\textit{Call For New Election Message}: Increment the count, $n$, of such calls seen from different validators, and if $n \ge 2 f +1$, then run another election round based on the last election's random value, with a decision tree that excludes current leader. Determine new leader and next role for this validator. Reset the counter of calls for new election.}
 \end{itemize}
 
@@ -292,9 +292,9 @@ All validators should pay attention to leader election messages:
 
 Stegos blockchain is able to accommodate multiple kinds of blocks. The kind of the block is defined by the \textit{Block Type ID} slot in the block header. In this paper we define two types of blocks: $0 (KeyBlock)$ and $1 (MonetaryBlock)$.
 
-Monetary blocks, the blocks that carry all cryptocurrency transactions data and coins, will be described in details in Section \ref{block}. We will be referring to them simply as \textit{blocks} throughout this paper. 
+Monetary blocks, the blocks that carry all cryptocurrency transactions data and coins, will be described in detail in Section \ref{block}. We will be referring to them simply as \textit{blocks} throughout this paper. 
 
-The purpose of Key blocks is to deliver the administrative information to blockchain participants. Any node, searching through key blocks, can see who is current or past epoch \textit{leader}, who are witnesses (validators) for the current or past epoch. Nodes wishing to submit a transaction should consult with the latest key block to find who is the current pooled transactions \textit{facilitator}.
+The purpose of Key blocks is to deliver the administrative information to blockchain participants. Any node, searching through key blocks, can see who is current or past epoch \textit{leader}, and who are witnesses (validators) for the current or past epoch. Nodes wishing to submit a transaction should consult with the latest key block to find who is the current pooled transactions \textit{facilitator}.
 
 The key block header is constructed by the current \textit{leader} filling in the following slots:
 
@@ -314,19 +314,19 @@ There is no body in the key block.
 
 The initial contents of the BLS Multi-signature slots should be zero filled and, even after being filled in, never contribute to the computation of any \textit{block header hash}. All other slots are concatenated to form a header hash pre-image.
 
-The key block verification and sealing should be done using the same consensus protocol as for the monetary blocks. We will describe this protocol in details later on in this paper, in Section \ref{block}.
+The key block verification and sealing should be done using the same consensus protocol as for the monetary blocks. We will describe this protocol in detail later on in this paper, in Section \ref{block}.
 
 \section{Basic Transactions}\label{transactions}
 
-In previous sections, we explained the high-level concepts of Stegos, including networking, randomness and consensus. Now it's time to describe the inner details of Stegos, such as the composition of its coins and basic transactions.
+In previous sections, we explained the high-level concepts of Stegos, including networking, randomness, and consensus. Now it is time to describe the inner details of Stegos, such as the composition of its coins and basic transactions.
 
 \subsection{UTXO Structure}\label{utxo}
 
 For illustrative purposes, suppose that some coins have been sent from Alice to Bob. Alice's public key is $P_A$, while Bob's secret key is $s_B$ and his public key is $P_B$. To help preserve anonymity, all public keys in Stegos are cloaked with a random value chosen from a very large finite field, $Z_r$.
 
-When Alice sends coins to Bob, she cloaks their amount with a Pedersen commitment, which is both binding and hiding. It binds Alice to her commitment so that she can never alter the amount of coins. The commitment also hides the amount from the general public, while simultaneously providing proof to the public that the amount is legitimate.  Only Alice and Bob know how many coins are being transferred. 
+When Alice sends coins to Bob, she cloaks their amount with a Pedersen commitment, which is both binding and hiding. It binds Alice to her commitment so that she can never alter the amount of coins. The commitment also hides the amount from the general public, while simultaneously providing proof to the public that the amount is legitimate. Only Alice and Bob know how many coins are being transferred. 
 
-To form a Pedersen commitment, Alice multiplies the amount by a generator, $A$ for the Elliptic curve group, $E_q$, of prime order $r$. To that she cloaks the commitment by adding a multiple, $\gamma$, of the publicly known generator point, $G$, with the multiple being chosen randomly from the finite field, $Z_r$. Generators $A$ and $G$ must have no known relationship. Placing the cloaking factor on the main generator curve will become important as we proceed. This is the same curve which holds all public keys. 
+To form a Pedersen commitment, Alice multiplies the amount by a generator, $A$ for the Elliptic curve group, $E_q$, of prime order $r$. To that, she cloaks the commitment by adding a multiple, $\gamma$, of the publicly known generator point, $G$, with the multiple being chosen randomly from the finite field, $Z_r$. Generators $A$ and $G$ must have no known relationship. Placing the cloaking factor on the main generator curve will become important as we proceed. This is the same curve which holds all public keys. 
 
 The Pedersen commitment is thus:
 $$ C(x, \gamma) = x \, A + \gamma \, G \in E_q$$
@@ -355,17 +355,17 @@ E_B(x, \gamma, \delta) &= \textit{Encrypted payload}
 
 $E_B(x, \gamma, \delta)$ represents an encrypted packet containing the information about $x$, $\gamma$, and $\delta$, in a form that only Bob can read.
 
-The Bulletproof contains the Pedersen commitment discussed above, as well as providing a range proof on the amount, $x$. Everyone knows the $E_q$ group generators, $G$ and $A$. Alice's complete transaction record contains additional information that we'll discuss below.
+The Bulletproof contains the Pedersen commitment discussed above, as well as provides a range proof on the amount, $x$. Everyone knows the $E_q$ group generators, $G$ and $A$. Alice's complete transaction record contains additional information that we will discuss below.
 
 Nowhere is either of Alice's or Bob's public key shown. We only present a cloaked version of Bob's key. And since $\delta$ is a secret value, nobody can recover the actual public key underlying the cloaked version. 
 
-Therefore Bob may publish his public key openly, i.e. on his website or in an  invoice, and don't worry that his identity will be linked to the recipient of the payment on Stegos blockchain, because his public key will appear in Stegos UTXOs always in a cloaked from -- every time as a completely new and random number.
+Therefore Bob may publish his public key openly, i.e. on his website or in an invoice, and need not worry that his identity will be linked to the recipient of the payment on Stegos blockchain, because his public key will appear in Stegos UTXOs always in a cloaked from -- every time as a completely new and random number.
 
 \subsection{Transaction Structure}
 
 When Bob wants to spend his new tokens, he must form a transaction containing a list of inputs (TXINs) and outputs (TXOUTs). TXINs are nothing more than the $\mathit{ID}$s referring to other UTXOs. TXOUTs are a list of new UTXOs. He must also offer a valid signature on the entire transaction, which simultaneously proves his ownership of all TXIN's, proves that the transaction carries zero net balance of funds between TXINs, TXOUTs and fees, and protects the contents of his transaction against mutation by MITM attackers.
 
-A UTXO can only be spent in its entirety, and if it carries excess value for his purposes, he will produce a TXOUT with change back to himself, thereby creating a new UTXO. Bob must show that the sum of all inputs to his transaction equals the sum of all outputs plus fee. And he can do so with Pedersen commitments so that his transaction is binding on him, while also disclosing nothing about the actual amounts involved.
+A UTXO can only be spent in its entirety, and if it carries excess value for his purposes, he will produce a TXOUT with change back to himself, thereby creating a new UTXO. Bob must show that the sum of all inputs to his transaction equals the sum of all outputs plus fees. He can do so with Pedersen commitments so that his transaction is binding on him, while also disclosing nothing about the actual amounts involved.
 
 To form his signature, he adds together all the $\delta$ cloaking factors from the UTXOs specified by his TXINs list of $\mathit{ID}$s, adds in all the $\gamma$ cloaking factors from the Pedersen commitments in the Bulletproofs from those same UTXOs, and subtracts the $\gamma$ cloaking factors used in his own TXOUT UTXOs. 
 
@@ -384,9 +384,9 @@ where $T$ represents the entire transaction record, sans signature.
 Let's examine the commitment terms. Pedersen commitments are additively homomorphic:
 $$C(x_1, \gamma_1) + C(x_2, \gamma_2) = C(x_1 + x_2, \gamma_1 + \gamma_2)$$
 
-Hence, if Bob's transaction is valid, the amount terms in the effective public key show a zero balance on the $A$ curve, after subtracting off the $\mathit{Fee}$. What remains is entirely on the $G$ curve. The validator sum becomes another public key on the $G$ curve, exactly matching her own computed effective secret key, $s_{\mathit{eff}}$. Only Bob could form a valid signature since it relies on his secret key. It is unforgeable. Both Alice and Bob know all the other secret items, $\gamma$'s and $\delta$'s. Nobody else knows any of the secret values.
+Hence, if Bob's transaction is valid, the amount terms in the effective public key show a zero balance on the $A$ curve, after subtracting off the $\mathit{Fee}$. What remains is entirely on the $G$ curve. The validator sum becomes another public key on the $G$ curve, exactly matching his own computed effective secret key, $s_{\mathit{eff}}$. Only Bob could form a valid signature since it relies on his secret key. It is unforgeable. Both Alice and Bob know all the other secret items, $\gamma$'s and $\delta$'s. Nobody else knows any of the secret values.
 
-Suppose Bob now just wants to send the coins she received from Alice on to Charlie, after deducting fees. In that case, Bob forms a UTXO that uses a different blinding factor, $\gamma_2$, and different key cloaking value, $\delta_2$, and which contains amount, $(x - \mathit{Fee})$. Bob must form a new Bulletproof on the amount, and encrypt these values into a payload that only Charlie can read:
+Suppose Bob now just wants to send the coins he received from Alice on to Charlie, after deducting fees. In that case, Bob forms a UTXO that uses a different blinding factor, $\gamma_2$, and different key cloaking value, $\delta_2$, and which contains amount, $(x - \mathit{Fee})$. Bob must form a new Bulletproof on the amount, and encrypt these values into a payload that only Charlie can read:
 $$ID' = H_r(P_{S, \delta_2}, Bp', E_S(x - Fee), \gamma_2, \delta_2))$$
 where $P_{C, \delta_2}$ is Charile's cloaked public key for this transaction. 
 
@@ -407,7 +407,7 @@ To wrap up, Bob publishes the transaction:
 
 The first line is Bob's TXIN referencing the UTXO produced for him by Alice. The second line is the TXOUT - a new UTXO aimed at Charlie. The third line shows the fees paid for this transaction, in clear text form. 
 
-The fourth line shows what value of $\gamma$ adjustment, on the $G$ curve, is needed to see that the sum of input commitments equals the sum of output commitments, proving a zero net balance between TXINs and TXOUTs and Fee. This information is redundant in the sense that a valid signature on the transaction already proves this. But future coalescing of transactions, e.g. in the blockchain, needs to know the individual $\gamma_{\mathit{adj}}$ factors in order to produce a valid collection from individual transactions.
+The fourth line shows what value of $\gamma$ adjustment, on the $G$ curve, is needed to see that the sum of input commitments equals the sum of output commitments, proving a zero net balance between TXINs and TXOUTs and Fees. This information is redundant in the sense that a valid signature on the transaction already proves this. But future coalescing of transactions, e.g. in the blockchain, needs to know the individual $\gamma_{\mathit{adj}}$ factors in order to produce a valid collection from individual transactions.
 
 The final line is Bob's signature asserting ownership of all TXINs, valid zero balance on the transaction, and serves as a checksum against mutation of the contents of this transaction. If anything becomes changed in this record, the signature won't check. Hence our transactions are non-malleable.
 
@@ -416,52 +416,50 @@ The final line is Bob's signature asserting ownership of all TXINs, valid zero b
 \subsection{A problem of establishing untraceability}
 We just saw that, even though participants' identities are cloaked in the blockchain, a record of ancestry for every UTXO could be potentially generated by tracing blockchain transactions backwards up to the genesis block if neeeded.
 
-Despite we have a serious hurdle for such tracing --- we don't store transactions in the blocks of out blockchain, but rather Merkle trees of inputs and outputs --- the malicious node implanted in our permissionless blockchain may become a validator very soon in the blockchain history and it may collect and store transactions history, in order to analyze and trace UTXOs later on.
+Despite the fact that we have a serious hurdle for such tracing --- we don't store transactions in the blocks of out blockchain, but rather Merkle trees of inputs and outputs --- a malicious node implanted in our permissionless blockchain may become a validator very soon in the blockchain history and it may collect and store transactions history, in order to analyze and trace UTXOs later on.
 
-To counteract that, we want to utilize a protocol that totally hides knowledge about the relationship of between inputs and outpus.
+To counteract that, we want to utilize a protocol that totally hides knowledge about the relationship of between inputs and outputs.
 
-The difficulty in implementation of such protocol follows from the fact that UTXOs must have identifiable characteristics. Their $ID$s are unique. Without that, no witness could ever validate transactions, and there would be no way to prove ownership. But that $ID$ leads to an inevitable trail. We want to obscure that trail by showing only that a UTXO could have come from one or more of many different and unrelated inputs. We want to ensure that nobody can tell what its source was but done so in a manner allowing public validation.
+The difficulty in implementation of such a protocol follows from the fact that UTXOs must have identifiable characteristics. Their $ID$s are unique. Without that, no witness could ever validate transactions, and there would be no way to prove ownership. But that $ID$ leads to an inevitable trail. We want to obscure that trail by showing only that a UTXO could have come from one or more of many different and unrelated inputs. We want to ensure that nobody can tell what its source was, but only in a manner allowing public validation.
 
 \subsection{Possible solutions}
-Currently there are four kinds of approaches for solving the problem of establishing untraceability: mixers, Ring Signature, zk-SNARK and CoinJoin family of protocols.
+Currently there are four kinds of approaches for solving the problem of establishing untraceability: mixers, Ring Signature, zk-SNARK, and CoinJoin family of protocols.
 
-\subsubsection{Mixers} require that users trust the third-party which provides mixing services, which is obviously an unacceptable scenario for a truly private and confdential blockchain.
+\subsubsection{Mixers} require that users trust the third-party which provides mixing services, which is obviously an unacceptable scenario for a truly private and confidential blockchain.
 
-\subsubsection{Ring Signature} collect together a large number of UTXOs from the blockchain at random, and add those into the list of actual inputs being spent. A signature is formed on all of the inputs, so that you can prove that one group of inputs are being spent properly, but nobody can determine which ones. The problem with this approach is that you can't ever know, therefore, if a UTXO becomes spent and could be pruned from the blockchain. All UTXOs that \textit{ever existed} must be retained in the blockchain. That doesn't scale very well.
+\subsubsection{Ring Signature} collects together a large number of UTXOs from the blockchain at random, and adds those into the list of actual inputs being spent. A signature is formed on all of the inputs, so that you can prove that one group of inputs are being spent properly, but nobody can determine which ones. The problem with this approach is that you can not ever know, therefore, if a UTXO becomes spent and could be pruned from the blockchain. All UTXOs that \textit{ever existed} must be retained in the blockchain. That does not scale very well.
 
 \subsubsection{zk-SNARK} stands for ``Zero-Knowledge Succinct Non-Interactive Argument of Knowledge.'' Currently, the only known way to produce zero-knowledge proofs that are non-interactive and short enough to publish to a block chain is to have an initial setup phase that generates a common reference string shared between prover and verifier. If someone had access to the secret randomness used to generate these parameters, they would be able to create false proofs that would look valid to the verifier. For a cryptocurrency that uses zk-SNARK, like, for example, Zcash, this would mean the malicious party could create counterfeit coins. 
 
-Moreover, in order to defend zk-SNARKs-based cryptocurrency from the double-spending, a cryptographical accumulator should be etsablished on all nodes. It should contain the serial numbers of all spent coins. This accumulator is ever-growing and cannot be trimmed, which hurts the sustainability of the blockchain.
+Moreover, in order to defend zk-SNARKs-based cryptocurrency from the double-spending problem, a cryptographical accumulator should be established on all nodes. It should contain the serial numbers of all spent coins. This accumulator is ever-growing and cannot be trimmed, which hurts the sustainability of the blockchain.
 
-\subsubsection{CoinJoin} is a protocol for joining several Bitcoin transactions together before submitting them to miners to include in the block, that was originally proposed by Greg Maxwell in 2013. It is based on the following idea: ``When you want to make a payment, find someone else who also wants to make a payment and make a joint payment together.''\footnote{https://en.wikipedia.org/wiki/CoinJoin} CoinJoin implementations were based on the usage of trusted server, that provided service of mixing multiple transactions together.
+\subsubsection{CoinJoin} is a protocol for joining several Bitcoin transactions together before submitting them to miners to include in the block, that was originally proposed by Greg Maxwell in 2013. It is based on the following idea: ``When you want to make a payment, find someone else who also wants to make a payment and make a joint payment together.''\footnote{https://en.wikipedia.org/wiki/CoinJoin} CoinJoin implementations were based on the usage of trusted servers that provided the service of mixing multiple transactions together.
 
 CoinJoin inspired researchers from Saarland University to develop a completely decentralized protocol they called CoinShuffle\cite{c17} in 2014, that also allows users to mix their coins with those of other interested users. It ensures security against theft and by the accountable anonymous group communication protocol Dissent to ensure anonymity as
-well as robustness against DoS attacks. Continuing their research, the same researchers in 2016 presented echanced version of the protocol, which they called CoinShuffle++\cite{c18}. The key innovation of CoinShuffle++ was the use of a more efficient mechanism for anonymity: it uses Dining Cryptographers Networks (DC-nets)\cite{c20} instead of mix-nets. A mix-net requires sequential processing. Thus, the original CoinShuffle needs a number of communication rounds linear in the number of users, even if everybody is honest. CoinShuffle++ instead uses DC-nets and thus allows users to process mixing in parallel. As a result, CoinShuffle++ requires only a constant number of communication rounds independently of the number of users in this case. 
+well as robustness against DoS attacks. Continuing their research, the same researchers in 2016 presented an enhanced version of the protocol, which they called CoinShuffle++\cite{c18}. The key innovation of CoinShuffle++ was the use of a more efficient mechanism for anonymity: it uses Dining Cryptographers Networks (DC-nets)\cite{c20} instead of mix-nets. A mix-net requires sequential processing. Thus, the original CoinShuffle needs a number of communication rounds linear in the number of users, even if everybody is honest. CoinShuffle++ instead uses DC-nets and thus allows users to process mixing in parallel. As a result, CoinShuffle++ requires only a constant number of communication rounds independently of the number of users in this case. 
 
-In Stegos, we are improving on ValueShuffle\cite{c19}, an extension of CoinShuffle++ which is compatible with confidential transactions. ValueShuffle ensures the
-anonymity of mixing participants as well as the confidentiality of their
-payment values even against other possibly malicious mixing participants. ValueShuffle paper does not provide details on forming a pool of senders wishing to mix their transaction, as well as details on how to form a signature on the resulting, pooled transaction. 
+In Stegos, we are improving on ValueShuffle\cite{c19}, an extension of CoinShuffle++ which is compatible with confidential transactions. ValueShuffle ensures the anonymity of mixing participants as well as the confidentiality of their payment values even against other possibly malicious mixing participants. The ValueShuffle paper does not provide details on forming a pool of senders wishing to mix their transaction, as well as details on how to form a signature on the resulting, pooled transaction. 
 
-We have developed a protocol where a \textit{facilitator} elected among the validators is providing services of \textit{Bulletin Board}, as defined in ValueShuffle paper. We have also defined a protocol for a collective Schnorr signature\cite{c22} formation on the resulting transaction. Details of these protocols, as well as brief explanation of our implementation of ValueShuffle will be given in the rest of this section.
+We have developed a protocol where a \textit{facilitator} elected among the validators is providing services of \textit{Bulletin Board}, as defined in the ValueShuffle paper. We have also defined a protocol for a collective Schnorr signature\cite{c22} formation on the resulting transaction. Details of these protocols, as well as a brief explanation of our implementation of ValueShuffle will be given in the rest of this section.
 
 \subsection{Formation of senders pool}
 Each epoch, besides selecting new witnesses, a leader, and a winner of the Jackpot, all validators select a node among them which must serve as a \textit{Bulletin Board} in ValueShuffle protocol and include the public key of this node into the sealed keyblock for the new epoch. We call that Bulletin Board node \textit{a facilitator}.
 
 Each node intending to submit a transaction should broadcast a \textit{Transaction Intent} message with a fresh ephemeral public key along with the signature proof of validity.
 
-\textit{Facilitator} should listen to transaction intent messages from the nodes and pool public keys from those messages into collections of $K$ keys each. $K$ defines a cardinality of the anonymity set by defining how many participants should form a transaction mixing pool. This is a tunable parameter which can be set for an each epoch of the blockchain. 
+\textit{Facilitators} should listen to transaction intent messages from the nodes and pool public keys from those messages into collections of $K$ keys each. $K$ defines a cardinality of the anonymity set by defining how many participants should form a transaction mixing pool. This is a tunable parameter which can be set for an each epoch of the blockchain. 
 
 Upon collection of $K$ keys or on the timeout of $T$ seconds, \textit{the facilitator} broadcasts \textit{Transactions Pool} message (signed with its private key), containing all collected ephemeral public keys and corresponding signatures.
 
-Each node that recognize its key in \textit{Transactions Pool} message should sort the collection of keys from it in the ascending numerical order, form the hash of the collection, and use that hash as a random seed for the \textit{Pooled Transactions Session}.
+Each node that recognizes its key in \textit{Transactions Pool} messages should sort the collection of keys from it in ascending numerical order, form the hash of the collection, and use that hash as a random seed for the \textit{Pooled Transactions Session}.
 
-\textit{A pool leader} is elected by participating nodes by forming the XOR of the hash value defined above with the public key of the each pool participant and, if the resulting value is the minimum in the list, then that noide should be chosen as a \textit{pool leader}.
+\textit{A pool leader} is elected by participating nodes by forming the XOR of the hash value defined above with the public key of the each pool participant and, if the resulting value is the minimum in the list, then that node should be chosen as a \textit{pool leader}.
 
 \textit{A pool leader} is responsible for publication of a final pooled transaction, that we call a \textit{super-transaction}.
 
 \subsection{Pooled Transactions Session}
 
-All communications, including broadcasting, within the pooled transactions session should be contained within the group of the pool participants.  All nodes of the pool will broadcast their lists of TXINs along with signatures validating ownership of their TXINs. Every participant can validate the lists from other participants by verifying the signature attesting to TXIN ownership. Participants should check that the public key in the signature is from one of the group members.
+All communications, including broadcasting, within the pooled transactions session should be contained within the group of the pool participants. All nodes of the pool will broadcast their lists of TXINs along with signatures validating ownership of their TXINs. Every participant can validate the lists from other participants by verifying the signature attesting to TXIN ownership. Participants should check that the public key in the signature is from one of the group members.
 
 \subsubsection{Collecting inputs} A valid signature on the TXINs from one participant is formed by creating a Schnorr signature on the sum of the cloaked public keys shown in the UTXOs referenced in the TXINs:
 
@@ -474,19 +472,19 @@ u &= k + H(K | ID_1 | ID_2 | ...) \, (N \, s + \sum_i{\delta_i}),
 
 where the sum is over the list of TXINs, $s$ is the owner's secret key, and the $\delta_i$ are the cloaking factors used on the public key of the owner. $N$ refers to how many TXINs there are in the list. Value $k$ is chosen randomly from the field, $Z_r$. 
 
-Verification of a signature is by seeing that:
+Verification of a signature is done by seeing that:
 $$u \, G = K + H(K | ID_1 | ID_2 | ...) \sum_i{P_i}$$
-where the $P_i$ are the cloaked public keys shown in the UTXO's corresponding to each $ID_i$. This signature proves ownership of the stated UTXOs referenced in TXINs.
+where the $P_i$ are the cloaked public keys shown in the UTXOs corresponding to each $ID_i$. This signature proves ownership of the stated UTXOs referenced in TXINs.
 
-Nothing in this broadcast identifies the sender, but one cannot count on that to hold. In the event of misbehavior, a blame cycle will require each node to submit all their shared secret keys, which effectively reveals their full transactions. A restart will compute new TXOUTs, so that a successful run ensures anonymity of participants. But if a blame cycle is performed there is no way to cloak the associations to TXINs again.
+Nothing in this broadcast identifies the sender, but one cannot count on that to hold. In the event of misbehavior, a blame cycle will require each node to submit all their shared secret keys, which effectively reveals their full transactions. A restart will compute new TXOUTs, so that a successful run ensures anonymity of participants. But if a blame cycle is performed, there is no way to cloak the associations to TXINs again.
 
 Once contributions have been received from each participant, or a timeout occurs, the resulting pool of TXINs is known to all participants. Since these are merely UTXO $ID$s pointing into the immutable blockchain, no further changes can occur to this list except for removal of individual TXIN references as some participants are found to go offline during the protocol, or else when a cheater is detected and then excluded for a restart of the protocol.
 
-\subsubsection{Establishing pair-wise shared keys} All participants will establish pair-wise shared secret keys between themselves and every other participant of the pooled transactions session. These shared keys are used to form cloaking factors in the anonymizing protocol, such that, only after pooling results from all participants, will the collection of data shared among them become apparent. Until that time, all information remains cloaked. And after that time, the data will be known, but no associations can be inferred regarding who supplied which portions of the data. 
+\subsubsection{Establishing pair-wise shared keys} All participants will establish pair-wise shared secret keys between themselves and every other participant of the pooled transactions session. These shared keys are used to form cloaking factors in the anonymizing protocol, such that, only after pooling results from all participants will the collection of data shared among them become apparent. Until that time, all information remains cloaked. After that time, the data will be known, but no associations can be inferred regarding who supplied which portions of the data. 
 
-It is important to the protocol, that between any two users, both of them are using the same shared secret cloaking key. Only then will the sum of all cloaking factors, from all participants, cancel out in the DiceMix arrays. But users are prevented from seeing each other's secrets since the total cloaking factor also sums contributions related to all other participants, and those keys are unknown to the other party.
+It is important to the protocol, that between any two users both of them are using the same shared secret cloaking key. Only then will the sum of all cloaking factors, from all participants, cancel out in the DiceMix arrays. But users are prevented from seeing each other's secrets since the total cloaking factor also sums contributions related to all other participants, and those keys are unknown to the other party.
 
-Shared keys can be securely established between every pair of participants using Diffie-Hellman secure key exchange\cite{c21}. With two participants, $A$ and $B$, this can be established by having $A$ send to $B$
+Shared keys can be securely established between every pair of participants using a Diffie-Hellman secure key exchange\cite{c21}. With two participants, $A$ and $B$, this can be established by having $A$ send to $B$
 $$A \rightarrow B: (\alpha \, P_B, Sig(P_A))$$
 for $\alpha$ randomly chosen by $A$, and where $Sig(P_A)$ securely authenticates this information as having come from $A$. The signature includes the public key, $P_A$. 
 
@@ -503,9 +501,9 @@ since $P_A = s_A \, G$. And at $B$ we compute
 $$\alpha \, G = (\alpha \, P_B) / s_B$$
 Then each side can multiply their result by their chosen randomness to reveal $(\alpha \beta \, G)$. Nobody watching the exchange can deduce the shared secret key.
 
-\subsubsection{Producing DiceMix arrays for outputs} Next, each participant computes their TXOUTs with \textit{fresh randomness}, chooses random $k$-factors for an eventual collective Schnorr signature, and produces both a DiceMix array containing the fragmented TXOUTs, and cloaked running sums of their $\gamma_{adj}$ and $K$-signature values. The hash commitment of this information is signed and broadcasted to all participants. This commitment will be used to verify information during the following passes to verify that information was properly transmitted.
+\subsubsection{Producing DiceMix arrays for outputs} Next, each participant computes their TXOUTs with \textit{fresh randomness}, chooses random $k$-factors for an eventual collective Schnorr signature, and produces both a DiceMix array containing the fragmented TXOUTs, and cloaked running sums of their $\gamma_{adj}$ and $K$-signature values. The hash commitment of this information is signed and broadcast to all participants. This commitment will be used to verify information during the following passes to verify that information was properly transmitted.
 
-The DiceMix array contains successive powers of TXOUTs fragments, cloaked with self-canceling seeds that zero-out after all participants pool their results from the next pass. After forming the DiceMix array and running sums, this information is signed and broadcasted to all participants. Anonymity is assured because of the DiceMix cryptographic mixing process. Even though all participants can see, from the accompanying signature, who delivered a DiceMix array, they cannot see which components of the collection were contributed by any participant. The entire collection is revealed only after summing the DiceMix arrays from all participants.
+The DiceMix array contains successive powers of TXOUTs fragments, cloaked with self-canceling seeds that zero-out after all participants pool their results from the next pass. After forming the DiceMix array and running sums, this information is signed and broadcast to all participants. Anonymity is assured because of the DiceMix cryptographic mixing process. Even though all participants can see, from the accompanying signature, who delivered a DiceMix array, they cannot see which components of the collection were contributed by any participant. The entire collection is revealed only after summing the DiceMix arrays from all participants.
 
 The individual $K$-signature terms from each participant are summed in a blind sum. We do this to prevent combinatorial exploration, once signature $u$-values are disclosed, which could lead to associations between TXINs and TXOUTs.
 
@@ -527,7 +525,7 @@ u_i &= k_i + H(K_{sum} | T) \,  s_{cmp}\\
 
 where index $i$, labels each participant, index $j$, labels every TXIN, for $N$ of them, belonging to the participant, and index $k$, labels each TXOUT belonging to that participant. On summation from all participants, the multi-signature $(u_{sum}, K_{sum})$ represents a valid signature on the super-transaction in the same manner that would hold if this were a simple transaction.
 
-\subsubsection{Publishing the super-tranaction} At the end of this final signature pass, each participant should have a super-transaction that can be validated by public witnesses. But all connections between TXINs and TXOUTs have been broken. All that anyone can see is that all TXIN are being spent, and each TXOUT must have derived from one or more of those TXIN, but no way to see which ones are associated. \textit{The session leader} then sends the super-transaction into the network using gossip protocol for validation and inclusion into the block.
+\subsubsection{Publishing the super-transaction} At the end of this final signature pass, each participant should have a super-transaction that can be validated by public witnesses. But all connections between TXINs and TXOUTs will have been broken. All that anyone can see is that all TXINs are being spent, and each TXOUT must have derived from one or more of those TXIN, but no way to see which ones are associated. \textit{The session leader} then sends the super-transaction into the network using gossip protocol for validation and inclusion into the block.
 
 \subsubsection{Blame cycle} If a blame cycle must happen, each participant must divulge their shared secret keys. Then all other nodes can verify that all stages of the computation were performed correctly, according to the information sent previously. We then have known associations between TXINs and TXOUTs. Any participant which cannot or will not do this is blamed for the fault, and the protocol restarts after taking note of the TXINs associated with the cheating node.
 
@@ -539,7 +537,7 @@ But since secret shared keys were divulged during blame discovery, all participa
 On entry to the witness pool, a transaction needs to be validated. The steps are:
 
 \begin{itemize}
-	\item{For each TXIN, witness must locate the UTXO referred to by the $ID$, to find the public key, Bulletproof, and Pedersen commitment, used for signature formation. If any $ID$ does not point to existing UTXO, then the entire transaction is invalid.}
+	\item{For each TXIN, a witness must locate the UTXO referred to by the $ID$, to find the public key, Bulletproof, and Pedersen commitment, used for signature formation. If any $ID$ does not point to an existing UTXO, then the entire transaction is invalid.}
 	\item{No two TXINs can point to the same UTXO, to prevent double-spend attempts.}
 	\item{All of the cloaked public keys must be summed, along with all of the Pedersen commitments from the TXINs. Then all of the Pedersen commitments from the Bulletproofs in the TXOUTs must be subtracted from the sum, as well as $Fee$ times the $A$ curve generator. The Schnorr signature in the transaction must be checked against this summed public key:
 
@@ -555,7 +553,7 @@ On entry to the witness pool, a transaction needs to be validated. The steps are
 	Now check that
 	$$u \, G = K + H_r(T, K) \, P_{eff}$$
 	
-	If this equation holds true, then the transaction body has not been mutated, the sender has proven ownership of all UTXOs referenced in TXINs, and the transaction represents a proper zero balance.}
+	If this equation holds true, then the transaction body has not been mutated, the sender has proven ownership of all UTXOs referenced in the TXINs, and the transaction represents a proper zero balance.}
 	\item{The Bulletproofs in every TXOUT must be validated to ensure that amounts are within proper range, that no money is being created on credit.}
 \end{itemize}
 
@@ -563,7 +561,7 @@ At this point, we now have a valid transaction to consider. Commitments are held
 
 The paired TXINs and their UTXOs must be marked as pending extinction, so that the UTXOs will not be available for matching with the next transaction. This prevents future double-spend attempts.
 
-Because network communications do not guarantee message arrival order, it may be necessary to form the topological sort of incoming transactions, in case some of their TXINs refer to UTXOs created elsewhere in the batch. An example would be where Alice spends some of her tokens, receives change back to herself, then spends that change in another transaction.
+Because network communications do not guarantee message arrival order, it may be necessary to form a topological sort of incoming transactions, in case some of their TXINs refer to UTXOs created elsewhere in the batch. An example would be where Alice spends some of her tokens, receives change back to herself, then spends that change in another transaction.
 
 \subsection{Formation and Validation of Monetary Blocks}\label{block}
 
@@ -607,9 +605,9 @@ Because network communications do not guarantee message arrival order, it may be
 	The leader will sign and broadcast this message to all witnesses. The witnesses will attempt to validate the proposed block construction.}
 \end{itemize}
 
-\subsubsection{Block validation} Once constructed, the witness leader must then seek consensus for its proposed block from all the other witnesses according to the protocol described on the high-level in the Section \ref{consensus}. 
+\subsubsection{Block validation} Once constructed, the witness leader must then seek consensus for its proposed block from all the other witnesses according to the protocol described at a high-level in the Section \ref{consensus}. 
 
-In this section we are going to clarify the details of the Stegos consensus protocol, which happens in two passes among the witness group.
+In this section we are going to clarify the details of the Stegos consensus protocol, which occurs in two passes among the witness group.
 
 \begin{itemize}
 	\item {\textbf{PrePrepare Phase}: \textit{The leader} broadcasts the contents of the signed \textit{Block Proposal} message, and its hash, to all witnesses in a \textit{PrePrepare} message. This is the only time that the entire message will be transmitted. All further communications will refer only to its hash value.}
@@ -643,7 +641,7 @@ In this section we are going to clarify the details of the Stegos consensus prot
 	\item{During the \textbf{PrePrepare timeout period}, the \textit{leader} accumulates valid \textit{Prepare} responses from the witnesses:
 
 		\begin{itemize}
-			\item {Every response is checked to see if it is a valid signature on the block header hash value. The public key for the signature is looked up in the list of witnesses according to the indicated position from the response message. If the signature is valid, and the response has not already been seen, then the signature is accumulated into an accumulating multi-signature, and the position of the witness is recorded as a bit in the multi-signature bitmap.} 
+			\item {Every response is checked to see if there is a valid signature on the block header hash value. The public key for the signature is looked up in the list of witnesses according to the indicated position from the response message. If the signature is valid, and the response has not already been seen, then the signature is accumulated into an accumulating multi-signature, and the position of the witness is recorded as a bit in the multi-signature bitmap.} 
 
 			\item {At the end of the \textit{PrePrepare timeout period}, the leader examines the census in the multi-signature bitmap. If that witness count is above a BFT threshold for the witness pool, then we consider that a consensus has been reached. If not, then the blockchain extension is aborted. The next epoch will elect a new leader, and the process will be retried then.}
 
@@ -656,14 +654,14 @@ In this section we are going to clarify the details of the Stegos consensus prot
 			\item {The message hash code must agree with the message hash code from the PrePrepare message seen during this epoch}
 			\item{The message should have been sent from the epoch \textit{leader}, the signature on the message must be valid for the known \textit{leader} public key}
 			\item{The census shown in the multi-signature bitmap must exceed the BFT threshold for the witness pool}
-			\item{The muilti-signature should be a valid signature against the hash of the proposed block header; to obtain the public key for the signature validation, simply add up all the public keys from the witness list as indicated by the multi-signature bitmap}
+			\item{The multi-signature should be a valid signature against the hash of the proposed block header; to obtain the public key for the signature validation, simply add up all the public keys from the witness list as indicated by the multi-signature bitmap}
 		\end{itemize}
 
-	\item{If the Commit message is seen as valid, then the witness stores the mutli-signature and its bitmap into its local copy of the block header, and commits the block to its local copy of the blockchain. A confirmation response is formed from their BLS signature on the block header hash, their position in the list of witnesses, and the message hash code. This response is sent back to the leader.}
+	\item{If the Commit message is seen as valid, then the witness stores the multi-signature and its bitmap into its local copy of the block header, and commits the block to its local copy of the blockchain. A confirmation response is formed from their BLS signature on the block header hash, their position in the list of witnesses, and the message hash code. This response is sent back to the leader.}
 
 	\item{If the witness is unable to validate the Commit message, they simply refrain from sending back a response, and discard the pending block update.}}
 
-	\item{At completion of the Commit phase timeout period, the leader node accumulates all the response signatures into a multi-signature and signature bitmap. If the census of the bitmap exceeds the BFT threshold for the witness pool, and the mulit-signature is a valid signature on the hash of the block header, then a successful Commit has occurred. The leader and a BFT threshold number of witnesses have reached consensus on the block, and that block has now extended the blockchain.}
+	\item{At completion of the Commit phase timeout period, the leader node accumulates all the response signatures into a multi-signature and signature bitmap. If the census of the bitmap exceeds the BFT threshold for the witness pool, and the multi-signature is a valid signature on the hash of the block header, then a successful Commit has occurred. The leader and a BFT threshold number of witnesses have reached consensus on the block, and that block has now extended the blockchain.}
 	}
 \end{itemize}
 
@@ -683,24 +681,24 @@ Upon verification and signing of a new block, a \textit{leader} of the witness g
 		\item {Find the block which contains the UTXO reffered by $ID$}
 		\item {Find a leaf in TXOUT Merkle Tree in that block that contains sought UTXO}
 		\item {Mark that leaf as \textit{SPENT}, not touching the value of the hash that belongs to that leaf}
-		\item {If a sibling leaf is also marked as \textit{SPENT} then delete \textit{both} leaves and their correstonding hashes, and mark the parent node of these two pruned leaves with \textit{SPENT} marker as well, and then restart from the step 4 again, until there will be no \textit{SPENT} sibling}
+		\item {If a sibling leaf is also marked as \textit{SPENT} then delete \textit{both} leaves and their corresponding hashes, and mark the parent node of these two pruned leaves with \textit{SPENT} marker as well, and then restart from step 4 again, until there will be no \textit{SPENT} sibling}
 	\end{enumerate}} 
 	\item {When the process above will be done for all UTXO IDs in TXIN Merkle Tree in the new block, that tree should be totally wiped from the block body, leaving only the TXIN Root Hash in the block header. The block now can be appended to the full node's copy of the blockchain.}
 \end{itemize}
 
-Therefore, blockchain pruning in Stegos is a continuous process --- each new incoming sealed block is triggering the pruning. As a result of this continuous pruning, the blockchain in Stegos becomes just a database of unspent coins and does not contain any historical data, thus making it impossible (in collaboration with stealh addresses and pooled transactions) to hurt Stegos cryptocurrency fungibility.
+Therefore, blockchain pruning in Stegos is a continuous process --- each new incoming sealed block triggers the pruning. As a result of this continuous pruning, the blockchain in Stegos becomes just a database of unspent coins and does not contain any historical data, thus making it impossible (in collaboration with stealh addresses and pooled transactions) to hurt Stegos cryptocurrency fungibility.
 
 \section{Keeping Arbitrary Data on the Blockchain}
 
-The Stegos blockchain, besides using it for sending coins, can be used for sending and temporary storing the arbitrary data payloads. For this puprose we must slightly modify our UTXO structure by adding an additional slot called \textit{UTXO Type}.
+The Stegos blockchain, besides being used for sending coins, can be used for sending and temporarily storing arbitrary data payloads. For this purpose we must slightly modify our UTXO structure by adding an additional slot called \textit{UTXO Type}.
 
 There are two \textit{UTXO Type} values that are supported now: $0$ (\textit{monetary UTXO}) and $1$ (\textit{data UTXO}).
 
-We already described motenary UTXO composition in Section \ref{utxo}. Here we explain the structure of data UTXO and show how transactions can be composed using the mix of monetary and data UTXOs.
+We already described monetary UTXO composition in Section \ref{utxo}. Here we explain the structure of data UTXO and show how transactions can be composed using the mix of monetary and data UTXOs.
 
 \subsection{Data UTXO structure}
 
-Data UTXO structure is following the same design principles as monetary UTXO. Let's consider an example where Alice wants to send Bob some data object. As before, $P_B$ and $s_B$ will stand for Bob's public and private secret key correspondingly. 
+Data UTXO structure follows the same design principles as monetary UTXO. Consider an example where Alice wants to send Bob some data object. As before, $P_B$ and $s_B$ will stand for Bob's public and private secret key correspondingly. 
 
 Alice should compose the following data UTXO:
 
@@ -725,15 +723,15 @@ Size_{BLOB}, Key_{BLOB}, E_{BLOB}(data))
 	E_{BLOB}(data) &= \textit{Data object, encrypted with AES}
 \end{align*}
 
-When creating $UTXO_D$, Alice must choose random values $\alpha, k \in Z_r$ that will be used in cloaking symmetric data encryption key, before storing it as $Key_{BLOB}$. Actual symmetric key for the encrypted data object will be $H_r(k \, G)$. Alice encrypts her data with AES using the computed symmetric key and places encrypted object along with its size and time-to-live into $UTXO_D$.
+When creating $UTXO_D$, Alice must choose random values $\alpha, k \in Z_r$ that will be used in cloaking the symmetric data encryption key, before storing it as $Key_{BLOB}$. The actual symmetric key for the encrypted data object will be $H_r(k \, G)$. Alice encrypts her data with AES using the computed symmetric key and places the encrypted object along with its size and time-to-live into $UTXO_D$.
 
-When Bob receives $UTXO_D$, he will take out $Key_{BLOB} = (\alpha \, P_{B} + k \, G, \alpha \, G )$ from it, multiply the second term by his secret key $s_B$, getting $s_B \, \alpha \, G = \alpha \, P_B$, then subtracts that from first term to find $k \, G$. Afterwards he produces $H_r(k \, G)$ thus computing the symmetric key and decrypts the data that Alice sent to him.
+When Bob receives $UTXO_D$, he will take out $Key_{BLOB} = (\alpha \, P_{B} + k \, G, \alpha \, G )$ from it, multiply the second term by his secret key $s_B$, getting $s_B \, \alpha \, G = \alpha \, P_B$, then subtract that from the first term to find $k \, G$. Afterwards he produces $H_r(k \, G)$ thus computing the symmetric key and decrypts the data that Alice sent to him.
 
 \subsection{Transactions involving data UTXOs}
 
-Because data UTXOs have Pedersen Commitments to zero included in their bodies, they can be easily mixed in the same transactions with monetary UTXOs, because they will not influence to the monetary balance of transactions. The algorithms for validating transactions will stay the same, as shown previously in this paper.
+Because data UTXOs have Pedersen Commitments to zero included in their bodies, they can be easily mixed in the same transactions with monetary UTXOs, because they will not influence the monetary balance of transactions. The algorithms for validating transactions will stay the same, as shown previously in this paper.
 
-There are few differences of transactions with mixed UTXO types from ``normal'' tranactions:
+There are a few differences of transactions with mixed UTXO types from ``normal'' tranactions:
 
 \begin{itemize}
 
@@ -748,26 +746,26 @@ There are few differences of transactions with mixed UTXO types from ``normal'' 
 
 	So, for each data UTXO in outputs of the transaction, the fee must be calculated proportionally to the size of the data stored in that UTXO and time-to-live for that data. If there are multiple data UTXOs in outputs of transaction, then these UTXO's fees they must be summed up in order to calculate the final trasaction fee. If there are monetary UTXOs in outputs as well, then ordinary monetary fees must be also added to the final fee of the transaction.}
 
-	\item{The second difference is that it is possible to leave outputs in the trasaction completely empty if only data UTXOs are referenced by the transaction inputs. In this case, $Fee$ slot for such a transaction can be set to $0$.}
+	\item{The second difference is that it is possible to leave outputs in the transaction completely empty if only data UTXOs are referenced by the transaction inputs. In this case, $Fee$ slot for such a transaction can be set to $0$.}
 \end{itemize}
 
 \subsection{Pruning of used and expired data}
 
-If UTXO $ID$ of the data UTXO was referenced in inputs of a transaction and subsequently were validated and included into a new sealed block, then all full nodes of the blockchain will process that block according to the pruning procedure decribed in Section \ref{pruning} and delete the corresponding UTXO from the blockchain. So, there is no difference in pruning spent monetary and used data UTXOs.
+If UTXO $ID$ of the data UTXO was referenced in inputs of a transaction and subsequently were validated and included into a new sealed block, then all full nodes of the blockchain will process that block according to the pruning procedure described in Section \ref{pruning} and delete the corresponding UTXO from the blockchain. So, there is no difference in pruning spent monetary and used data UTXOs.
 
-With that, a special mechanism should be established for deleting expired data --- those data UTXOs which haven't been referenced in inputs to any registered transaction, and whose TTL timers were expired.
+With that, a special mechanism should be established for deleting expired data --- those data UTXOs which haven't been referenced in inputs to any registered transaction, and whose TTL timers have expired.
 
-The duty to identify expired data UTXOs belongs to the epoch \textit{leader}. In addition to the normal duties of the leader, now, in a presence of data UTXO in the UTXO Database, before proposing the new block to witnesses in the group, it must scan the the database and check in each data UTXO a number of the block in which it has been created and its TTL. If sum of creation block number and TTL is less than number of the new block that the leader is going to propose, then the leader must add this UTXO's $ID$ to the inputs to special data cleaning trasaction which should be added to the proposed block along with other special transaction for collecting fees. 
+The duty to identify expired data UTXOs belongs to the epoch \textit{leader}. In addition to the normal duties of the leader, now, in the presence of data UTXO in the UTXO Database, before proposing the new block to witnesses in the group, it must scan the database and check in each data UTXO a number of the block in which it has been created and its TTL. If the sum of creation block number and TTL is less than number of the new block that the leader is going to propose, then the leader must add this UTXO's $ID$ to the inputs to special data cleaning transaction which should be added to the proposed block along with other special transactions for collecting fees. 
 \addtolength{\textheight}{-38mm}
-Upon receiving block proposal from the leader, witnesses will validate that UTXOs referenced in the data cleaning transaction are indeed exprired and seal the block with their signatures. Finally, the sealed block will be propagated through the network, and all full nodes will prune expired data UTXOs according to the usual pruning procedure.
+Upon receiving block proposal from the leader, witnesses will validate that UTXOs referenced in the data cleaning transaction are indeed expired and seal the block with their signatures. Finally, the sealed block will be propagated through the network, and all full nodes will prune expired data UTXOs according to the usual pruning procedure.
 
 \section{Next Steps}
 
-In this paper we laid a design for Stegos - a private, confidential and scalable blockchain that is eco-friendly, upon which applications for sending monetary values and/or arbitrary data can be built.
+In this paper we laid out a design for Stegos - a private, confidential, and scalable blockchain that is eco-friendly, upon which applications for sending monetary values and/or arbitrary data can be built.
 
-Stegos team is working on implementation of the blockchain and the development progress can be tracked online at \url{https://github.com/orgs/stegos/projects/1}. Our source code is and always be 100\% open.
+The Stegos team is working on implementation of the blockchain and the development progress can be tracked online at \url{https://github.com/orgs/stegos/projects/1}. Our source code is and always be 100\% open.
 
-As our implementation will be progressing, we are going to publish separate, more detailed and focused, papers on our most essential contributions to the blockchain ecosystem, like improved distributed randomness generation (\textit{RandHound++}) , our flavor of collective signing protocol and consensus based on it (\textit{BLS CoSi/pBFT}) and our approach for transactions and data sharding. 
+As our implementation progresses, we will publish separate, more detailed papers focused on our most essential contributions to the blockchain ecosystem, like improved distributed randomness generation (\textit{RandHound++}), our flavor of collective signing protocol and consensus based on it (\textit{BLS CoSi/pBFT}), and our approach for transactions and data sharding. 
 
 \begin{thebibliography}{99}
 
