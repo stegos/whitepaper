@@ -369,13 +369,13 @@ A UTXO can only be spent in its entirety, and if it carries excess value for his
 
 To form his signature, he adds together all the $\delta$ cloaking factors from the UTXOs specified by his TXINs list of $\mathit{ID}$s, adds in all the $\gamma$ cloaking factors from the Pedersen commitments in the Bulletproofs from those same UTXOs, and subtracts the $\gamma$ cloaking factors used in his own TXOUT UTXOs. 
 
-Suppose Bob uses $N$ TXINs. His own public key, $P_M = s_M \, G$. Then his effective secret key for the signature becomes:
-$$s_{\mathit{eff}} = N \, s_M + \sum_{i \in \text{ins}} {\delta_i} + \sum_{i \in \text{ins}}{\gamma_i} - \sum_{j \in \text{outs}}{ \gamma_j}$$
+Suppose Bob uses $N$ TXINs. His own public key, $P_B = s_B \, G$. Then his effective secret key for the signature becomes:
+$$s_{\mathit{eff}} = N \, s_B + \sum_{i \in \text{ins}} {\delta_i} + \sum_{i \in \text{ins}}{\gamma_i} - \sum_{j \in \text{outs}}{ \gamma_j}$$
 
 Using this effective secret key, he produces a Schnorr signature pair, $(u, K)$, after choosing $k \in Z_r$ at random:
 $$K = k \, G$$
 $$u = k + H_r(T, K) \, s_{\mathit{eff}}$$
-$$Sig(M,T) = (u, K)$$
+$$Sig(s_eff,T) = (u, K)$$
 so that validators can see that:
 $$u \, G = K + H_r(T, K) \, P_{\mathit{eff}}$$
 $$P_{\mathit{eff}} = \sum_{i \in \text{ins}}{P_i} + \sum_{i \in \text{ins}}{C_i} - \sum_{j \in \text{outs}}{C_j} - \mathit{Fee} \, A$$
