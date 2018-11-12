@@ -375,9 +375,9 @@ $$s_{\mathit{eff}} = N \, s_B + \sum_{i \in \text{ins}} {\delta_i} + \sum_{i \in
 Using this effective secret key, he produces a Schnorr signature pair, $(u, K)$, after choosing $k \in Z_r$ at random:
 $$K = k \, G$$
 $$u = k + H_r(T, K) \, s_{\mathit{eff}}$$
-$$Sig(s_eff,T) = (u, K)$$
+$$Sig(s_{eff},T) = (u, K)$$
 so that validators can see that:
-$$u \, G = K + H_r(T, K) \, P_{\mathit{eff}}$$
+$$u \, G = K + H_r(T, K, P_{eff}) \, P_{eff}$$
 $$P_{\mathit{eff}} = \sum_{i \in \text{ins}}{P_i} + \sum_{i \in \text{ins}}{C_i} - \sum_{j \in \text{outs}}{C_j} - \mathit{Fee} \, A$$
 where $T$ represents the entire transaction record, sans signature.
 
