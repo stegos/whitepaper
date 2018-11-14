@@ -299,7 +299,7 @@ The purpose of Key blocks is to deliver the administrative information to blockc
 The key block header is constructed by the current \textit{leader} filling in the following slots:
 
 \begin{itemize}
-	\item {Block Type ID -- 0}
+	\item {Block Type ID, 0}
 	\item {Version Number}
 	\item {Epoch Number}
 	\item {Previous block hash, computed as the hash of the block header of the current blockchain tip block}
@@ -326,10 +326,10 @@ For illustrative purposes, suppose that some coins have been sent from Alice to 
 
 When Alice sends coins to Bob, she cloaks their amount with a Pedersen commitment, which is both binding and hiding. It binds Alice to her commitment so that she can never alter the amount of coins. The commitment also hides the amount from the general public, while simultaneously providing proof to the public that the amount is legitimate. Only Alice and Bob know how many coins are being transferred. 
 
-To form a Pedersen commitment, Alice multiplies the amount by a generator, $A$ for the Elliptic curve group, $E_q$, of prime order $r$. To that, she cloaks the commitment by adding a multiple, $\gamma$, of the publicly known generator point, $G$, with the multiple being chosen randomly from the finite field, $Z_r$. Generators $A$ and $G$ must have no known relationship. Placing the cloaking factor on the main generator curve will become important as we proceed. This is the same curve which holds all public keys. 
+To form a Pedersen commitment, Alice multiplies the amount by a generator, $A$ for the Elliptic curve group, $E_r$, of prime order $r$. To that, she cloaks the commitment by adding a multiple, $\gamma$, of the publicly known generator point, $G$, with the multiple being chosen randomly from the finite field, $Z_r$. Generators $A$ and $G$ must have no known relationship. Placing the cloaking factor on the main generator curve will become important as we proceed. This is the same curve which holds all public keys. 
 
 The Pedersen commitment is thus:
-$$ C(x, \gamma) = x \, A + \gamma \, G \in E_q$$
+$$ C(x, \gamma) = x \, A + \gamma \, G \in E_r$$
 $$x, \gamma \in Z_r$$
 
 where $x$ denotes the number of coins being transferred, $A$ is the amount-curve generator, and $G$ is the principal generator. We denote the commitment by $C(x, \gamma)$. 
@@ -345,17 +345,17 @@ UTXO &= (ID, P_{B, \delta}, Bp, E_B(x, \gamma, \delta))
 \end{align*}
 where
 \begin{align*}
-ID &= H_r(P_{B, \delta}, Bp, E_B(x, \gamma, \delta)) \in Z_r \\
-H_r(arg_1, arg_2, ...) &= \textit{hash mapping of concat args} \rightarrow Z_r \\
+ID &= H(P_{B, \delta}, Bp, E_B(x, \gamma, \delta)) \in Z_r \\
+H(arg_1, arg_2, ...) &= \textit{hash mapping of concat args} \\
 P_{B, \delta} &= P_B + \delta \, G \\
-G &= \textit{known generator for group } E_q \\
+G &= \textit{known generator for group } E_r \\
 Bp &= \textit{Bulletproof of range on amount}, x \\
 E_B(x, \gamma, \delta) &= \textit{Encrypted payload}
 \end{align*}
 
 $E_B(x, \gamma, \delta)$ represents an encrypted packet containing the information about $x$, $\gamma$, and $\delta$, in a form that only Bob can read.
 
-The Bulletproof contains the Pedersen commitment discussed above, as well as provides a range proof on the amount, $x$. Everyone knows the $E_q$ group generators, $G$ and $A$. Alice's complete transaction record contains additional information that we will discuss below.
+The Bulletproof contains the Pedersen commitment discussed above, as well as provides a range proof on the amount, $x$. Everyone knows the $E_r$ group generators, $G$ and $A$. Alice's complete transaction record contains additional information that we will discuss below.
 
 Nowhere is either of Alice's or Bob's public key shown. We only present a cloaked version of Bob's key. And since $\delta$ is a secret value, nobody can recover the actual public key underlying the cloaked version. 
 
@@ -374,12 +374,12 @@ $$s_{\mathit{eff}} = N \, s_B + \sum_{i \in \text{ins}} {\delta_i} + \sum_{i \in
 
 Using this effective secret key, he produces a Schnorr signature pair, $(u, K)$, after choosing $k \in Z_r$ at random:
 $$K = k \, G$$
-$$u = k + H_r(T, K) \, s_{\mathit{eff}}$$
+$$u = k + H_r(K, P_{eff}, H(T)) \, s_{\mathit{eff}}$$
 $$Sig(s_{eff},T) = (u, K)$$
 so that validators can see that:
-$$u \, G = K + H_r(T, K, P_{eff}) \, P_{eff}$$
+$$u \, G = K + H_r(K, P_{eff}, H(T)) \, P_{eff}$$
 $$P_{\mathit{eff}} = \sum_{i \in \text{ins}}{P_i} + \sum_{i \in \text{ins}}{C_i} - \sum_{j \in \text{outs}}{C_j} - \mathit{Fee} \, A$$
-where $T$ represents the entire transaction record, sans signature.
+where $T$ represents the entire transaction record, sans signature. The function $H_r(x)$ represents the hash $H(x)$ mapped onto the field $Z_r$.
 
 Let's examine the commitment terms. Pedersen commitments are additively homomorphic:
 $$C(x_1, \gamma_1) + C(x_2, \gamma_2) = C(x_1 + x_2, \gamma_1 + \gamma_2)$$
@@ -387,7 +387,7 @@ $$C(x_1, \gamma_1) + C(x_2, \gamma_2) = C(x_1 + x_2, \gamma_1 + \gamma_2)$$
 Hence, if Bob's transaction is valid, the amount terms in the effective public key show a zero balance on the $A$ curve, after subtracting off the $\mathit{Fee}$. What remains is entirely on the $G$ curve. The validator sum becomes another public key on the $G$ curve, exactly matching his own computed effective secret key, $s_{\mathit{eff}}$. Only Bob could form a valid signature since it relies on his secret key. It is unforgeable. Both Alice and Bob know all the other secret items, $\gamma$'s and $\delta$'s. Nobody else knows any of the secret values.
 
 Suppose Bob now just wants to send the coins he received from Alice on to Charlie, after deducting fees. In that case, Bob forms a UTXO that uses a different blinding factor, $\gamma_2$, and different key cloaking value, $\delta_2$, and which contains amount, $(x - \mathit{Fee})$. Bob must form a new Bulletproof on the amount, and encrypt these values into a payload that only Charlie can read:
-$$ID' = H_r(P_{S, \delta_2}, Bp', E_S(x - Fee), \gamma_2, \delta_2))$$
+$$ID' = H(P_{S, \delta_2}, Bp', E_S(x - Fee, \gamma_2, \delta_2))$$
 where $P_{C, \delta_2}$ is Charile's cloaked public key for this transaction. 
 
 Charlie can spend this UTXO by providing a valid transaction signature against the UTXO \textit{ID'}, just like Bob did for his own input. 
@@ -402,14 +402,14 @@ To wrap up, Bob publishes the transaction:
  &\text{TXOUT} : \{(\mathit{ID'}, P_{S, \delta_2}, \mathit{Bp'}, E_S(x - \mathit{Fee}, \gamma_2, \delta_2))\}, \\
  &\text{FEE} : \mathit{Fee}, \\
  &\text{GAMMA} : \gamma_{\mathit{adj}} = \sum_{i \in \text{ins}}{\gamma_i} - \sum_{j \in \text{outs}}{\gamma_j}\\
- &\text{SIG} : \mathit{Sig}(M, T)\}
+ &\text{SIG} : \mathit{Sig}(s_B, T)\}
 \end{align*}
 
 The first line is Bob's TXIN referencing the UTXO produced for him by Alice. The second line is the TXOUT - a new UTXO aimed at Charlie. The third line shows the fees paid for this transaction, in clear text form. 
 
-The fourth line shows what value of $\gamma$ adjustment, on the $G$ curve, is needed to see that the sum of input commitments equals the sum of output commitments, proving a zero net balance between TXINs and TXOUTs and Fees. This information is redundant in the sense that a valid signature on the transaction already proves this. But future coalescing of transactions, e.g. in the blockchain, needs to know the individual $\gamma_{\mathit{adj}}$ factors in order to produce a valid collection from individual transactions.
+The fourth line shows what value of $\gamma$ adjustment, on the $G$ curve, is needed to see that the sum of input commitments equals the sum of output commitments, proving a zero net balance between TXINs and TXOUTs and Fee. And this term will be added to a block sum when the transaction is absorbed into the blockchain, to show that entire blocks, which may contain many UTXOs, continue to show a zero balance.
 
-The final line is Bob's signature asserting ownership of all TXINs, valid zero balance on the transaction, and serves as a checksum against mutation of the contents of this transaction. If anything becomes changed in this record, the signature won't check. Hence our transactions are non-malleable.
+The final line is Bob's signature asserting ownership of the entire transaction which is based on the hash of all the stated TXINs, TXOUTs, $Fee$, and $\gamma_{adj}$ term. This final signature also serves as a checksum against mutation of the contents of this transaction. If anything becomes changed in this record, the signature won't check. Hence our transactions are non-malleable.
 
 \section{Pooled Transactions}\label{pooled_tx}
 
@@ -459,7 +459,7 @@ Each node that recognizes its key in \textit{Transactions Pool} messages should 
 
 \subsection{Pooled Transactions Session}
 
-All communications, including broadcasting, within the pooled transactions session should be contained within the group of the pool participants. All nodes of the pool will broadcast their lists of TXINs along with signatures validating ownership of their TXINs. Every participant can validate the lists from other participants by verifying the signature attesting to TXIN ownership. Participants should check that the public key in the signature is from one of the group members.
+All communications, including broadcasting, within the pooled transactions session should be contained within the group of the pool participants. All nodes of the pool will broadcast their lists of TXINs along with signatures validating ownership of their TXINs. Every participant can validate the lists from other participants by verifying the signature attesting to TXIN ownership. Participants should check that the public key referenced by the TXIN $ID$ is from one of the group members.
 
 \subsubsection{Collecting inputs} A valid signature on the TXINs from one participant is formed by creating a Schnorr signature on the sum of the cloaked public keys shown in the UTXOs referenced in the TXINs:
 
@@ -467,13 +467,15 @@ All communications, including broadcasting, within the pooled transactions sessi
 TXIN &= \{ID_1, ID_2, ..., ID_N\}\\
 Sig &= (u, K)\\
 K &= k \, G \\
-u &= k + H(K | ID_1 | ID_2 | ...) \, (N \, s + \sum_i{\delta_i}),
+s_{cmp} &= N s + \sum_i{\delta_i}\\
+P_{cmp} &= N P + (\sum_i{\delta_i})\, G = s_{cmp} \, G\\
+u &= k + H_r(K, P_{cmp}, H(ID_1, ID_2, ..., ID_N)) \, s_{cmp},
 \end{align*}
 
-where the sum is over the list of TXINs, $s$ is the owner's secret key, and the $\delta_i$ are the cloaking factors used on the public key of the owner. $N$ refers to how many TXINs there are in the list. Value $k$ is chosen randomly from the field, $Z_r$. 
+where the sum is over the list of TXINs, $s$ is the owner's secret key, $P = s \, G$ is the corresponding public key, and the $\delta_i$ are the cloaking factors used on the public key of the owner. $N$ refers to how many TXINs there are in the list. Value $k$ is chosen randomly from the field, $Z_r$. 
 
 Verification of a signature is done by seeing that:
-$$u \, G = K + H(K | ID_1 | ID_2 | ...) \sum_i{P_i}$$
+$$u \, G = K + H_r(K, \sum_i{P_i}, H(ID_1, ID_2, ..., ID_N)) \, \sum_i{P_i}$$
 where the $P_i$ are the cloaked public keys shown in the UTXOs corresponding to each $ID_i$. This signature proves ownership of the stated UTXOs referenced in TXINs.
 
 Nothing in this broadcast identifies the sender, but one cannot count on that to hold. In the event of misbehavior, a blame cycle will require each node to submit all their shared secret keys, which effectively reveals their full transactions. A restart will compute new TXOUTs, so that a successful run ensures anonymity of participants. But if a blame cycle is performed, there is no way to cloak the associations to TXINs again.
@@ -519,8 +521,10 @@ Signature formation on the super-transaction for each participant is done as fol
 T &= \text{super-transaction} \\
 Sig_i &= (u_i, K_{sum}) \\
 K_{sum} &= \sum_i{k_i \, G} \\
-s_{cmp} &= N \, s_i + \sum_{j \in \text{ins}} {\delta_j} + \sum_{j \in \text{ins}} {\gamma_j} - \sum_{k \in \text{outs}} {\gamma_k} \\
-u_i &= k_i + H(K_{sum} | T) \,  s_{cmp}\\
+s_{cmp,i} &= N \, s_i + \sum_{j \in \text{ins}} {\delta_j} + \sum_{j \in \text{ins}} {\gamma_j} - \sum_{k \in \text{outs}} {\gamma_k} \\
+P_{cmp,i} &= s_{cmp,i} \, G \\
+P_{sum} &= \sum_i{P_{cmp,i}}\\
+u_i &= k_i + H_r(K_{sum} , P_{sum},  H(T)) \,  s_{cmp,i}\\
 \end{align*}
 
 where index $i$, labels each participant, index $j$, labels every TXIN, for $N$ of them, belonging to the participant, and index $k$, labels each TXOUT belonging to that participant. On summation from all participants, the multi-signature $(u_{sum}, K_{sum})$ represents a valid signature on the super-transaction in the same manner that would hold if this were a simple transaction.
@@ -542,16 +546,16 @@ On entry to the witness pool, a transaction needs to be validated. The steps are
 	\item{All of the cloaked public keys must be summed, along with all of the Pedersen commitments from the TXINs. Then all of the Pedersen commitments from the Bulletproofs in the TXOUTs must be subtracted from the sum, as well as $Fee$ times the $A$ curve generator. The Schnorr signature in the transaction must be checked against this summed public key:
 
 	\begin{align*}
-		\text{TXIN} &= \{ID\} \\
-		ID &\rightarrow P_{M, \delta}, \text{as a result of UTXO lookup}\\
-		ID &\rightarrow C(x, \gamma)\\
+		\text{TXINs} &= \{ID_1, ID_2, ..., ID_N\} \\
+		ID_i &\rightarrow P_{i, \delta_i} = P_i\\
+		ID_i &\rightarrow C(x_i, \gamma_i) = C_i\\
 		P_{eff} &= \sum_{i \in \text{ins}}{P_i} + \sum_{i \in \text{ins}}{C_i}  - \sum_{j \in \text{outs}}{C_j} - Fee\,A\\
-		Sig(M, T) &= (u, K)\\
+		Sig(s, T) &= (u, K)\\
 		T &= \text{Entire transaction sans signature}
 	\end{align*}
 
 	Now check that
-	$$u \, G = K + H_r(T, K) \, P_{eff}$$
+	$$u \, G = K + H_r(K, P_{eff}, H(T)) \, P_{eff}$$
 	
 	If this equation holds true, then the transaction body has not been mutated, the sender has proven ownership of all UTXOs referenced in the TXINs, and the transaction represents a proper zero balance.}
 	\item{The Bulletproofs in every TXOUT must be validated to ensure that amounts are within proper range, that no money is being created on credit.}
@@ -559,7 +563,7 @@ On entry to the witness pool, a transaction needs to be validated. The steps are
 
 At this point, we now have a valid transaction to consider. Commitments are held inside each Bulletproof.
 
-The paired TXINs and their UTXOs must be marked as pending extinction, so that the UTXOs will not be available for matching with the next transaction. This prevents future double-spend attempts.
+The paired TXINs and their UTXOs must be marked as pending extinction, so that they will be pruned later on according to the procedure explained in Section \ref{pruning}.
 
 Because network communications do not guarantee message arrival order, it may be necessary to form a topological sort of incoming transactions, in case some of their TXINs refer to UTXOs created elsewhere in the batch. An example would be where Alice spends some of her tokens, receives change back to herself, then spends that change in another transaction.
 
@@ -582,7 +586,7 @@ Because network communications do not guarantee message arrival order, it may be
 	\item {The block header is constructed by filling in the following slots:
 
 		\begin{itemize}
-			\item {Block Type ID -- 1}
+			\item {Block Type ID, 1}
 			\item {Version number}
 			\item {Epoch number}
 			\item {Previous block hash, computed as the hash of the block header of the current blockchain tip block}
@@ -652,7 +656,7 @@ In this section we are going to clarify the details of the Stegos consensus prot
 
 		\begin{itemize}
 			\item {The message hash code must agree with the message hash code from the PrePrepare message seen during this epoch}
-			\item{The message should have been sent from the epoch \textit{leader}, the signature on the message must be valid for the known \textit{leader} public key}
+		\item{The message should have been sent from the epoch \textit{leader}, the signature on the message must be valid for the known \textit{leader} public key}
 			\item{The census shown in the multi-signature bitmap must exceed the BFT threshold for the witness pool}
 			\item{The multi-signature should be a valid signature against the hash of the proposed block header; to obtain the public key for the signature validation, simply add up all the public keys from the witness list as indicated by the multi-signature bitmap}
 		\end{itemize}
@@ -679,7 +683,7 @@ Upon verification and signing of a new block, a \textit{leader} of the witness g
 	\item {A full node must retrieve all leaves of TXIN Merkle Tree from the new block body, and for each leaf (UTXO $ID$) do the following:
 	\begin{enumerate}
 		\item {Find the block which contains the UTXO reffered by $ID$}
-		\item {Find a leaf in TXOUT Merkle Tree in that block that contains sought UTXO}
+		   \item {Find a leaf in TXOUT Merkle Tree in that block that contains sought UTXO}
 		\item {Mark that leaf as \textit{SPENT}, not touching the value of the hash that belongs to that leaf}
 		\item {If a sibling leaf is also marked as \textit{SPENT} then delete \textit{both} leaves and their corresponding hashes, and mark the parent node of these two pruned leaves with \textit{SPENT} marker as well, and then restart from step 4 again, until there will be no \textit{SPENT} sibling}
 	\end{enumerate}} 
@@ -708,10 +712,10 @@ Size_{BLOB}, Key_{BLOB}, E_{BLOB}(data))
 \end{multline*}
 	where:
 \begin{align*}
-	ID &= H_r(Type, TTL, P_{B, \delta}, PC, E_B(\gamma, \delta), \\
+	ID &= H(Type, TTL, P_{B, \delta}, PC, E_B(\gamma, \delta), \\
 	& \ \ \ \ \ \ \ \ \ Size_{BLOB}, Key_{BLOB}, \\
 	& \ \ \ \ \ \ \ \ \ E_{BLOB}(data)) \in Z_r \\	
-	H_r(arg_1, arg_2, ...) &= \textit{hash mapping of concat args} \rightarrow Z_r \\
+	H(arg_1, arg_2, ...) &= \textit{hash of concat args}\\
 	P_{B, \delta} &= P_B + \delta \, G \\
 	G &= \textit{known generator for group } E_q \\
 	Type &= \textit{UTXO Type}, 1\\
@@ -723,9 +727,9 @@ Size_{BLOB}, Key_{BLOB}, E_{BLOB}(data))
 	E_{BLOB}(data) &= \textit{Data object, encrypted with AES}
 \end{align*}
 
-When creating $UTXO_D$, Alice must choose random values $\alpha, k \in Z_r$ that will be used in cloaking the symmetric data encryption key, before storing it as $Key_{BLOB}$. The actual symmetric key for the encrypted data object will be $H_r(k \, G)$. Alice encrypts her data with AES using the computed symmetric key and places the encrypted object along with its size and time-to-live into $UTXO_D$.
+When creating $UTXO_D$, Alice must choose random values $\alpha, k \in Z_r$ that will be used in cloaking the symmetric data encryption key, before storing it as $Key_{BLOB}$. The actual symmetric key for the encrypted data object will be $H(k \, G)$. Alice encrypts her data with AES using the computed symmetric key and places the encrypted object along with its size and time-to-live into $UTXO_D$.
 
-When Bob receives $UTXO_D$, he will take out $Key_{BLOB} = (\alpha \, P_{B} + k \, G, \alpha \, G )$ from it, multiply the second term by his secret key $s_B$, getting $s_B \, \alpha \, G = \alpha \, P_B$, then subtract that from the first term to find $k \, G$. Afterwards he produces $H_r(k \, G)$ thus computing the symmetric key and decrypts the data that Alice sent to him.
+When Bob receives $UTXO_D$, he will take out $Key_{BLOB} = (\alpha \, P_{B} + k \, G, \alpha \, G )$ from it, multiply the second term by his secret key $s_B$, getting $s_B \, \alpha \, G = \alpha \, P_B$, then subtract that from the first term to find $k \, G$. Afterwards he produces $H(k \, G)$ thus computing the symmetric key and decrypts the data that Alice sent to him.
 
 \subsection{Transactions involving data UTXOs}
 
