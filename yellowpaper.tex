@@ -728,15 +728,13 @@ Therefore, blockchain pruning in Stegos is a continuous process --- each new inc
 
 \section{Keeping Arbitrary Data on the Blockchain} \label{data}
 
-The Stegos blockchain, besides being used for sending coins, can be used for sending and temporarily storing arbitrary data payloads. For this purpose we must slightly modify our UTXO structure by adding an additional slot called \textit{UTXO Type}.
+The Stegos blockchain, besides being used for sending coins, can be used for sending and temporarily storing arbitrary data payloads. 
 
-There are two \textit{UTXO Type} values that are supported now: $0$ (\textit{monetary UTXO}) and $1$ (\textit{data UTXO}).
-
-We already described monetary UTXO composition in Section \ref{utxo}. Here we explain the structure of data UTXO and show how transactions can be composed using the mix of monetary and data UTXOs.
+We already described monetary UTXO composition in Section \ref{utxo}. Here we explain the structure of data UTXOs and show how transactions can be composed using the mix of monetary and data UTXOs.
 
 \subsection{Data UTXO structure}
 
-Data UTXO structure is the same as a structure of a monetary UTXO explained in Section \ref{utxo}. The difference is in the values of $Bp$, $TTL$, $Size_{data}$ and $E_B$ slots:
+Data UTXOs have the same structure as monetary UTXOs, which has been explained in Section \ref{utxo}. The difference is in the values of $Bp$, $TTL$, $Size_{data}$ and encrypted payload slots:
 
 \begin{itemize}
 	\item {$Bp$ slot should only contain Pedersen commitment to zero, $\gamma \, G$, without Bulletproof range proof.}
