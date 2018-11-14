@@ -326,7 +326,7 @@ For illustrative purposes, suppose that some coins have been sent from Alice to 
 
 When Alice sends coins to Bob, she cloaks their amount with a Pedersen commitment, which is both binding and hiding. It binds Alice to her commitment so that she can never alter the amount of coins. The commitment also hides the amount from the general public, while simultaneously providing proof to the public that the amount is legitimate. Only Alice and Bob know how many coins are being transferred. 
 
-To form a Pedersen commitment, Alice multiplies the amount by a generator, $A$ for the Elliptic curve group, $E_r$, of prime order $r$. To that, she cloaks the commitment by adding a multiple, $\gamma$, of the publicly known generator point, $G$, with the multiple being chosen randomly from the finite field, $Z_r$. Generators $A$ and $G$ must have no known relationship. Placing the cloaking factor on the main generator curve will become important as we proceed. This is the same curve which holds all public keys. 
+\subsubsection{Pedersen commitment and Bulletproof} To form a Pedersen commitment, Alice multiplies the amount by a generator, $A$ for the Elliptic curve group, $E_r$, of prime order $r$. To that, she cloaks the commitment by adding a multiple, $\gamma$, of the publicly known generator point, $G$, with the multiple being chosen randomly from the finite field, $Z_r$. Generators $A$ and $G$ must have no known relationship. Placing the cloaking factor on the main generator curve will become important as we proceed. This is the same curve which holds all public keys. 
 
 The Pedersen commitment is thus:
 $$ C(x, \gamma) = x \, A + \gamma \, G \in E_r$$
@@ -336,26 +336,50 @@ where $x$ denotes the number of coins being transferred, $A$ is the amount-curve
 
 This commitment value will be wrapped inside a Bulletproof range proof on the amount, $x$, which also proves that the amount lies within a legitimate range of values, typically a 64-bit number.
 
-Alice then cloaks Bob's public key with factor, $\delta \in Z_r$, and leaves a record of the amount $x$, and cloaking factors, $\gamma$ and $\delta$, in an encrypted payload as a part of the \textit{UTXO} awaiting Bob. She forms a UTXO $\mathit{ID}$ by hashing the rest of the UTXO record, which contains the cloaked version of Bob's public key, $P_{B, \delta}$, the Bulletproof, and the encrypted payload. 
+\subsubsection{Destination address cloaking} Alice then cloaks Bob's public key with a factor, $\delta \in Z_r$, so that instead of Bob's original public key $P_B$, she will put into UTXO $P_{B, \delta} = P_B + \delta \, G$.
+
+
+\subsubsection{Encrypted payload} Alice must pass values for the amount $x$, and cloaking factors, $\gamma$ and $\delta$, to Bob. She can do it by including this information into the \textit{encrypted payload} of the UTXO. Besides the values mentioned above, the encrypted payload may also contain arbitrary data, that Alice wants to share with Bob. Detailed explanation of storing arbitrary data on Stegos blockchain will be given in Section \ref{data}. 
+
+For generating the encrypted payload, Alice must choose random values $\alpha, k \in Z_r$ that will be used in creating and cloaking a symmetric data encryption key.
+The actual symmetric key for the encrypted data object will be $H(k \, G)$. In order to pass it safely via the blockchain to Bob, Alice needs to cloak it with $\alpha$ and store it in the UTXO as the following tuple: $$Key_{\alpha} = (\alpha \, P_{B} + k \, G, \alpha \, G )$$ 
+
+Alice encrypts her payload with AES-128 using $H(k \, G)$ key and places the encrypted payload into the UTXO as $E_B(x, \gamma, \delta)$.
+
+When Bob receives UTXO later on, he will take out $Key_{\alpha}$ from it, multiply the second element of the tuple by his secret key $s_B$, getting $s_B \, \alpha \, G = \alpha \, P_B$, then subtract that from the first element to find $k \, G$. Afterwards he produces $H(k \, G)$ thus computing the symmetric key and decrypts the payload that Alice sent to him.
+
+\subsubsection{TTL and Data Size} Alice sets TTL (time-to-live) and $Size_{data}$ slots of the UTXO to zero, indicating that this is a \textit{monetary UTXO}. Non-zero values of the mentioned slots will indicate that this is \textit{data UTXO}, handling of which will be described in details later in this document, it Section \ref{data}.
+
+\subsubsection{UTXO ID} Alice forms a UTXO $\mathit{ID}$ by hashing the the whole UTXO object sans the ID slot, which contains the cloaked version of Bob's public key, $P_{B, \delta}$, the Pedersen commitment and Bulletproof, TTL, $Size_{data}$, and the encrypted payload.
 
 The UTXO $\mathit{ID}$ becomes a unique identifier, since, if all else were equal, the $\gamma$ and $\delta$ factors were randomly chosen from field $Z_r$.
 
-\begin{align*}
-UTXO &= (ID, P_{B, \delta}, Bp, E_B(x, \gamma, \delta))
-\end{align*}
+\subsubsection{UTXO structure}
+
+Thus the resulting structure of the UTXO object will be the following:
+
+\begin{multline*}
+UTXO = (ID, P_{B, \delta}, Bp, TTL, Size_{data},\\
+        Key_{\alpha}, E_B(x, \gamma, \delta))
+\end{multline*}
+
 where
+
 \begin{align*}
-ID &= H(P_{B, \delta}, Bp, E_B(x, \gamma, \delta)) \in Z_r \\
+ID &= H(P_{B, \delta}, Bp, TTL, Size_{data}, \\ 
+   & Key_{\alpha}, E_B(x, \gamma, \delta)) \in Z_r \\
 H(arg_1, arg_2, ...) &= \textit{hash mapping of concat args} \\
 P_{B, \delta} &= P_B + \delta \, G \\
 G &= \textit{known generator for group } E_r \\
-Bp &= \textit{Bulletproof of range on amount}, x \\
-E_B(x, \gamma, \delta) &= \textit{Encrypted payload}
+Bp &= \textit{Bulletproof and Pedersen} \\
+& \textit{commitment on amount}, x 
 \end{align*}
 
-$E_B(x, \gamma, \delta)$ represents an encrypted packet containing the information about $x$, $\gamma$, and $\delta$, in a form that only Bob can read.
-
-The Bulletproof contains the Pedersen commitment discussed above, as well as provides a range proof on the amount, $x$. Everyone knows the $E_r$ group generators, $G$ and $A$. Alice's complete transaction record contains additional information that we will discuss below.
+\begin{align*}
+TTL &= \textit{Time-to-Live}, 0 \\
+Side_{data} &= \textit{Data payload size}, 0 \\
+E_B(x, \gamma, \delta) &= \textit{AES-128 encrypted payload}
+\end{align*}
 
 Nowhere is either of Alice's or Bob's public key shown. We only present a cloaked version of Bob's key. And since $\delta$ is a secret value, nobody can recover the actual public key underlying the cloaked version. 
 
@@ -387,19 +411,29 @@ $$C(x_1, \gamma_1) + C(x_2, \gamma_2) = C(x_1 + x_2, \gamma_1 + \gamma_2)$$
 Hence, if Bob's transaction is valid, the amount terms in the effective public key show a zero balance on the $A$ curve, after subtracting off the $\mathit{Fee}$. What remains is entirely on the $G$ curve. The validator sum becomes another public key on the $G$ curve, exactly matching his own computed effective secret key, $s_{\mathit{eff}}$. Only Bob could form a valid signature since it relies on his secret key. It is unforgeable. Both Alice and Bob know all the other secret items, $\gamma$'s and $\delta$'s. Nobody else knows any of the secret values.
 
 Suppose Bob now just wants to send the coins he received from Alice on to Charlie, after deducting fees. In that case, Bob forms a UTXO that uses a different blinding factor, $\gamma_2$, and different key cloaking value, $\delta_2$, and which contains amount, $(x - \mathit{Fee})$. Bob must form a new Bulletproof on the amount, and encrypt these values into a payload that only Charlie can read:
-$$ID' = H(P_{S, \delta_2}, Bp', E_S(x - Fee, \gamma_2, \delta_2))$$
-where $P_{C, \delta_2}$ is Charile's cloaked public key for this transaction. 
+
+\begin{multline*}
+ID' = H(P_{S, \delta_2}, Bp', TTL, Size_{data}, \\
+          Key_{\alpha_2}, E_S(x - Fee, \gamma_2, \delta_2))
+\end{multline*}
+
+where $P_{C, \delta_2}$ is Charile's cloaked public key for this transaction, $TTL$ and $Size_{data}$ are zero, and $Key_{\alpha_2}$ is a cloaked symmetric key. 
 
 Charlie can spend this UTXO by providing a valid transaction signature against the UTXO \textit{ID'}, just like Bob did for his own input. 
 
 Bob's TXOUT will now look like this:
-$$\text{TXOUT} = (ID', P_{S, \delta_2}, Bp', E_S(x - Fee, \gamma_2, \delta_2))$$
+
+\begin{multline*}
+\text{TXOUT} = (ID', P_{S, \delta_2}, Bp', TTL, Size_{data},\\ 
+                Key_{\alpha_2}, E_S(x - Fee, \gamma_2, \delta_2))
+\end{multline*}
 
 To wrap up, Bob publishes the transaction:
 
 \begin{align*}
 \text{T} = \{&\text{TXIN} : \{\mathit{ID}\}, \\
- &\text{TXOUT} : \{(\mathit{ID'}, P_{S, \delta_2}, \mathit{Bp'}, E_S(x - \mathit{Fee}, \gamma_2, \delta_2))\}, \\
+ &\text{TXOUT} : \{(ID', P_{S, \delta_2}, Bp', TTL, Size_{data}, \\
+ & \ \ \ \ \ \ \ \ \ \ \ \ \ \ Key_{\alpha_2}, E_S(x - Fee, \gamma_2, \delta_2))\}, \\
  &\text{FEE} : \mathit{Fee}, \\
  &\text{GAMMA} : \gamma_{\mathit{adj}} = \sum_{i \in \text{ins}}{\gamma_i} - \sum_{j \in \text{outs}}{\gamma_j}\\
  &\text{SIG} : \mathit{Sig}(s_B, T)\}
@@ -692,7 +726,7 @@ Upon verification and signing of a new block, a \textit{leader} of the witness g
 
 Therefore, blockchain pruning in Stegos is a continuous process --- each new incoming sealed block triggers the pruning. As a result of this continuous pruning, the blockchain in Stegos becomes just a database of unspent coins and does not contain any historical data, thus making it impossible (in collaboration with stealh addresses and pooled transactions) to hurt Stegos cryptocurrency fungibility.
 
-\section{Keeping Arbitrary Data on the Blockchain}
+\section{Keeping Arbitrary Data on the Blockchain} \label{data}
 
 The Stegos blockchain, besides being used for sending coins, can be used for sending and temporarily storing arbitrary data payloads. For this purpose we must slightly modify our UTXO structure by adding an additional slot called \textit{UTXO Type}.
 
@@ -702,48 +736,52 @@ We already described monetary UTXO composition in Section \ref{utxo}. Here we ex
 
 \subsection{Data UTXO structure}
 
-Data UTXO structure follows the same design principles as monetary UTXO. Consider an example where Alice wants to send Bob some data object. As before, $P_B$ and $s_B$ will stand for Bob's public and private secret key correspondingly. 
+Data UTXO structure is the same as a structure of a monetary UTXO explained in Section \ref{utxo}. The difference is in the values of $Bp$, $TTL$, $Size_{data}$ and $E_B$ slots:
+
+\begin{itemize}
+	\item {$Bp$ slot should only contain Pedersen commitment to zero, $\gamma \, G$, without Bulletproof range proof.}
+	\item {$TTL$ (Time-to-Live period) should be set to a number of blocks for which this UTXO should be kept on the blockchain since it has been added to it.}
+	\item {$Size_{data}$ should be set equal to the size of encrypted data, in bytes, that will be stored on the blockchain as a part of encrypted payload.}
+	\item {Encrypted payload should be enhanced with the fourth element, \textit{data}, to accomodate the data to be stored.}
+\end{itemize}
+
+Consider an example where Alice wants to send Bob some data object. As before, $P_B$ and $s_B$ will stand for Bob's public and private secret key correspondingly. 
 
 Alice should compose the following data UTXO:
 
 \begin{multline*}
-UTXO_D = (ID, Type, TTL, P_{B, \delta}, PC, E_B(\gamma, \delta), \\
-Size_{BLOB}, Key_{BLOB}, E_{BLOB}(data))
+	UTXO_D = (ID, P_{B, \delta}, PC, TTL, Size_{data},\\
+			Key_{\alpha}, E_B(x, \gamma, \delta, data))
 \end{multline*}
-	where:
+	
+	where
+	
 \begin{align*}
-	ID &= H(Type, TTL, P_{B, \delta}, PC, E_B(\gamma, \delta), \\
-	& \ \ \ \ \ \ \ \ \ Size_{BLOB}, Key_{BLOB}, \\
-	& \ \ \ \ \ \ \ \ \ E_{BLOB}(data)) \in Z_r \\	
-	H(arg_1, arg_2, ...) &= \textit{hash of concat args}\\
+	ID &= H(P_{B, \delta}, PC, TTL, Size_{data}, \\ 
+		& Key_{\alpha}, E_B(x, \gamma, \delta, data)) \in Z_r \\
 	P_{B, \delta} &= P_B + \delta \, G \\
-	G &= \textit{known generator for group } E_q \\
-	Type &= \textit{UTXO Type}, 1\\
-	TTL &= \textit{UTXO Time-to-Live, in blocks}\\
-	PC &= \textit{Pedersen Commitment to zero}, \gamma \, G \\
-	E_B(\gamma, \delta) &= \textit{Payload encrypted with}\  P_B \\
-	Key_{BLOB} &= \textit{Cloaked data key}, (\alpha \, P_{B} + k \, G, \alpha \, G )\\
-	Size_{BLOB} &= \textit{Size of data object, less than $2^{32}$}\\
-	E_{BLOB}(data) &= \textit{Data object, encrypted with AES}
+	PC &= \textit{Pedersen commitment to zero}, \gamma \, G \\
+	TTL &= \textit{Time-to-Live of the UTXO},\\
+	& \ \ \ \ \textit{in number of blocks} \\
+	Size_{data} &= \textit{Data payload size, in bytes} \\
+	Key_{\alpha} &= (\alpha \, P_{B} + k \, G, \alpha \, G ) \\
+	E_B(x, \gamma, \delta, data) &= \textit{AES-128 encrypted payload}, \\
+	& \ \ \ \ \textit{including the data}
 \end{align*}
-
-When creating $UTXO_D$, Alice must choose random values $\alpha, k \in Z_r$ that will be used in cloaking the symmetric data encryption key, before storing it as $Key_{BLOB}$. The actual symmetric key for the encrypted data object will be $H(k \, G)$. Alice encrypts her data with AES using the computed symmetric key and places the encrypted object along with its size and time-to-live into $UTXO_D$.
-
-When Bob receives $UTXO_D$, he will take out $Key_{BLOB} = (\alpha \, P_{B} + k \, G, \alpha \, G )$ from it, multiply the second term by his secret key $s_B$, getting $s_B \, \alpha \, G = \alpha \, P_B$, then subtract that from the first term to find $k \, G$. Afterwards he produces $H(k \, G)$ thus computing the symmetric key and decrypts the data that Alice sent to him.
 
 \subsection{Transactions involving data UTXOs}
 
-Because data UTXOs have Pedersen Commitments to zero included in their bodies, they can be easily mixed in the same transactions with monetary UTXOs, because they will not influence the monetary balance of transactions. The algorithms for validating transactions will stay the same, as shown previously in this paper.
+Because data UTXOs have the same structure as monetary UTXOs, and they have Pedersen commitments to zero included in their bodies, they can be easily mixed in the same transactions with monetary UTXOs, because they will not influence the monetary balance of transactions. The algorithms for validating transactions will stay the same, as shown previously in this paper.
 
 There are a few differences of transactions with mixed UTXO types from ``normal'' tranactions:
 
 \begin{itemize}
 
-	\item{The first difference is that a value of the $Fee$ slot in a transactions must obey the following:
+	\item{The first difference is that a value of the $Fee$ slot in a transactions must obey the following formula:
 
 	\begin{align*}
 		FeeUnit &= \textit{Fee for keeping 1024 bytes for 1 block} \\
-		SizeKB_i &= \frac{Size_{BLOB_i}}{1024}, \textit{rounded up to the next integer}\\
+		SizeKB_i &= \frac{Size_{data_i}}{1024}, \textit{rounded up to the next integer}\\
 		Fee_i &= SizeKB_i * TTL_i * FeeUnit\\
 		Fee &= \sum_i Fee_i
 	\end{align*}
@@ -760,7 +798,7 @@ If UTXO $ID$ of the data UTXO was referenced in inputs of a transaction and subs
 With that, a special mechanism should be established for deleting expired data --- those data UTXOs which haven't been referenced in inputs to any registered transaction, and whose TTL timers have expired.
 
 The duty to identify expired data UTXOs belongs to the epoch \textit{leader}. In addition to the normal duties of the leader, now, in the presence of data UTXO in the UTXO Database, before proposing the new block to witnesses in the group, it must scan the database and check in each data UTXO a number of the block in which it has been created and its TTL. If the sum of creation block number and TTL is less than number of the new block that the leader is going to propose, then the leader must add this UTXO's $ID$ to the inputs to special data cleaning transaction which should be added to the proposed block along with other special transactions for collecting fees. 
-\addtolength{\textheight}{-38mm}
+
 Upon receiving block proposal from the leader, witnesses will validate that UTXOs referenced in the data cleaning transaction are indeed expired and seal the block with their signatures. Finally, the sealed block will be propagated through the network, and all full nodes will prune expired data UTXOs according to the usual pruning procedure.
 
 \section{Next Steps}
