@@ -750,14 +750,14 @@ Alice should compose the following data UTXO:
 
 \begin{multline*}
 	UTXO_D = (ID, P_{B, \delta}, PC, TTL, Size_{data},\\
-			Key_{\alpha}, E_B(x, \gamma, \delta, data))
+			Key_{\alpha}, E_B(0, \gamma, \delta, data))
 \end{multline*}
 	
 	where
 	
 \begin{align*}
 	ID &= H(P_{B, \delta}, PC, TTL, Size_{data}, \\ 
-		& Key_{\alpha}, E_B(x, \gamma, \delta, data)) \in Z_r \\
+		& Key_{\alpha}, E_B(0, \gamma, \delta, data)) \in Z_r \\
 	P_{B, \delta} &= P_B + \delta \, G \\
 	PC &= \textit{Pedersen commitment to zero}, \gamma \, G \\
 	TTL &= \textit{Time-to-Live of the UTXO},\\
