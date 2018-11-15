@@ -735,13 +735,13 @@ We already described monetary UTXO composition in Section \ref{utxo}. Here we ex
 
 \subsection{Data UTXO structure}
 
-Data UTXOs have the same structure as monetary UTXOs, which has been explained in Section \ref{utxo}. The difference is in the values of $Bp$, $TTL$, $Size_{data}$ and encrypted payload slots:
+Data UTXOs have the same structure as monetary UTXOs, which has been explained in Section \ref{utxo}. The difference is in the values of $Bp$, $TTL$, $Size_{data}$ and the encrypted payload slots:
 
 \begin{itemize}
 	\item {$Bp$ slot should only contain Pedersen commitment to zero, $\gamma \, G$, without Bulletproof range proof.}
 	\item {$TTL$ (Time-to-Live period) should be set to a number of blocks for which this UTXO should be kept on the blockchain since it has been added to it.}
 	\item {$Size_{data}$ should be set equal to the size of encrypted data, in bytes, that will be stored on the blockchain as a part of encrypted payload.}
-	\item {Encrypted payload should be enhanced with the fourth element, \textit{data}, to accomodate the data to be stored.}
+	\item {The encrypted payload should be enhanced with the fourth element, \textit{data}, to accomodate the data to be stored. The first element of the payload, $x$, should be set to 0.}
 \end{itemize}
 
 Consider an example where Alice wants to send Bob some data object. As before, $P_B$ and $s_B$ will stand for Bob's public and private secret key correspondingly. 
@@ -764,7 +764,7 @@ Alice should compose the following data UTXO:
 	& \ \ \ \ \textit{in number of blocks} \\
 	Size_{data} &= \textit{Data payload size, in bytes} \\
 	Key_{\alpha} &= (\alpha \, P_{B} + k \, G, \alpha \, G ) \\
-	E_B(x, \gamma, \delta, data) &= \textit{AES-128 encrypted payload}, \\
+	E_B(0, \gamma, \delta, data) &= \textit{AES-128 encrypted payload}, \\
 	& \ \ \ \ \textit{including the data}
 \end{align*}
 
