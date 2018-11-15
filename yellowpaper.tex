@@ -342,11 +342,11 @@ This commitment value will be wrapped inside a Bulletproof range proof on the am
 \subsubsection{Encrypted payload} Alice must pass values for the amount $x$, and cloaking factors, $\gamma$ and $\delta$, to Bob. She can do it by including this information into the \textit{encrypted payload} of the UTXO. Besides the values mentioned above, the encrypted payload may also contain arbitrary data, that Alice wants to share with Bob. Detailed explanation of storing arbitrary data on Stegos blockchain will be given in Section \ref{data}. 
 
 For generating the encrypted payload, Alice must choose random values $\alpha, k \in Z_r$ that will be used in creating and cloaking a symmetric data encryption key.
-The actual symmetric key for the encrypted data object will be $H(k \, G)$. In order to pass it safely via the blockchain to Bob, Alice needs to cloak it with $\alpha$ and store it in the UTXO as the following tuple: $$Key_{\alpha} = (\alpha \, P_{B} + k \, G, \alpha \, G )$$ 
+The actual symmetric key for the encrypted data object will be $H(k \, G)$. In order to pass it safely via the blockchain to Bob, Alice needs to cloak it with $\alpha$ and store it in the UTXO as the following tuple: $$\mathit{Key}_{\alpha} = (\alpha \, P_{B} + k \, G, \alpha \, G )$$ 
 
 Alice encrypts her payload with AES-128 using $H(k \, G)$ key and places the encrypted payload into the UTXO as $E_B(x, \gamma, \delta)$.
 
-When Bob receives UTXO later on, he will take out $Key_{\alpha}$ from it, multiply the second element of the tuple by his secret key $s_B$, getting $s_B \, \alpha \, G = \alpha \, P_B$, then subtract that from the first element to find $k \, G$. Afterwards he produces $H(k \, G)$ thus computing the symmetric key and decrypts the payload that Alice sent to him.
+When Bob receives UTXO later on, he will take out $\mathit{Key}_{\alpha}$ from it, multiply the second element of the tuple by his secret key $s_B$, getting $s_B \, \alpha \, G = \alpha \, P_B$, then subtract that from the first element to find $k \, G$. Afterwards he produces $H(k \, G)$ thus computing the symmetric key and decrypts the payload that Alice sent to him.
 
 \subsubsection{TTL and Data Size} Alice sets TTL (time-to-live) and $Size_{data}$ slots of the UTXO to zero, indicating that this is a \textit{monetary UTXO}. Non-zero values of the mentioned slots will indicate that this is \textit{data UTXO}, handling of which will be described in details later in this document, it Section \ref{data}.
 
