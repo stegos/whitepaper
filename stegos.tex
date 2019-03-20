@@ -31,75 +31,77 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{abstract}
-    In this paper we propose a design for a private, confidential and scalable privacy blockchain that is friendly to the environment. We start with an overview of existing privacy coins, then design a foundation to send payments and data with absolute privacy and complete confidentiality. We extend this foundation to provide a platform for building privacy applications that communicate via messages sent with minimal latency. We describe a Trusted Application Container (TAC), a mobile application that simplifies building privacy applications while providing additional security to users. Last but not least, we sketch the design of the Privacy App Store and private marketplaces. 
+	​​The Stegos Privacy Platform (Stegos) combines a unique blockchain and token design to implement the first cryptocurrency that’s absolutely private, secure, efficient, and environmentally friendly. Stegos is fully scalable and prunable, ensuring the chain is always kept small without compromising trust. This makes Stegos the world’s first public blockchain to offer secure and confidential data storage and transmission, in addition to payment transactions. It also ensures that Stegos is compact enough to run on smartphones, meaning anyone can run the Stegos blockchain from their pocket and earn tokens by staking. 
+	
+    In this paper we describe the design of the blockchain foundation used to send payments and data with absolute privacy and complete confidentiality. We extend this foundation to provide a platform for building privacy applications that communicate via messages sent with minimal latency. We describe a Trusted Application Container (TAC), a mobile application that simplifies building privacy applications while providing additional security to users. Last but not least, we describe the design of the Privacy App Store and private marketplaces. 
 \end{abstract}
 
-\section{Introduction}
-In this section we give a brief overview of most prominent privacy coins and analyze their privacy-protecting and performance characteristics.
+\section{Why Stegos?}
 
-We also explain, on a high level, how Stegos builds and improves on existing privacy coin ideas and employs latest research in cryptography and blockchains in order to create privacy-preserving a blockchain that can be scaled. 
+\subsection{We All Deserve Privacy}
+Everyone deserves privacy. But there are many people whose jobs and sometimes even lives depend on the ability to send and receive crucial information privately and with confidence. People like whistleblowers, activists, journalists, and businesspeople. These people are all vital elements of a free and safe society. 
 
-\subsection{Terminology}
-Here we give definitions for the miscellaneous terms that we are using throughout this paper:
+Whistleblowers expose lies and corruption in governments and corporations. Activists rally like-minded people to bring about positive change. Journalists uncover the truth and guard it. Businesspeople travel the world creating wealth and prosperity, all while protecting clients’ sensitive information.
 
-\begin{itemize}
-	\item \textbf{Privacy}: protection from detection of the identity of blockchain participants and parties to transactions.
-	\item \textbf{Confidentiality}: protection from analyzing blockchain data (e.g. transaction details, including amounts) by unauthorized third parties.
-	\item \textbf{Unlinkability}: for any two outgoing transactions it is impossible to prove they were sent to the same person\cite{c2}.
-	\item \textbf{Untraceability}: for each incoming transaction all possible senders are equiprobable\cite{c2}.
-	\item \textbf{Compactness}: spent coins can be pruned from the blockchain and the blockchain can be compacted.
-	\item \textbf{Sharding}: a transaction verification and block-sealing process that can be partitioned between participants or groups of participants.
-	\item \textbf{Interactivity}: senders and recipients of transactions must interact with each other \textit{off-chain} before posting a transaction to the blockchain.
-	\item \textbf{Trusted Setup}: blockchain participants need to trust someone to generate some initial parameters and then destroy those parameters.
-	\item \textbf{PoW}: Proof-of-Work, an original consensus protocol for Bitcoin, where each node participating in the protocol should present a piece of data which is difficult (costly, time-consuming) to produce but easy for others to verify and which satisfies certain requirements. Due to complexity of computations needed and amount of miners, the current energy consumption by Bitcoin PoW consensus is approximately 73TWh per year\footnote{https://digiconomist.net/bitcoin-energy-consumption}.
-	\item \textbf{PoS}: Proof-of-Stake is a consensus algorithm, where the creator of the next block is chosen via various combinations of random selection, wealth, age and staked funds. PoS blockchains can be more energy efficient than currencies based on PoS algorithms\footnote{http://cfa-consulting.ch/dlfiles/NxtEnergyandCostEfficiencyAnalysis.pdf}.
-	\item \textbf{UTXO}: An Unspent Transaction Output that can be spent as an input in a new transaction.
-\end{itemize}
+All of these people have important secrets, secrets which benefit the whole of society when they’re kept safe. To protect these secrets and the people that carry them, the Stegos team is proud to introduce the Stegos Vault application.
 
-\subsection{Existing privacy coins}
+\subsection{Using Blockchain for the Greater Good}
+At Stegos, we believe everyone has the right to privacy. Every individual should have the right to decide for themselves what they want to share and what they want to keep secret. And those secrets should be safe and secure from hackers, corporations, and governments.
 
-\subsubsection{Monero} originated as a Bytecoin fork in 2014 under the name Bitmonero. The cryptocurrency is using a UTXO model and PoW consensus, and based on the CryptoNote protocol\cite{c2}, employing the ring signatures method. In 2017, Monero implemented RingCT\cite{c3}, an improved version of the ring signatures. RingCT enables confidentiality of amounts and untraceability of transactions. In combination with the stealth addresses (also introduced in the original CryptoNote paper), which provide unlinkability of recipients, this provides full privacy and confidentiality.
+We are increasingly forced to give up our privacy — online, at the airport, and even on the street. 
 
-Monero's blockchain cannot be compacted because spent UTXOs cannot be pruned from it. Keeping all UTXOs forever is one of the requirements of RingCT protocol, which obfuscates the fact that particular UTXOs mentioned in transaction inputs were actually spent. 
-Despite the recent introduction of Bulletproofs\cite{c4} which replaced Monero's original zero-knowledge range proofs and reduced a simple transaction size from 13KB down to 2.5KB, the problem with ever-growing blockchains cannot be solved. 
+We're passionate about technology that keeps secrets safe from prying eyes. We’ve put years of research into making key improvements to cutting-edge blockchain technology to make sure privacy is within everyone’s reach. Stegos lets everyone send and receive coins and data completely anonymously and privately, as well as earn and win coins for supporting the network. Best of all, it can all be done right from your smartphone.
 
-\subsubsection{ZCash} originated in 2016 as a Bitcoin fork and obviously is using a UTXO model and PoW consensus. The goal of the project is to improve on the flaws of Bitcoin, with a focus on privacy. The project is building on work done on Zerocoin\cite{c5}, addressing some of its faults, like the size of the proofs, which ZCash decreases to 1KB and speeds up the verification.
+\subsection{Big Brother is Watching}
+Solid-state technology, smartphones, and the Internet of Things have made it easier than ever to carry large amounts of data with us wherever we go. We carry our lives in our pockets, on our phones and on our laptops. But under the guise of protecting us — from terrorism, from hackers, from our own alleged lack of responsibility — our privacy has been decimated. In airports, online, even on the street, we are being forced to reveal our private information with alarming frequency.
 
-For establishing confidentiality and untraceability, ZCash implements ``Zero-Knowledge Succinct Non-Interactive Argument of Knowledge'' (zk-SNARKS)\cite{c6}. For providing unlinkability of recipients, ZCash employs stealth addresses.
+This intrusion by Big Brother leaves many of us feeling exposed and powerless. Even worse, people face much more chilling consequences such as the loss of their jobs, liberty, or even lives.
 
-zk-SNARKS enable a large anonymity set of all minted coins\footnote{The \textit{anonymity set} here defined as the set of participants who could be a sender in ZCash transaction, as seen by a global observer who has also compromised a set of nodes.}, providing a high degree of privacy. However, the size of up to 2KB for an average transaction and ever-growing accumulator, holding serial numbers of all spent coins, that cannot be pruned, makes ZCash much less scalable. The issue of scalability is the main reason why privacy is currently optional, not by default. At the time of writing, less than 25\% of all transactions were shielded.
+Privacy is a universal human right that we must all fight to preserve.
+  
+\subsection{Disruptive Change}
+Traditional data sharing and storage technologies (online cloud storage, email, our laptops, etc.) have built-in security. But all these technologies can easily be compromised. If the password is obtained and entered, the data is permanently exposed for everyone to see.
 
-The questionable part of the zk-SNARKS protocol is the initial trusted setup. ZCash utilizes a multi-party ceremony involving a several trusted people. This is controversial, as you have to trust any of these people that they destroyed the initial parameters and also trust that the ceremony was carried out correctly. 
+The Stegos team believes that blockchain is a far better way to keep your private information safe in the modern online world.
 
-\subsubsection{Dash} originally a codebase fork from Litecoin (which is in turn a codebase fork of Bitcoin), Dash were launched as XCoin in January 2014. Dash is using the UTXO model and PoW consensus. 
+\subsection{Why Blockchain?}
+Stegos Privacy Blockchain is the best mechanism for securing secrets and communications because, unlike traditional email and online messaging services, it’s completely decentralized, cryptographically secure, and leaves no telltale clues in the open. It’s impossible to see who sends or receives information or establish how anyone is connecting to the Stegos Privacy Blockchain. No-one but the intended recipient of a communication or transaction can see what or how much was sent, and there’s nothing to link data or transactions to anyone’s real-life identities.
 
-Besides standard nodes and miners, Dash has \textit{masternodes}, the nodes that must have static IP address and fulfill particular requirements for CPU, RAM, and disk space. Each masternode must have at least 1000DASH in its ownership. A Proof-of-Service protocol ensures that masternodes have the most current blockchain protocol and are online. 
+With the Stegos Privacy Blockchain, there is no central place for Big Brother or other bad actors to tap into our secrets.
 
-It is important to note that privacy is optional in Dash and the high volume of transactions is driven mainly by fast public transactions called \textit{InstantSend} which are provided by masternodes.
+\subsection{Private by Default}
+The original Bitcoin paper was seminal in its proposal for a mechanism to prevent double-spending of electronic cash, but it only included a very small section on privacy. It assumed that even though transaction amounts are public, it would be impossible to link those transactions to anyone’s real identities. This assumption has been proven wrong over the years by researchers, hackers, and blockchain analysis companies. Transaction analysis has become trivial with the help of software like ChainAnalysis, allowing anyone to quickly de-anonymize users of Bitcoin and other cryptocurrencies.
 
-\textit{PrivateSend} is an implementation of CoinJoin, the untraceability solution first proposed for Bitcoin by Bitcoin Core developer Gregory Maxwell\footnote{https://bitcointalk.org/index.php?topic=279249.0}. In PrivateSend, three users add their coins together in one big transaction, that sends the coins to freshly generated addresses belonging to the same three users. As such, the coins are effectively mixed between the three participants, breaking the blockchain trail of ownership between them. This process can be automatically repeated up to eight times, with (hopefully) different mixing participants, for extra privacy.
+Most blockchains have followed in Bitcoin’s footsteps with a totally transparent design that includes visible addresses and amounts, including the balance of any wallet, how much money has been sent and received and the addresses of every sender and recipient. All this readily available information paints a large and highly visible target for hackers and Big Brother.
 
-Dash is not providing confidentiality of amounts either in InstantSend, or in PrivateSend. Moreover, it is an essential requirement of CoinJoin protocol that inputs of users involved in the round of the mixing protocol must have exactly the same denomination (amount of coins). This requirement is impossible to fulfill in case of amounts that are cloaked. 
+There’s a reason why your credit card spending isn’t published online, even with your name stripped. Your pseudo-anonymous payment history can be put together with other data collected from the Internet and you can still be identified, making you a target for unscrupulous marketers and scammers.
 
-Users of Dash have to trust masternodes that they will keep users' IP addresses undisclosed and unlinked to users' UTXOs when sending transactions in Dash. This adds another privacy vulnerability to Dash.
+We live in an era of unprecedented state surveillance and crackdowns on freedom of the press and even thought. It’s nobody’s business what you do with your money, whether paper or digital, and it’s nobody's business who you transact with on the blockchain. With the rise of privacy technologies like Bulletproofs and zk-SNARKs, there’s no excuse to perpetuate Bitcoin’s mistake. Blockchain should be private by default.
 
-\subsubsection{Mimblewimble} is a protocol that was proposed by an anonymous user in a Bitcoin developers chat room by the name of Tom Elvis Jedusor, that left a link to a paper\footnote{https://download.wpsoftware.net/bitcoin/wizardry/mimblewimble.txt} in which he outlines that by using the Mimblewimble protocol, the scalability, as well as the privacy of the Bitcoin network, could significantly be enhanced.
+In the following sections we describe the design for \textit{Stegos}, a blockchain which uses the \textit{UTXO} (coin) model and \textit{PoS} (Proof-of-Stake) consensus. We also explain how Stegos builds and improves on existing privacy coin ideas and employs latest research in cryptography in order to create highly scalable privacy blockchain and application platform. 
 
-Mimblewimble is based on the ideas of Greg Maxwell's design for Confidential Transactions\footnote{https://people.xiph.org/\texttt{\~}greg/confidential\_values.txt}, except, it is the recipient that generates a random blinding factor used to cloak the amount of the transaction. This blinding factor is then used as proof of ownership by the recipient, therefore working simultaneously as the recipient's public key. Therefore, Mimblewimble provides confidentiality of amounts and unlinkability of recipients in its transactions.
+\section{What is Stegos?}
+​​The Stegos Privacy Platform (Stegos) combines a unique blockchain and token design to implement the first cryptocurrency that’s absolutely private, secure, efficient, and environmentally friendly. Stegos is fully scalable and prunable, ensuring the chain is always kept small without compromising trust. This makes Stegos the world’s first public blockchain to offer secure and confidential data storage and transmission, in addition to payment transactions. It also ensures that Stegos is compact enough to run on smartphones, meaning anyone can run the Stegos blockchain from their pocket and earn tokens by staking.
 
-Untraceability of transactions in Mimblewimble is building on the ideas of CoinJoin and is implemented by breaking transaction boundaries and storing only inputs and outputs of all transactions verified by miner in a newly mined block.
+Other privacy tokens — such as Monero, Dash, ZCash, and Grin — can only be used for payments, and all display weaknesses in terms of scalability, privacy, security, or usability. Stegos builds and improves upon these and other privacy coins and can be used to send both payments and data with complete confidentiality. The Stegos Privacy Platform can also be used to build applications that communicate anonymously, privately, and efficiently.
 
-The two existing implementations of the protocol known at the moment are Grin\footnote{https://github.com/mimblewimble/grin} and Beam\footnote{https://www.beam.mw}. These projects use the UTXO model and PoW consensus. Spent UTXOs in both projects can be pruned by recursively applying a simple pruning algorithm for each UTXO referenced in inputs of the new minted block.
+Payment and data transactions in Stegos are unlinkable, untraceable, and completely confidential. Every Stegos transaction is directed to a new and unique stealth address, making it impossible to identify the recipients. It’s also impossible to trace Stegos transaction history, since individual transactions are first joined together to form a supertransaction before being submitted to blockchain validators. This is all done in a secure and privacy-preserving way, while ensuring that Stegos coins remain fully fungible.
 
-There are several drawbacks in the design of Mimblewimble:
+All amounts in Stegos are hidden using cryptographic commitments and zero-knowledge proofs. Validator stakes and transaction fees are the only exception, since these must be visible for blockchain validation to work. 
 
-\begin{itemize}
-	\item {The first drawback is related to the transaction creation mechanism of MimbleWimble --- in order to create a transaction, senders and recipients must interact with each other. The sender cannot post a transaction to the blockchain without first contacting the recipient with half-baked transaction data and receiving that data updated by applying a blinding factor back from the recipient.}
-	\item {The second is very similar to the problem from Dash where users must trust Dash masternodes. Currently, Grin and Beam users must trust miners that they will not trace the history of inputs and outputs in transactions, and discard this data completely after mining a block. Therefore, there is a threat to the coins' fungibility and the privacy of users.}
-\end{itemize}
+Stegos is a fast and highly scalable blockchain and, unlike other blockchains, it’s kept small. Details of spent coins and consumed data are safely removed from the blockchain using secure cryptographic pruning. It's also highly scalable thanks to transactional sharding. Separate groups of Stegos validators keep the whole blockchain state but verify only a subset of incoming transactions, using cross-shard atomic commits to eliminate double-spending. These breakthroughs let Stegos process hundreds of thousands of transactions per second across billions of mobile devices, making Stegos the first and only blockchain that can run and earn you money entirely in your pocket.
 
-\section{Our contribution}
-In this paper we propose a design for \textit{Stegos}, a blockchain which uses the \textit{UTXO} (coin) model and \textit{PoS} (Proof-of-Stake) consensus.
+Stegos is environmentally friendly and does not waste megawatts of electricity mining blocks. Instead, Stegos uses a bespoke proof-of-stake (PoS) consensus, building on advancements in distributed systems theory and cryptography. Each new Stegos block must be verified and confirmed by a group of validators, all of whom must post tokens as bonds. The value of the tokens staked in this way directly effects the probability that a validator will win a block and earn the associated transaction fees. 
+
+The Stegos mobile app is the portal into the ecosystem and a showcase of the potential of our platform. The app integrates the wallet with a secure environment for running privacy-focused applications, the Stegos App Store, as well as group chat and marketplaces.
+
+In addition to standard block rewards, Stegos implements unique a Jackpot feature. A portion of the reward from each block is added to the jackpot, which continues to grow until a winner is selected in an ongoing cryptographic lottery based on verifiable distributed randomness. 
+
+The Red Envelopes, another unique Stegos feature, helps viral marketing by letting anyone create a custom token airdrop that anyone with a Stegos app mobile app can claim by scanning a QR code.
+
+Everyone deserves privacy. The Stegos Privacy Platform doesn’t just keep your money and secrets safe. It rewards you for maintaining the network, even on your phone.    
+
+\section{Features}
 
 \subsection{Absolute privacy}
 Transactions in Stegos are \textit{unlinkable}, \textit{untraceable}, and \textit{confidential}:
@@ -146,9 +148,9 @@ Stegos includes incentives to drive adoption and encourage viral marketing.
 
 Users create \textit{tickets} with their lucky numbers and post them to the blockchain. The Jackpot is distributed every few thousand blocks when validators run a cryptographic lottery based on verifiable distributed randomness to generate the winning number. Several tiers of prizes are awarded depending on how closely the ticker numbers match the winning number. 
 
-\textit{Red envelopes}\footnote{https://en.m.wikipedia.org/wiki/Red\_envelope\#Digital\_red\_envelopes} is a WeChat-like feature that we implement to promote viral growth. Users create red envelopes with a given number of tokens and post the corresponding QR code or URL on social networks. Each attempt to open the red envelope may result in a few tokens or none at all. 
+\textit{Red envelopes}\footnote{https://en.m.wikipedia.org/wiki/Red\_envelope\#Digital\_red\_envelopes} is a WeChat-like feature that we implement to promote viral growth. Users create red envelopes with a given number of tokens and post the corresponding QR code or URL on social networks. Each attempt to open a red envelope may result in a few tokens or none at all. 
 
-In the following sections we will explain each of the Stegos features in more detail.
+In the following sections we explain Stegos features in more detail.
 
 \section{Networking}\label{Networking}
 
@@ -204,10 +206,6 @@ A validator elected to become the leader of the current epoch is rewarded by col
 Leader election is done using a stake-weighted lottery. The larger the validator's stake, the greater the chances of becoming the leader of the current consensus round (epoch). After serving as the leader of one epoch, the leader relinquishes his right to be re-elected until a number of rounds later.
 
 Please see Appendix \ref{ConsensusAppendix} for the exact details of our consensus protocol.
-
-\subsection{Blocks}
-\todo[inline]{Briefly describe our key blocks and microblocks}
-\comment{We need to be able to refer to key blocks and microblocks in FastData}
 
 \section{Snowball}\label{Snowball}
 
@@ -268,8 +266,6 @@ Stegos blockchain compaction is a continuous process where each incoming and pro
 \section{FastData}\label{FastData}
 Stegos introduces data transactions in addition to regular payment transactions. Both types of transactions enjoy the same encryption and privacy protection. In fact, there's no way to tell payments apart from data messages. 
 
-Unlike payments that need to spend existing coins, data has no inputs so here's no need to obfuscate which inputs resulted in which output. This means that data does not need to incur the delay of going through Snowball\ref{Snowball} and can be sent much faster.
-
 Data messages are meant to be handled at the application layer and the payload is expected to include a sequence number. Unlike payments, data cannot be double-spent and there's no need to wait for data messages to become irreversible. The message sequence number should help applications order messages and check for messages that are missing. 
 
 Stegos data messaging is a lot like UDP/IP and serves as a message bus that all kinds of applications can use to communicate securely and privately.
@@ -277,14 +273,9 @@ Stegos data messaging is a lot like UDP/IP and serves as a message bus that all 
 Data messages are automatically recycled and removed from the blockchain using BlockCrunch\ref{Pruning}.
 
 \section{Token economics}\label{Tokenomics}
-\todo[inline]{Describe our token economics}
-Stegos is powered by the STG token, available once the mainnet is launched. When posted as a performance bond by nodes wishing to support the Stegos platform, the STG token gives validators the right to earn fees and block rewards. ​​
+Stegos is powered by the STG token, available once the mainnet is launched. When posted as a performance bond by nodes wishing to support the Stegos platform, the STG token gives validators the right to earn fees and block rewards when they are elected as the leader of the consensus round. The probability of a validator being elected the leader is proportional to the size of their stake.
 
-\subsection{Monetary policy}
 STG token emission will start at 14\% during the first 4 years and halve every 4 years thereafter.
-
-\subsection{Block rewards and transaction fees}\label{BlockRewardsAndFees}
-\todo[inline]{Describe block rewards and transaction fees}
 
 \subsection{Jackpot}\label{Jackpot}
 \todo[inline]{Describe the Jackpot}
@@ -310,8 +301,8 @@ STG token emission will start at 14\% during the first 4 years and halve every 4
 
 Electing a leader of the consensus and choosing a winner in the Jackpot lottery uses our algorithm for generating distributed, untainted, unbiasable randomness, in the spirit of the RandHound protocol\cite{c12}. Our algorithm, \textit{RandHound++}, actually derives much of its protocol from SCRAPE\cite{c13} as its primary deviation from original RandHound. SCRAPE defines a PVSS\cite{c14} protocol using symmetric bilinear pairing based cryptography and coding theory. But beyond SCRAPE, we had to adjust the algorithm to deal with asymmetric pairings which offer necessary stronger cryptographic security.
 
-\subsection{Red packets}\label{RedPackets}
-\todo[inline]{Describe the red packets}
+\subsection{Red envelopes}\label{RedEnvelopes}
+\todo[inline]{Describe the red envelopes}
 
 - A lot like token airdrops. 
 - The red envelope is funded with a number of tokens.
@@ -1011,6 +1002,68 @@ With that, a special mechanism should be established for deleting expired data -
 The duty to identify expired data UTXOs belongs to the epoch \textit{leader}. In addition to the normal duties of the leader, now, in the presence of data UTXO in the UTXO Database, before proposing the new block to witnesses in the group, it must scan the database and check in each data UTXO a number of the block in which it has been created and its TTL. If the sum of creation block number and TTL is less than number of the new block that the leader is going to propose, then the leader must add this UTXO's $ID$ to the inputs to special data cleaning transaction which should be added to the proposed block along with other special transactions for collecting fees. 
 
 Upon receiving block proposal from the leader, witnesses will validate that UTXOs referenced in the data cleaning transaction are indeed expired and seal the block with their signatures. Finally, the sealed block will be propagated through the network, and all full nodes will prune expired data UTXOs according to the usual pruning procedure.
+
+\section{Overview of privacy coins}\label{PrivacyCoinsAppendix}
+In this section we give a brief overview of most prominent privacy coins and analyze their privacy-protecting and performance characteristics.
+
+\subsection{Terminology}
+Here we give definitions for the miscellaneous terms that we are using throughout this paper:
+
+\begin{itemize}
+	\item \textbf{Privacy}: protection from detection of the identity of blockchain participants and parties to transactions.
+	\item \textbf{Confidentiality}: protection from analyzing blockchain data (e.g. transaction details, including amounts) by unauthorized third parties.
+	\item \textbf{Unlinkability}: for any two outgoing transactions it is impossible to prove they were sent to the same person\cite{c2}.
+	\item \textbf{Untraceability}: for each incoming transaction all possible senders are equiprobable\cite{c2}.
+	\item \textbf{Compactness}: spent coins can be pruned from the blockchain and the blockchain can be compacted.
+	\item \textbf{Sharding}: a transaction verification and block-sealing process that can be partitioned between participants or groups of participants.
+	\item \textbf{Interactivity}: senders and recipients of transactions must interact with each other \textit{off-chain} before posting a transaction to the blockchain.
+	\item \textbf{Trusted Setup}: blockchain participants need to trust someone to generate some initial parameters and then destroy those parameters.
+	\item \textbf{PoW}: Proof-of-Work, an original consensus protocol for Bitcoin, where each node participating in the protocol should present a piece of data which is difficult (costly, time-consuming) to produce but easy for others to verify and which satisfies certain requirements. Due to complexity of computations needed and amount of miners, the current energy consumption by Bitcoin PoW consensus is approximately 73TWh per year\footnote{https://digiconomist.net/bitcoin-energy-consumption}.
+	\item \textbf{PoS}: Proof-of-Stake is a consensus algorithm, where the creator of the next block is chosen via various combinations of random selection, wealth, age and staked funds. PoS blockchains can be more energy efficient than currencies based on PoS algorithms\footnote{http://cfa-consulting.ch/dlfiles/NxtEnergyandCostEfficiencyAnalysis.pdf}.
+	\item \textbf{UTXO}: An Unspent Transaction Output that can be spent as an input in a new transaction.
+\end{itemize}
+
+\subsection{Existing privacy coins}
+
+\subsubsection{Monero} originated as a Bytecoin fork in 2014 under the name Bitmonero. The cryptocurrency is using a UTXO model and PoW consensus, and based on the CryptoNote protocol\cite{c2}, employing the ring signatures method. In 2017, Monero implemented RingCT\cite{c3}, an improved version of the ring signatures. RingCT enables confidentiality of amounts and untraceability of transactions. In combination with the stealth addresses (also introduced in the original CryptoNote paper), which provide unlinkability of recipients, this provides full privacy and confidentiality.
+
+Monero's blockchain cannot be compacted because spent UTXOs cannot be pruned from it. Keeping all UTXOs forever is one of the requirements of RingCT protocol, which obfuscates the fact that particular UTXOs mentioned in transaction inputs were actually spent. 
+Despite the recent introduction of Bulletproofs\cite{c4} which replaced Monero's original zero-knowledge range proofs and reduced a simple transaction size from 13KB down to 2.5KB, the problem with ever-growing blockchains cannot be solved. 
+
+\subsubsection{ZCash} originated in 2016 as a Bitcoin fork and obviously is using a UTXO model and PoW consensus. The goal of the project is to improve on the flaws of Bitcoin, with a focus on privacy. The project is building on work done on Zerocoin\cite{c5}, addressing some of its faults, like the size of the proofs, which ZCash decreases to 1KB and speeds up the verification.
+
+For establishing confidentiality and untraceability, ZCash implements ``Zero-Knowledge Succinct Non-Interactive Argument of Knowledge'' (zk-SNARKS)\cite{c6}. For providing unlinkability of recipients, ZCash employs stealth addresses.
+
+zk-SNARKS enable a large anonymity set of all minted coins\footnote{The \textit{anonymity set} here defined as the set of participants who could be a sender in ZCash transaction, as seen by a global observer who has also compromised a set of nodes.}, providing a high degree of privacy. However, the size of up to 2KB for an average transaction and ever-growing accumulator, holding serial numbers of all spent coins, that cannot be pruned, makes ZCash much less scalable. The issue of scalability is the main reason why privacy is currently optional, not by default. At the time of writing, less than 25\% of all transactions were shielded.
+
+The questionable part of the zk-SNARKS protocol is the initial trusted setup. ZCash utilizes a multi-party ceremony involving a several trusted people. This is controversial, as you have to trust any of these people that they destroyed the initial parameters and also trust that the ceremony was carried out correctly. 
+
+\subsubsection{Dash} originally a codebase fork from Litecoin (which is in turn a codebase fork of Bitcoin), Dash were launched as XCoin in January 2014. Dash is using the UTXO model and PoW consensus. 
+
+Besides standard nodes and miners, Dash has \textit{masternodes}, the nodes that must have static IP address and fulfill particular requirements for CPU, RAM, and disk space. Each masternode must have at least 1000DASH in its ownership. A Proof-of-Service protocol ensures that masternodes have the most current blockchain protocol and are online. 
+
+It is important to note that privacy is optional in Dash and the high volume of transactions is driven mainly by fast public transactions called \textit{InstantSend} which are provided by masternodes.
+
+\textit{PrivateSend} is an implementation of CoinJoin, the untraceability solution first proposed for Bitcoin by Bitcoin Core developer Gregory Maxwell\footnote{https://bitcointalk.org/index.php?topic=279249.0}. In PrivateSend, three users add their coins together in one big transaction, that sends the coins to freshly generated addresses belonging to the same three users. As such, the coins are effectively mixed between the three participants, breaking the blockchain trail of ownership between them. This process can be automatically repeated up to eight times, with (hopefully) different mixing participants, for extra privacy.
+
+Dash is not providing confidentiality of amounts either in InstantSend, or in PrivateSend. Moreover, it is an essential requirement of CoinJoin protocol that inputs of users involved in the round of the mixing protocol must have exactly the same denomination (amount of coins). This requirement is impossible to fulfill in case of amounts that are cloaked. 
+
+Users of Dash have to trust masternodes that they will keep users' IP addresses undisclosed and unlinked to users' UTXOs when sending transactions in Dash. This adds another privacy vulnerability to Dash.
+
+\subsubsection{Mimblewimble} is a protocol that was proposed by an anonymous user in a Bitcoin developers chat room by the name of Tom Elvis Jedusor, that left a link to a paper\footnote{https://download.wpsoftware.net/bitcoin/wizardry/mimblewimble.txt} in which he outlines that by using the Mimblewimble protocol, the scalability, as well as the privacy of the Bitcoin network, could significantly be enhanced.
+
+Mimblewimble is based on the ideas of Greg Maxwell's design for Confidential Transactions\footnote{https://people.xiph.org/\texttt{\~}greg/confidential\_values.txt}, except, it is the recipient that generates a random blinding factor used to cloak the amount of the transaction. This blinding factor is then used as proof of ownership by the recipient, therefore working simultaneously as the recipient's public key. Therefore, Mimblewimble provides confidentiality of amounts and unlinkability of recipients in its transactions.
+
+Untraceability of transactions in Mimblewimble is building on the ideas of CoinJoin and is implemented by breaking transaction boundaries and storing only inputs and outputs of all transactions verified by miner in a newly mined block.
+
+The two existing implementations of the protocol known at the moment are Grin\footnote{https://github.com/mimblewimble/grin} and Beam\footnote{https://www.beam.mw}. These projects use the UTXO model and PoW consensus. Spent UTXOs in both projects can be pruned by recursively applying a simple pruning algorithm for each UTXO referenced in inputs of the new minted block.
+
+There are several drawbacks in the design of Mimblewimble:
+
+\begin{itemize}
+	\item {The first drawback is related to the transaction creation mechanism of MimbleWimble --- in order to create a transaction, senders and recipients must interact with each other. The sender cannot post a transaction to the blockchain without first contacting the recipient with half-baked transaction data and receiving that data updated by applying a blinding factor back from the recipient.}
+	\item {The second is very similar to the problem from Dash where users must trust Dash masternodes. Currently, Grin and Beam users must trust miners that they will not trace the history of inputs and outputs in transactions, and discard this data completely after mining a block. Therefore, there is a threat to the coins' fungibility and the privacy of users.}
+\end{itemize}
 
 \listoftodos
 
