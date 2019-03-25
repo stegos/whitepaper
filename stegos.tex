@@ -95,7 +95,7 @@ Stegos is environmentally friendly and does not waste megawatts of electricity m
 
 The Stegos mobile app is the portal into the ecosystem and a showcase of the potential of our platform. The app integrates the wallet with a secure environment for running privacy-focused applications, the Stegos App Store, as well as one-on-one and group chat.
 
-In addition to standard block rewards, Stegos implements unique a Jackpot feature. A portion of the reward from each block is added to the jackpot, which continues to grow until a winner is selected in an ongoing cryptographic lottery based on verifiable distributed randomness. 
+In addition to standard block rewards, Stegos implements a unique _Validator Service Award_ feature. A portion of the reward from each block is added to the service award pool, which continues to grow until a winner is selected in an ongoing cryptographic lottery based on verifiable distributed randomness. 
 
 The Red Envelopes, another unique Stegos feature, helps viral marketing by letting anyone create a custom token airdrop that anyone with a Stegos app mobile app can claim by scanning a QR code.
 
@@ -144,9 +144,9 @@ We look forward to a blooming ecosystem of privacy applications, developed to ru
 \subsection{Incentives to drive adoption}
 Stegos includes incentives to drive adoption and encourage viral marketing. 
 
-\textit{Jackpot} is a feature unique to Stegos and a lottery concept that everyone is familiar with. A portion of the fees from each block are added to the Jackpot and any stake forfeited by a validator caught cheating goes into the Jackpot as well. 
+\textit{Validator Service Award} is a feature unique to Stegos that rewards validators for being online and helping support the network. A portion of the fees from each block are added to the service award pool and any stake forfeited by a validator caught cheating goes into this pool as well. 
 
-Users create \textit{tickets} with their lucky numbers and post them to the blockchain. The Jackpot is distributed every few thousand blocks when validators run a cryptographic lottery based on verifiable distributed randomness to generate the winning number. Several tiers of prizes are awarded depending on how closely the ticker numbers match the winning number. 
+The service award pool is distributed every few thousand blocks when validators run a cryptographic lottery based on verifiable distributed randomness to select one validator to receive the award.
 
 \textit{Red envelopes}\footnote{https://en.m.wikipedia.org/wiki/Red\_envelope\#Digital\_red\_envelopes} is a WeChat-like feature that we implement to promote viral growth. Users create red envelopes with a given number of tokens and post the corresponding QR code or URL on social networks. Each attempt to open a red envelope may result in a few tokens or none at all. 
 
@@ -180,7 +180,7 @@ We use RandHound++ for multiple purposes:
 	\item {to form validator groups;}
 	\item {to elect leaders of validator groups;} 
 	\item {to choose pooled transactions facilitators among validators;}
-	\item {to find a winner of the Jackpot lottery.}
+	\item {to find a winner of the Validator service award drawing.}
 \end{itemize}
 
 See Appendix \ref{RandomnessAppendix} for more details of our randomness implementation. 
@@ -199,7 +199,7 @@ Please see the Appendix \ref{ValidationAppendix} for more details on how we use 
 \subsection{Leader Election}
 Stegos is a public so anyone can join the network, become a validator and earn rewards for maintaining the blockchain. Stegos uses Proof-of-Stake (PoS) consensus and all validators need to post a performance bond (stake). Requiring a performance bond helps against Sybil attack by requiring a significant financial commitment from validator.
 
-Any validator caught cheating by their peers loses their stake, which gets transferred into the Jackpot. 
+Any validator caught cheating by their peers loses their stake, which gets transferred to the validator service award pool. 
 
 A validator elected to become the leader of the current epoch is rewarded by collecting transaction fees from the blocks they form, as well as collecting the block reward. 
 
@@ -244,7 +244,7 @@ We implement a protocol where a \textit{facilitator} elected among the validator
 
 \section{BlockCrunch}\label{Pruning}
 
-As described in Appendix \ref{Block}, a Stegos block is composed of a header and a body, where the header contains root hashes of two Merkle trees, that comprise the body of the block. Those two trees are a tree of all inputs (TXIN Merkle Tree) and a tree of all outputs (TXOUT Merkle Tree). 
+As described in Appendix \ref{Blocks}, a Stegos block is composed of a header and a body, where the header contains root hashes of two Merkle trees, that comprise the body of the block. Those two trees are a tree of all inputs (TXIN Merkle Tree) and a tree of all outputs (TXOUT Merkle Tree). 
 
 When a new block is verified and signed by CoSi witnesses, the signatures are computed over just the block header. The body of the block is not signed because it is secured against modification by the nature of the Merkle tree. It will be impossible to modify the body of the block without invalidating the root hashes contained in the signed header.
 
@@ -263,7 +263,7 @@ After verifying and signing a new block, the \textit{leader} broadcasts it to th
 
 Stegos blockchain compaction is a continuous process where each incoming and properly signed block triggers the pruning. As a result of this continuous pruning, the Stegos blockchain becomes a database of unspent coins (UTXO), with no transaction history kept.
 
-\section{FastData}\label{FastData}
+\section{FastData}\label{Data}
 Stegos introduces data transactions in addition to regular payment transactions. Both types of transactions enjoy the same encryption and privacy protection. In fact, there's no way to tell payments apart from data messages. 
 
 Data messages are meant to be handled at the application layer and the payload is expected to include a sequence number. Unlike payments, data cannot be double-spent and there's no need to wait for data messages to become irreversible. The message sequence number should help applications order messages and check for messages that are missing. 
@@ -277,29 +277,16 @@ Stegos is powered by the STG token, available once the mainnet is launched. When
 
 STG token emission will start at 14\% during the first 4 years and halve every 4 years thereafter.
 
-\subsection{Jackpot}\label{Jackpot}
-\todo[inline]{Expand the Jackpot description}
+\subsection{Validator service award}\label{ValidatorAward}
+\todo[inline]{Expand the award description}
 
-- A portion of block rewards goes to the Jackpot. 
+- A portion of block rewards goes to the service award pool. 
 - Calculated as 1/3 of the inflation rate.
-- Stakes forfeited by cheating validators go into the pot.
-- Users pay coins to buy lottery tickets.
-- The payment for each ticket is added to the pot.
-- Each ticket has 7 numbers specified by the user. 
-	- The range of the first 6 numbers is 1-33 and the last number 1-16.
-- A 7-number winning sequence is generated for each lottery run.
-- A tier of prizes for guessing the numbers right 
-	- 1 prize. Matching all the 7 numbers.
-	- 2 prize. Guessing the first 6 numbers correctly.
-	- 3 prize. Guessing any 5 numbers, plus the 7th.
-	- 4 prize. Any 5 numbers, or 4 numbers plus the 7th.
-	- 5 prize. Any 4 numbers, or 3 numbers plus the 7th. 
-	- 6 prize. Any 2 numbers + 7th, Any 1 number + 7th, just 7th. The price of the ticket back.
-- If the pot is not won then it keeps growing. 
-- The jackpot runs at a random time. 
-- Only tickets bought 1 week or more in advance participate in the draw.
+- Stakes forfeited by cheating validators go into the pool.
+- The drawing runs at a random time. 
+- Only validators who have been online and signing blocks for a predetermined amount of time are elegible for the drawing.
 
-Electing a leader of the consensus and choosing a winner in the Jackpot lottery uses our algorithm for generating distributed, untainted, unbiasable randomness, in the spirit of the RandHound protocol\cite{c12}. Our algorithm, \textit{RandHound++}, actually derives much of its protocol from SCRAPE\cite{c13} as its primary deviation from original RandHound. SCRAPE defines a PVSS\cite{c14} protocol using symmetric bilinear pairing based cryptography and coding theory. But beyond SCRAPE, we had to adjust the algorithm to deal with asymmetric pairings which offer necessary stronger cryptographic security.
+Electing a leader of the consensus and choosing a winner in the validator service award drawing uses our algorithm for generating distributed, untainted, unbiasable randomness, in the spirit of the RandHound protocol\cite{c12}. Our algorithm, \textit{RandHound++}, actually derives much of its protocol from SCRAPE\cite{c13} as its primary deviation from original RandHound. SCRAPE defines a PVSS\cite{c14} protocol using symmetric bilinear pairing based cryptography and coding theory. But beyond SCRAPE, we had to adjust the algorithm to deal with asymmetric pairings which offer necessary stronger cryptographic security.
 
 \subsection{Red envelopes}\label{RedEnvelopes}
 \todo[inline]{Expand the description of red envelopes}
@@ -316,7 +303,7 @@ A great promotion and viral tool!
 
 \section{Privacy applications platform}\label{PrivacyPlatform}
 
-The Stegos Privacy Platform builds on top of our fast message bus \ref{FastData} and makes developing mobile privacy apps a breeze. The Stegos mobile app is the primary window to the platform. It integrates the Trusted Application Container (TAC) with one-on-one and group chat as well as the  Privacy App Store. 
+The Stegos Privacy Platform builds on top of our fast message bus \ref{Data} and makes developing mobile privacy apps a breeze. The Stegos mobile app is the primary window to the platform. It integrates the Trusted Application Container (TAC) with one-on-one and group chat as well as the  Privacy App Store. 
 
 \subsection{Trusted Application Container}\label{TAC}
 The Trusted Application Container (TAC) is a sandbox and virtual machine (VM) for running plug-in apps written using HTML, CSS and JavaScript. The architecture is very similar to that of WeChat mini-programs \footnote{https://walkthechat.com/wechat-mini-programs-simple-introduction/}.
@@ -365,8 +352,8 @@ Stegos users can export their wallet address as a QR code.
 \subsubsection{Bitcoin-style smart contracts}\label{SmartContracts}
 \todo[inline]{Describe programmable coins}
 
-\section{Next Steps}
-
+\section{Conclusion}
+\todo[inline]{Rewrite the conclusion}
 In this paper we laid out a design for Stegos - a private, confidential, and scalable blockchain that is eco-friendly, upon which applications for sending monetary values and/or arbitrary data can be built.
 
 The Stegos team is working on implementation of the blockchain and the development progress can be tracked online at \url{https://github.com/orgs/stegos/projects/1}. Our source code is and always be 100\% open.
@@ -538,11 +525,11 @@ All validators should pay attention to leader election messages:
 	\item{\textit{Call For New Election Message}: Increment the count, $n$, of such calls seen from different validators, and if $n \ge 2 f +1$, then run another election round based on the last election's random value, with a decision tree that excludes current leader. Determine new leader and next role for this validator. Reset the counter of calls for new election.}
 \end{itemize}
 
-\subsection{Key Blocks}
+\subsection{Key Blocks}\label{Blocks}
 
 Stegos blockchain is able to accommodate multiple kinds of blocks. The kind of the block is defined by the \textit{Block Type ID} slot in the block header. In this paper we define two types of blocks: $0 (KeyBlock)$ and $1 (MonetaryBlock)$.
 
-Monetary blocks, the blocks that carry all cryptocurrency transactions data and coins, will be described in detail in Section \ref{block}. We will be referring to them simply as \textit{blocks} throughout this paper. 
+Monetary blocks, the blocks that carry all cryptocurrency transactions data and coins, will be described in detail in Section \ref{Blocks}. We will be referring to them simply as \textit{blocks} throughout this paper. 
 
 The purpose of Key blocks is to deliver the administrative information to blockchain participants. Any node, searching through key blocks, can see who is current or past epoch \textit{leader}, and who are witnesses (validators) for the current or past epoch. Nodes wishing to submit a transaction should consult with the latest key block to find who is the current pooled transactions \textit{facilitator}.
 
@@ -564,7 +551,7 @@ There is no body in the key block.
 
 The initial contents of the BLS Multi-signature slots should be zero filled and, even after being filled in, never contribute to the computation of any \textit{block header hash}. All other slots are concatenated to form a header hash pre-image.
 
-The key block verification and sealing should be done using the same consensus protocol as for the monetary blocks. We will describe this protocol in detail later on in this paper, in Section \ref{block}.
+The key block verification and sealing should be done using the same consensus protocol as for the monetary blocks. We will describe this protocol in detail later on in this paper, in Section \ref{Blocks}.
 
 \section{Basic Transactions}\label{TransactionsAppendix}
 
@@ -589,7 +576,7 @@ This commitment value will be wrapped inside a Bulletproof range proof on the am
 \subsubsection{Destination address cloaking} Alice then cloaks Bob's public key with a factor, $\delta \in Z_r$, so that instead of Bob's original public key $P_B$, she will put into UTXO $P_{B, \delta} = P_B + \delta \, G$.
 
 
-\subsubsection{Encrypted payload} Alice must pass values for the amount $x$, and cloaking factors, $\gamma$ and $\delta$, to Bob. She can do it by including this information into the \textit{encrypted payload} of the UTXO. Besides the values mentioned above, the encrypted payload may also contain arbitrary data, that Alice wants to share with Bob. Detailed explanation of storing arbitrary data on Stegos blockchain will be given in Section \ref{data}. 
+\subsubsection{Encrypted payload} Alice must pass values for the amount $x$, and cloaking factors, $\gamma$ and $\delta$, to Bob. She can do it by including this information into the \textit{encrypted payload} of the UTXO. Besides the values mentioned above, the encrypted payload may also contain arbitrary data, that Alice wants to share with Bob. Detailed explanation of storing arbitrary data on Stegos blockchain will be given in Section \ref{Data}. 
 
 For generating the encrypted payload, Alice must choose random values $\alpha, k \in Z_r$ that will be used in creating and cloaking a symmetric data encryption key.
 The actual symmetric key for the encrypted data object will be $H(k \, G)$. In order to pass it safely via the blockchain to Bob, Alice needs to cloak it with $\alpha$ and store it in the UTXO as the following tuple: $$\mathit{Key}_{\alpha} = (\alpha \, P_{B} + k \, G, \alpha \, G )$$ 
@@ -598,7 +585,7 @@ Alice encrypts her payload with AES-128 using $H(k \, G)$ key and places the enc
 
 When Bob receives UTXO later on, he will take out $\mathit{Key}_{\alpha}$ from it, multiply the second element of the tuple by his secret key $s_B$, getting $s_B \, \alpha \, G = \alpha \, P_B$, then subtract that from the first element to find $k \, G$. Afterwards he produces $H(k \, G)$ thus computing the symmetric key and decrypts the payload that Alice sent to him.
 
-\subsubsection{TTL and Data Size} Alice sets TTL (time-to-live) and $Size_{data}$ slots of the UTXO to zero, indicating that this is a \textit{monetary UTXO}. Non-zero values of the mentioned slots will indicate that this is \textit{data UTXO}, handling of which will be described in details later in this document, it Section \ref{data}.
+\subsubsection{TTL and Data Size} Alice sets TTL (time-to-live) and $Size_{data}$ slots of the UTXO to zero, indicating that this is a \textit{monetary UTXO}. Non-zero values of the mentioned slots will indicate that this is \textit{data UTXO}, handling of which will be described in details later in this document, it Section \ref{Data}.
 
 \subsubsection{UTXO ID} Alice forms a UTXO $\mathit{ID}$ by hashing the the whole UTXO object sans the ID slot, which contains the cloaked version of Bob's public key, $P_{B, \delta}$, the Pedersen commitment and Bulletproof, TTL, $Size_{data}$, and the encrypted payload.
 
@@ -699,7 +686,7 @@ The final line is Bob's signature asserting ownership of the entire transaction 
 \section{Snowball}\label{SnowballAppendix}
 
 \subsection{Forming the pool of senders}
-Each epoch, besides selecting new witnesses, a leader, and a winner of the Jackpot, all validators select a node among them which must serve as a \textit{Bulletin Board} in ValueShuffle protocol and include the public key of this node into the sealed keyblock for the new epoch. We call that Bulletin Board node \textit{a facilitator}.
+Each epoch, besides selecting new witnesses and a leader, all validators select a node among them which must serve as a \textit{Bulletin Board} in ValueShuffle protocol and include the public key of this node into the sealed keyblock for the new epoch. We call that Bulletin Board node \textit{a facilitator}.
 
 Each node intending to submit a transaction should broadcast a \textit{Transaction Intent} message with a fresh ephemeral public key along with the signature proof of validity.
 
@@ -825,7 +812,7 @@ On entry to the witness pool, a transaction needs to be validated. The steps are
 
 At this point, we now have a valid transaction to consider. Commitments are held inside each Bulletproof.
 
-The paired TXINs and their UTXOs must be marked as pending extinction, so that they will be pruned later on according to the procedure explained in Section \ref{pruning}.
+The paired TXINs and their UTXOs must be marked as pending extinction, so that they will be pruned later on according to the procedure explained in Section \ref{Pruning}.
 
 Because network communications do not guarantee message arrival order, it may be necessary to form a topological sort of incoming transactions, in case some of their TXINs refer to UTXOs created elsewhere in the batch. An example would be where Alice spends some of her tokens, receives change back to herself, then spends that change in another transaction.
 
@@ -837,7 +824,7 @@ Because network communications do not guarantee message arrival order, it may be
 	\item {Collect transactions from its mempool, validate each of them, discarding invalid transactions, and collect the remaining valid transactions into an ordered list of pending additions.
 
 	The order must be such that all TXINs must refer to UTXOs that are either already in the blockchain, or else the transactions containing the UTXOs must precede the TXIN transaction.}
-	\item {The leader sums all $Fee$ terms from the transactions and produces a new fee distribution transaction to send portions of the fees to itself and to the Jackpot. That transaction is prepended to the ordered list of validated transactions proposed for the block. But unlike the other transactions, it will be sent in whole form to witnesses for validation since they won't have seen copies of it in their mempool.
+	\item {The leader sums all $Fee$ terms from the transactions and produces a new fee distribution transaction to send portions of the fees to itself and to the validator service award pool. That transaction is prepended to the ordered list of validated transactions proposed for the block. But unlike the other transactions, it will be sent in whole form to witnesses for validation since they won't have seen copies of it in their mempool.
 
 	The leader node then constructs a tentative blockchain block from this list.}
 	\item {The block body is constructed by stripping the TXINs and TXOUTs from each transaction, collecting these two components into two separate Merkle trees, and planting those two trees into the proposed block's body.
@@ -871,7 +858,7 @@ Because network communications do not guarantee message arrival order, it may be
 	The leader will sign and broadcast this message to all witnesses. The witnesses will attempt to validate the proposed block construction.}
 \end{itemize}
 
-\subsubsection{Block validation} Once constructed, the witness leader must then seek consensus for its proposed block from all the other witnesses according to the protocol described at a high-level in the Section \ref{consensus}. 
+\subsubsection{Block validation} Once constructed, the witness leader must then seek consensus for its proposed block from all the other witnesses according to the protocol described at a high-level in the Section \ref{Consensus}. 
 
 In this section we are going to clarify the details of the Stegos consensus protocol, which occurs in two passes among the witness group.
 
@@ -939,7 +926,7 @@ We already described the structure of the payment UTXO in Appendix \ref{UTXO}. H
 
 \subsection{Structure of the Data UTXO}
 
-Data UTXOs have the same structure as monetary UTXOs, which has been explained in Section \ref{utxo}. The difference is in the values of $Bp$, $TTL$, $Size_{data}$ and the encrypted payload slots:
+Data UTXOs have the same structure as monetary UTXOs, which has been explained in Section \ref{UTXO}. The difference is in the values of $Bp$, $TTL$, $Size_{data}$ and the encrypted payload slots:
 
 \begin{itemize}
 	\item {$Bp$ slot should only contain Pedersen commitment to zero, $\gamma \, G$, without Bulletproof range proof.}
