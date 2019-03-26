@@ -437,31 +437,31 @@ in Advances in Cryptology --- CRYPTO' 89, 1990, Springer, pages 239--252.
 \section{Randomness}\label{RandomnessAppendix}
 
 \subsection{Distributed Randomness Generation}
-The idea of performing distributed randomness generation is to have many nodes participate in the construction of an untainted and unpredictable random value in order to overcome Byzantine faults which might try to steer, or predict, the outcome.
+The idea of performing distributed randomness generation is to have many nodes participate in the construction of an untainted and unpredictable random value in order to overcome Byzantine faults that might try to steer, or predict, the outcome.
 
 RandHound++ is based on the notion of publicly verifiable secret sharing (PVSS)\cite{c15}, which ensures that every step of the process can be audited using zero knowledge proofs (ZKP), while keeping vital details of the process fully cloaked through strong cryptography.
 
-But unlike distributed Consensus Protocols, like pBFT, we do not need full Byzantine threshold participation at every stage. In what follows we assume a maximum number, $f$, of faulty nodes, in a collection of $(3 f + 1)$ participant nodes. 
+Unlike distributed consensus protocols (e.g. pBFT), we do not need full Byzantine threshold participation at every stage. In the description that follows we assume a maximum number of $f$ faulty nodes in a collection of $(3 f + 1)$ participant nodes. 
 
-The usual Byzantine Fault Tolerance (BFT) requires responses from a super-majority of $(2 f + 1)$ nodes in order to reach consensus. But in our application, generating randomness, as long as at least one honest participant blends its randomness into the computation, the result will be purely random. We do not need consensus on the result as long as its process can be verified.
+The usual Byzantine Fault Tolerance (BFT) requires responses from a super-majority of $(2 f + 1)$ nodes in order to reach consensus. Our randomness generation application, on the other hand, assumes that as long as at least one honest participant blends its randomness into the computation, the result will be purely random. We do not need consensus on the result as long as the randomness computation process can be verified.
 
-Hence we only need $(f + 1)$ responses from participants to overcome any Byzantine faults, where at least one participant will be honest, and supplies true randomness. There is no need for consensus on the actual value generated. It is sufficient to see only that at least one node was honest. That is clearly true with $(f + 1)$ participants. Attackers can perturb the final value, but it will still become an honest random value by virtue of the inoculation property.
+Hence we only need $(f + 1)$ responses from participants to overcome any Byzantine faults, where at least one participant is honest and supplies true randomness. There is no need for consensus on the actual value generated. It is sufficient to check only that at least one node was honest which is clearly true with $(f + 1)$ participants. Attackers can perturb the final value, but it will still become an honest random value by virtue of the inoculation property.
 
 \subsection{RandHound++}
-Our variant of the RandHound protocol is implemented with pairing-based cryptography (PBC). As such, it departs in a number of significant ways from the original RandHound algorithm. It is a distributed protocol for generating audit\-able, untainted, and unpredictable randomness, as required for fair stake-weighted elections of the validator group leader, among the other purposes.
+Our variant of the RandHound protocol is implemented using pairing-based cryptography (PBC). As such, it departs in a number of significant ways from the original RandHound algorithm. It is a distributed protocol for generating auditable, untainted, unpredictable randomness, as required for fair stake-weighted elections of the validator group leader, among the other purposes.
 
-After every election, a validator group's \textit{leader} is selected, and then a \textit{beacon} node is chosen among the remaining validators. The \textit{beacon} node is responsible for partitioning all validators (including itself and the \textit{leader} into RandHound++ groups. 
+After every election, a validator group's \textit{leader} is selected, and then a \textit{beacon} node is chosen among the remaining validators. The \textit{beacon} node is responsible for partitioning all validators (including itself and the \textit{leader}) into RandHound++ groups. 
 
-The first validator in any group becomes a local group leader who collects randomness from all its group members and itself, and then forwards that result back to the \textit{beacon}. The \textit{beacon} then combines all the group randomness values into a single result that becomes the seed value for the next elections, then the \textit{beacon} sends a \textit{HOLD-ELECTION} message, with that seed value, to all validators in the network.
+The first validator in any group becomes a local group leader who collects randomness from all group members and itself, and then forwards the result back to the \textit{beacon}. The \textit{beacon} then combines all the group randomness values into a single result that becomes the seed value for the following elections. The \textit{beacon} then sends a \textit{HOLD-ELECTION} message with the seed value to all validators in the network.
 
-A major advantage of PBC is that we can use efficient BLS signatures\cite{c16} in the protocol. Such signatures can be collectively added, along with the group sum of their public keys, to produce a short collective-signature that can be validated just as easily as a single signature. BLS signatures are efficient because multi-signatures can be generated immediately and do not require a second query from participants in order to produce their collective signature.
+A major advantage of PBC is that we can make use of efficient BLS signatures\cite{c16} in the protocol. Such signatures can be collectively added, along with the group sum of their public keys, to produce a short collective-signature that can be validated just as easily as a single signature. BLS signatures are efficient because multi-signatures can be generated immediately and do not require another query of participants to produce their collective signature.
 
-But PBC entails some complications in translating the RandHound algorithm to asymmetric pairs of elliptic curves. Though these complications are purely conceptual --- the mathematics are more difficult. But PBC performs nicely, with the same efficiencies for producing PVSS data as are to be had with producing BLS signatures.
+PBC entails some complications in translating the RandHound algorithm to asymmetric pairs of elliptic curves. Although these complications are purely conceptual, the mathematics are more difficult. Still, PBC performs nicely, with the same efficiencies for producing PVSS data as are to be had with producing BLS signatures.
 
-We will publish a separate paper describing in more detail our improvements on the original RandHound protocol in the nearest future.
+We will publish a separate paper with details of our improvements on the original RandHound protocol in the near future.
 
 \section{Consensus}\label{ConsensusAppendix}
-In order to produce a stake-weighted lottery, we could imagine dividing a circle into angular sections proportional to individual stakes, with the full circumference of the circle representing the sum of all stakes. A uniformly generated random number over a finite interval (this is where our RandHound++ protocol comes in handy) acts as a spinner in a dial readout, and wherever it points after a spin, that member is selected as the next leader. Larger stakeholders occupy a larger portion of the circumference, and have a better chance of winning.
+In order to produce a stake-weighted lottery, we could imagine dividing a circle into angular sections proportional to individual stakes, with the full circumference of the circle representing the sum of all stakes. A uniformly generated random number over a finite interval (this is where our RandHound++ protocol comes in handy) acts as a spinner in a dial readout. Wherever the dial points after a spin, that member is selected as the next leader. Larger stakeholders occupy a larger portion of the circumference, and have a better chance of winning.
 
 \begin{figure}[h!]
 \centering
@@ -509,7 +509,7 @@ are sized in proportion to the posted stake.}
   \label{fig:spinner}
 \end{figure}
 
-In practice, we form a binary tree of participants, in a consistent order, where each interior node represents the sum of all its sub-node stakes. The topmost node of the tree shows the full sum of all stakes represented in the tree, with all participants located in leafs. Branching decisions begin at the top node of the tree and descend toward leafs. This is done using the random value as a probe of the interval described by the partial sum at each node. The division between left and right are based on the relative weights of its two subtrees. Descent continues until meeting a leaf node, and declaring that node the winner of the leader election. 
+In practice, we form a binary tree of participants, in a consistent order, where each interior node represents the sum of all its sub-node stakes. The topmost node of the tree shows the full sum of all stakes represented in the tree, with all participants located in the leaves. Branching decisions begin at the top node of the tree and descend toward leaves. This is done using the random value as a probe of the interval described by the partial sum at each node. The division between left and right are based on the relative weights of its two subtrees. Descent continues until meeting a leaf node, and declaring that node the winner of the leader election. 
 
 If the random probe value is converted into a fractional value of its range, and each interior node is re-labeled with this fractional value, then it is simple to choose between left or right subnodes based on a single comparison between two fractional values.
 
@@ -523,8 +523,8 @@ The list of validators is publicly known and can be re-built by processing staki
 Each validator can re-run the election for themselves upon seeing the random value of the election signal, which arrives via RandHound++ protocol. All nodes should be able to agree on election outcome, but if not, then one of two things could happen: 
 
 \begin{itemize}
-	\item{First, if a validator thinks it won the election but was mistaken, then any attempts at forming new Cosi networks by the faux leader will be silently rejected by others, and it will fail to obtain a consensus on any new requests. If that happens, the rejected leader will re-synchronize its list of validators, rerun its own election, and re-join after agreeing on the outcome.} 
-	\item{Second, a validator may think that someone else had won the election. In that case, it will silently reject signing requests by actual election winner, and never see any requests from the presumed one. The validators will re-sync its list of other validators if this happens for two consecutive election rounds.}
+	\item{First, if a validator mistakenly thinks they won the election, then any attempts at forming new CoSi networks by the faux leader will be silently rejected by others, and it will fail to obtain a consensus on any new requests. If that happens, the rejected leader will re-synchronize its list of validators, rerun its own election, and re-join after agreeing on the outcome.} 
+	\item{Second, a validator may think that someone else had won the election. In that case, they will silently reject signing requests by the real election winner, and never see any requests from the presumed one. The validators will re-sync its list of other validators if this happens for two consecutive election rounds.}
 \end{itemize}
 
 If the election winner is absent or comes under attack, it may not respond to its own election as leader, form the block, or broadcast the block for signing. Any validator can call for a new early election, and after $(2 f+1)$ (supermajority) of such calls from different validators have been seen, a new election round will start.
@@ -547,13 +547,13 @@ All validators should pay attention to leader election messages:
 	\item{\textit{Call For New Election Message}: Increment the count, $n$, of such calls seen from different validators, and if $n \ge 2 f +1$, then run another election round based on the last election's random value, with a decision tree that excludes current leader. Determine new leader and next role for this validator. Reset the counter of calls for new election.}
 \end{itemize}
 
-\subsection{Key Blocks}\label{Blocks}
+\subsection{Key Blocks}\label{KeyBlocks}
 
 Stegos blockchain is able to accommodate multiple kinds of blocks. The kind of the block is defined by the \textit{Block Type ID} slot in the block header. In this paper we define two types of blocks: $0 (KeyBlock)$ and $1 (MonetaryBlock)$.
 
-Monetary blocks, the blocks that carry all cryptocurrency transactions data and coins, will be described in detail in Section \ref{Blocks}. We will be referring to them simply as \textit{blocks} throughout this paper. 
+Monetary blocks, the blocks that carry all cryptocurrency transactions, will be described in detail in Appendix \ref{BlocksAppendix}. We will be referring to them simply as \textit{blocks} throughout this paper. 
 
-The purpose of Key blocks is to deliver the administrative information to blockchain participants. Any node, searching through key blocks, can see who is current or past epoch \textit{leader}, and who are witnesses (validators) for the current or past epoch. Nodes wishing to submit a transaction should consult with the latest key block to find who is the current pooled transactions \textit{facilitator}.
+The purpose of Key blocks is to deliver administrative information to blockchain participants. Any validator can search through key blocks to find out current and past epoch \textit{leaders}, as well as the validators (witnesses). Validators who need to submit a transaction consult with the latest key block to find the current pooled transactions \textit{facilitator}.
 
 The key block header is constructed by the current \textit{leader} filling in the following slots:
 
@@ -571,9 +571,9 @@ The key block header is constructed by the current \textit{leader} filling in th
 
 There is no body in the key block.
 
-The initial contents of the BLS Multi-signature slots should be zero filled and, even after being filled in, never contribute to the computation of any \textit{block header hash}. All other slots are concatenated to form a header hash pre-image.
+The initial contents of the BLS Multi-signature slots should be zero-filled and, even after being filled in, never contribute to the computation of any \textit{block header hash}. All other slots are concatenated to form a header hash pre-image.
 
-The key block verification and sealing should be done using the same consensus protocol as for the monetary blocks. We will describe this protocol in detail later on in this paper, in Section \ref{Blocks}.
+The key block verification and sealing should be done using the same consensus protocol as for the monetary blocks. We will describe this protocol in detail later on in this paper, in Appendix \ref{BlocksAppendix}.
 
 \section{Basic Transactions}\label{TransactionsAppendix}
 
@@ -838,7 +838,7 @@ The paired TXINs and their UTXOs must be marked as pending extinction, so that t
 
 Because network communications do not guarantee message arrival order, it may be necessary to form a topological sort of incoming transactions, in case some of their TXINs refer to UTXOs created elsewhere in the batch. An example would be where Alice spends some of her tokens, receives change back to herself, then spends that change in another transaction.
 
-\subsection{Formation and Validation of Monetary Blocks}\label{Block}
+\subsection{Formation and Validation of Monetary Blocks}\label{Blocks}
 
 \subsubsection{Block formation} \textit{The leader} of the witness group is tasked with forming a tentative block for extension of the blockchain:
 
