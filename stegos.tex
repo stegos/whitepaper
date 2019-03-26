@@ -33,7 +33,7 @@
 \begin{abstract}
 	The Stegos Privacy Platform (Stegos) combines a unique blockchain and token design to implement the first cryptocurrency that’s absolutely private, secure, efficient and friendly to the environment. Stegos is fully scalable and prunable, ensuring the chain is always kept small without compromising trust. This makes Stegos the world’s first public blockchain to offer secure and confidential data storage and transmission, in addition to payment transactions. It also ensures that Stegos is compact enough to run on smartphones, meaning anyone can run the Stegos blockchain from their pocket and earn tokens by staking.
 	
-    In this paper we describe the design of the blockchain foundation used to send payments and data with absolute privacy and complete confidentiality. We extend this foundation to provide a platform for building privacy applications that communicate via messages sent with minimal latency. We describe a Trusted Application Container (TAC), a mobile application that simplifies building privacy applications while providing additional security to users. Last but not least, we describe the design of the Privacy App Store. 
+    In this paper we describe the design of the blockchain foundation used to send payments and data with absolute privacy and complete confidentiality. We extend this foundation to provide a platform for building privacy applications that communicate via messages sent with minimal latency. We describe a Trusted Application Container (TAC), a mobile application that simplifies building privacy applications while providing additional security to users. Last but not least, we describe the design of the Privacy App Store and private marketplaces.
 \end{abstract}
 
 \section{Why Stegos?}
@@ -140,6 +140,9 @@ The Stegos Trusted Application Container (TAC) is a native mobile application an
 
 \subsubsection{App Store}
 We look forward to a blooming ecosystem of privacy applications, developed to run in the Trusted Application Container (TAC)\ref{TAC}. The experience of existing mobile app stores shows that users need a way to easily discover and install applications. The Stegos Privacy App Store provides a mechanism to search and install privacy applications, as well as rate their usefulness. 
+
+\subsection{Private marketplaces}
+Stegos builds on top of private payments, fast messages, chat and the TAC\ref{TAC} to deliver private marketplaces where items can be sold anonymously and privately. Stegos will release a separate mobile as the marketplaces interface. 
 
 \subsection{Incentives to drive adoption}
 Stegos includes incentives to drive adoption and encourage viral marketing. 
@@ -344,10 +347,23 @@ Stegos users can export their wallet address as a QR code.
 - You can send the QR code of your wallet address to anyone and initiate an absolutely private chat.
 - You can create chat groups and invite people using QR codes.
 
+\subsection{Marketplaces}\label{Marketplaces}
+\todo[inline]{Expand the description of marketplaces}
+
+- The wallet public key serves as identity. 
+- A form of hashlock (TBD) will be used to atomically swap a payment for the item's decription key.
+- Buyers and sellers can message each other.
+- A vendor reputation system based on purchase ratings.
+- Buyers can post a review with text, rating (1-5 stars) and proof of purchase. 
+- Reputation system completely optional as it decreases privacy.
+- Each storefront is a mini-app in the TAC.
+- API for the storefront mini-apps to manipulate their inventory.
+- Categories of goods for ease of finding vendors.
+- Separate mobile marketplaces app.
+
 \section{Future work}\label{FutureWork}
 \todo[inline]{Describe the future roadmap}
 
-- Privacy marketplaces.
 - Bitcoin-style smart contracts for programmable coins.
 - Dandelion.
 - State sharding?
