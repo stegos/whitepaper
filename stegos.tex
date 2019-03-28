@@ -465,6 +465,69 @@ Eugene is the Site Reliability Engineer at Stegos, taking care of our developmen
 
 \section{Token Distribution}
 
+Stegos will generate a total of 1,000,000,000 (1 billion) of STG tokens and sell 51.25\% of tokens to raise \$39M (million). The fundraising target has been carefully selected to enable us to reach our development milestones and jumpstart the Stegos ecosystem.
+
+Tokens will be allocated as follows:
+
+\def\angle{0}
+\def\radius{3}
+\def\cyclelist{{"orange","blue","red","green","yellow","purple"}}
+\newcount\cyclecount \cyclecount=-1
+\newcount\ind \ind=-1
+\begin{tikzpicture}[nodes = {font=\sffamily}]
+  \foreach \percent/\name in {
+      51.25/Proportion of Token Sale,
+      16.75/Development,
+      10.0/Marketing & Ecosystem,
+      10.0/Reserve,
+      10.0/Team,
+      2.0/Advisors & Key Backers
+    } {
+      \ifx\percent\empty\else               % If \percent is empty, do nothing
+        \global\advance\cyclecount by 1     % Advance cyclecount
+        \global\advance\ind by 1            % Advance list index
+        \ifnum3<\cyclecount                 % If cyclecount is larger than list
+          \global\cyclecount=0              %   reset cyclecount and
+          \global\ind=0                     %   reset list index
+        \fi
+        \pgfmathparse{\cyclelist[\the\ind]} % Get color from cycle list
+        \edef\color{\pgfmathresult}         %   and store as \color
+        % Draw angle and set labels
+        \draw[fill={\color!50},draw={\color}] (0,0) -- (\angle:\radius)
+          arc (\angle:\angle+\percent*3.6:\radius) -- cycle;
+        \node at (\angle+0.5*\percent*3.6:0.7*\radius) {\percent\,\%};
+        \node[pin=\angle+0.5*\percent*3.6:\name]
+          at (\angle+0.5*\percent*3.6:\radius) {};
+        \pgfmathparse{\angle+\percent*3.6}  % Advance angle
+        \xdef\angle{\pgfmathresult}         %   and store in \angle
+      \fi
+};
+\end{tikzpicture}
+
+\begin{itemize}
+	\item[51.25\%] Sold to the public
+	\item[16.75\%] Development
+	\item[10\%] Marketing \& ecosystem
+	\item[10\%] Reserve
+	\item[10\%] Team
+	\item[2\%] Advisors and key backers
+\end{itemize}
+
+Stegos will follow strict KYC/AML procedures during both stages of fundraising, with funds used to, among other things:
+
+Expand the the Stegos ecosystem through educational programs;
+Build a world-class in-house research team;
+To accelerate blockchain adoption across the mass-market and enterprise; and
+Stegos will aggressively pursue development, acquire the best talent, and explore new solutions. The Stegos vision is ambitious, with equally ambitious goals.
+
+Tokens will be purchased in ETH, with an ETH/USD exchange rate equal to the rate at the time of contribution.
+
+Team tokens will be locked up for 18 months.
+
+Stegos will set aside a token reserve which will be 100\% used for promotion, publicity, airdrops, community expansion, bounties, etc. as determined by the Stegos team.
+
+Any tokens unsold after the private sales will be kept in reserve by Stegos, to be used for future funding needs.
+
 \chapter{Legal Disclaimer}
 
 No part of this white paper constitutes legal, financial, business, or tax advice, and you should consult your own legal, financial, tax, or other professional adviser before engaging in any activity in connection herewith. Stegos AG (“Stegos”), its affiliates, and the Stegos team members shall not be liable for any kind of direct or indirect damage, loss, or liability whatsoever which you may suffer or incur in connection with accessing this white paper or any other materials published by Stegos. 
