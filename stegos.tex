@@ -469,6 +469,11 @@ Stegos will generate a total of 1,000,000,000 (1 billion) of STG tokens and sell
 
 Tokens will be allocated as follows:
 
+\begin{figure}[h!]
+\centering
+
+\resizebox{.8\textwidth}{!}{%
+
 \def\angle{0}
 \def\radius{3}
 \def\cyclelist{{"orange","blue","red","green","yellow","purple"}}
@@ -478,10 +483,10 @@ Tokens will be allocated as follows:
   \foreach \percent/\name in {
       51.25/Proportion of Token Sale,
       16.75/Development,
-      10.0/Marketing & Ecosystem,
+      10.0/Marketing \& Ecosystem,
       10.0/Reserve,
       10.0/Team,
-      2.0/Advisors & Key Backers
+      2.0/Advisors \& Key Backers
     } {
       \ifx\percent\empty\else               % If \percent is empty, do nothing
         \global\advance\cyclecount by 1     % Advance cyclecount
@@ -503,7 +508,14 @@ Tokens will be allocated as follows:
       \fi
 };
 \end{tikzpicture}
+}%
 
+\bigskip
+
+\caption{Token allocation}\label{fig:token-allocation}
+\end{figure}
+
+\centering
 \begin{itemize}
 	\item[51.25\%] Sold to the public
 	\item[16.75\%] Development
