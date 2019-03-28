@@ -491,7 +491,7 @@ Tokens will be allocated as follows:
       \ifx\percent\empty\else               % If \percent is empty, do nothing
         \global\advance\cyclecount by 1     % Advance cyclecount
         \global\advance\ind by 1            % Advance list index
-        \ifnum3<\cyclecount                 % If cyclecount is larger than list
+        \ifnum6<\cyclecount                 % If cyclecount is larger than list
           \global\cyclecount=0              %   reset cyclecount and
           \global\ind=0                     %   reset list index
         \fi
