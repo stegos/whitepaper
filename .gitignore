@@ -1,4 +1,5 @@
 *.aux
+.DS_Store
 *.dvi
 *.fdb_latexmk
 *.fls
