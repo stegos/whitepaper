@@ -26,7 +26,7 @@
 
 \usepackage{pgf-pie}
 \usetikzlibrary{positioning,shadows,arrows,backgrounds}
-
+\usepackage{booktabs}
 \usepackage{xcolor}
 % \newcommand\todo[1]{\textcolor{red}{\textbf{TODO}: [#1]}}
 
@@ -442,30 +442,37 @@ The Stegos team is working on implementation of the blockchain and the developme
 
 As our implementation progresses, we will publish separate, more detailed papers focused on our most essential contributions to the blockchain ecosystem, like improved distributed randomness generation (\textit{RandHound++}), our flavor of collective signing protocol and consensus based on it (\textit{BLS CoSi/pBFT}), and our approach for transactions and data sharding. 
 
-\chapter{Team and Token Distribution}\label{app:team-and-tokens}
-
-\section{Team}
+\chapter{Team}\label{app:team}
 
 The Stegos team doesn't just bring blockchain experience to the table (although we have plenty of that, too). With backgrounds in finance, aerospace, and cryptography, the team has a breadth of experience in applying technology to some of the most sensitive challenges facing society.
 
-\subsection{Joel Reymont CEO, The Buck Stops With Me!}
+\section{Joel Reymont CEO, The Buck Stops With Me!}
 Joel is a seasoned hacker and blockchain pioneer. He started his career on Wall Street and brings twenty-five years of diverse software engineering and management experience to Stegos. Joel was previously Chief Technology Officer at a Top 100 cryptocurrency and blockchain company, where he earned a reputation within the community for his formidable ability to get things done. Joel has acted as Director of Prime Brokerage Technology at Deutsche Bank, has run offshore development teams, and has built many scalable and fault-tolerant systems over the years. He now smashes technological boundaries and ventures deep into the unexplored frontiers of crypto to bring unique opportunities to Stegos contributors. 
 
-\subsection{Vladimir Lebedev VP of Engineering}
+\section{Vladimir Lebedev VP of Engineering}
 Vladimir has over twenty-five years of experience in managing technology in fintech, telecom, and media companies. His pioneering credits include creating the first FidoNet node in Soviet Union, the first remote banking application using asymmetric keys cryptography in Russia, and the first ISP in Western Siberia. Vladimir was CTO of the Russian stock exchange, where he created its trading system and network infrastructure. Vladimir has held executive roles at VEON (a telecom company with over two hundred millions subscribers), Sberbank (the biggest bank in Eastern Europe), Moscow City Telephone Network, Orange Business Services, Lucent Technologies, and Mail.Ru Group (the biggest Internet-media company in Russia). Over his career, he has led and successfully delivered many cutting-edge projects, in addition to launching his own companies, CPM and Cybertonica. 
 
-\subsection{David McClain, PhD Chief Rocket Scientist}
+\section{David McClain, PhD Chief Rocket Scientist}
 David is literally a rocket scientist. Trained in theoretical and observational astrophysics, in addition to computer science, he brings an incomparable and extraordinary five decades of unique programming expertise to the table. David has served as a Principal Scientist in the aerospace industry where he built airborne LIDAR systems for underwater mine detection, and was a Senior Scientist on the Raytheon ExoAtmospheric Kill Vehicle (EKV) program. He is a true expert in numerous computer languages, including Lisp, and an authority on signal processing, image processing, guidance and navigation, radio-frequency and infrared target detection systems, and target tracking. He has twice addressed the European Common Lisp Meeting. 
 
-\subsection{Roman Tsisyk, Core Blockchain Team Lead}
+\section{Roman Tsisyk, Core Blockchain Team Lead}
 Roman is a database and distributed systems expert who enjoys working on the cutting edge of technology. Over his fifteen-years career in Telecom and Internet industries, he gained broad expertise in software engineering as well as team and product management skills. Roman was a Team Lead and Core Developer of Tarantool, an open-source database and application server. He designed and implemented numerous technologies to store mission-critical data in a highly-available and fault-tolerant manner. During his career at Mail.Ru Group, one of the largest Internet companies in Europe, Roman used his deep expertise in data processing and distributed systems to create and launch Russian’s first Database-as-a-Service and BigData-as-a-Service products for the public cloud. 
 
-\subsection{Eugene Chupriyanov Site Reliability Engineer}
+\section{Eugene Chupriyanov Site Reliability Engineer}
 Eugene is the Site Reliability Engineer at Stegos, taking care of our development and production infrastructure. Eugene has more than thirty years of experience in DevOps/SRE, beginning at the Siberian Branch of the prestigious Russian Academy of Sciences in the early days of the Internet. He has helped build and manage networking and operational infrastructure in industries as diverse as science, telecom, media, and finance, and has held Senior DevOps/SRE positions with companies including The Russian Trading System, RosBusinessConsulting, Lucent Technologies, and Vimpelcom/VEON. He brings a deep passion for information technology and is dedicated to continuously learning the latest techniques and tricks to ensure that the systems he manages operate at the peak of security and efficiency. 
 
-\section{Token Distribution}
+\chapter{Token Sales}\label{app:token-sales}
+
+\section{Distribution}
 
 Stegos will generate a total of 1,000,000,000 (1 billion) of STG tokens and sell 51.25\% of tokens to raise \$39M (million). The fundraising target has been carefully selected to enable us to reach our development milestones and jumpstart the Stegos ecosystem.
+
+Stegos will follow strict KYC/AML procedures during both stages of fundraising, with funds used to, among other things:
+
+Expand the the Stegos ecosystem through educational programs;
+Build a world-class in-house research team;
+To accelerate blockchain adoption across the mass-market and enterprise; and
+Stegos will aggressively pursue development, acquire the best talent, and explore new solutions. The Stegos vision is ambitious, with equally ambitious goals.
 
 Tokens will be allocated as follows:
 
@@ -476,12 +483,17 @@ Tokens will be allocated as follows:
 
 \def\angle{0}
 \def\radius{3}
-\def\cyclelist{{"orange","blue","red","green","yellow","purple"}}
+
+\definecolor{aqua}{rgb}{0.0, 1.0, 1.0}
+\definecolor{applegreen}{rgb}{0.55, 0.71, 0.0}
+\definecolor{ao(english)}{rgb}{0.0, 0.5, 0.0}
+
+\def\cyclelist{{"green","blue","red","yellow","aqua","orange"}}
 \newcount\cyclecount \cyclecount=-1
 \newcount\ind \ind=-1
 \begin{tikzpicture}[nodes = {font=\sffamily}]
   \foreach \percent/\name in {
-      51.25/Proportion of Token Sale,
+      51.25/Sold to the public,
       16.75/Development,
       10.0/Marketing \& Ecosystem,
       10.0/Reserve,
@@ -512,25 +524,25 @@ Tokens will be allocated as follows:
 
 \bigskip
 
-\caption{Token allocation}\label{fig:token-allocation}
+% \caption{Token allocation}
+\label{fig:token-allocation}
 \end{figure}
 
+\begin{table}[ht]
 \centering
-\begin{itemize}
-	\item[51.25\%] Sold to the public
-	\item[16.75\%] Development
-	\item[10\%] Marketing \& ecosystem
-	\item[10\%] Reserve
-	\item[10\%] Team
-	\item[2\%] Advisors and key backers
-\end{itemize}
-
-Stegos will follow strict KYC/AML procedures during both stages of fundraising, with funds used to, among other things:
-
-Expand the the Stegos ecosystem through educational programs;
-Build a world-class in-house research team;
-To accelerate blockchain adoption across the mass-market and enterprise; and
-Stegos will aggressively pursue development, acquire the best talent, and explore new solutions. The Stegos vision is ambitious, with equally ambitious goals.
+	\begin{tabular}{@{\extracolsep{4pt}}ll}
+	\toprule[2pt] Proportion & Purpose \\ 
+	\midrule[2pt]
+	51.25\% & Sold to the public \\
+	16.75\% & Development \\
+	10\% & Marketing \& ecosystem \\
+	10\% & Reserve \\
+	10\% & Team \\
+	2\% & Advisors and key backers \\
+\bottomrule[2pt]
+\end{tabular}
+\caption{Token allocation} 
+\end{table}
 
 Tokens will be purchased in ETH, with an ETH/USD exchange rate equal to the rate at the time of contribution.
 
@@ -539,6 +551,23 @@ Team tokens will be locked up for 18 months.
 Stegos will set aside a token reserve which will be 100\% used for promotion, publicity, airdrops, community expansion, bounties, etc. as determined by the Stegos team.
 
 Any tokens unsold after the private sales will be kept in reserve by Stegos, to be used for future funding needs.
+
+\section{Tokens sold}
+
+\begin{table}[ht]
+\centering
+	\begin{tabular}{@{\extracolsep{4pt}}lllll}
+	\toprule[2pt] 
+	Round & Allocation & Price & Amount & Tokens \\
+	\midrule[2pt]
+	Seed & 15.00\% & \$0.013 & \$2,000,000 & 150,000,000 \\
+	Round 1 & 14.00\% & \$0.07 & \$9,800,000 & 140,000,000 \\
+	Round 2 & 4.00\% & \$0.10 & \$4,050,000 & 40,000,000 \\
+	\bottomrule[2pt]
+	Total & 33\% & {} & \$15,850,000 & 330,000,000
+	\end{tabular}
+\caption{Previous token sales} 
+\end{table}
 
 \chapter{Legal Disclaimer}
 
