@@ -30,6 +30,9 @@
 \usepackage{xcolor}
 % \newcommand\todo[1]{\textcolor{red}{\textbf{TODO}: [#1]}}
 
+\usepackage{algpseudocode}
+\usepackage[chapter]{algorithm}
+
 % \usepackage[disable]{todonotes} % notes not shown
 \usepackage[draft]{todonotes}
 
@@ -311,20 +314,40 @@ As described in Appendix \ref{app:blocks}, a Stegos block is composed of a heade
 
 When a new block is verified and signed by CoSi witnesses, the signatures are computed over just the block header. The body of the block is not signed because it is secured against modification by the nature of the Merkle tree. It will be impossible to modify the body of the block without invalidating the root hashes contained in the signed header.
 
+Stegos blockchain compaction is a continuous process where each incoming and properly signed block triggers the pruning. As a result of this continuous pruning, the Stegos blockchain becomes a database of unspent coins (UTXO), with no transaction history kept.
+
 After verifying and signing a new block, the \textit{leader} broadcasts it to the network. All nodes must validate the collective block signature and process the new block using the following steps:
 
-\begin{itemize}
-  \item {A node must retrieve all leaves of TXIN Merkle Tree from the block body, and for each leaf (UTXO $ID$) do the following:
-  \begin{enumerate}
-    \item {Find the block that contains the UTXO with $ID$}
-       \item {Find a leaf in the TXOUT Merkle Tree of that block that contains the UTXO}
-    \item {Mark the leaf as \textit{SPENT} without modifying the value of the hash that belongs to that leaf}
-    \item {If a sibling leaf is also marked as \textit{SPENT} then delete \textit{both leaves and their corresponding hashes}. Then mark the parent node of these two pruned leaves as \textit{SPENT} as well and restart from step 4. Repeat until there are no \textit{SPENT} siblings left.}
-  \end{enumerate}} 
-  \item {If the process above applies to all UTXOs in the TXIN Merkle Tree of the block, delete that tree from the block body and leave just the TXIN Root Hash in the block header. Append the block to the local copy of the blockchain.}
-\end{itemize}
+A node must perform the following pruning algorithm for every block:
 
-Stegos blockchain compaction is a continuous process where each incoming and properly signed block triggers the pruning. As a result of this continuous pruning, the Stegos blockchain becomes a database of unspent coins (UTXO), with no transaction history kept.
+\begin{algorithm}
+\begin{algorithmic}
+\State $block \gets <This Block>$
+\State $tree \gets \Call{Get-TXIN-Merkle-Tree}{block}$
+\State $leaves \gets \Call{Merkle-Tree-Leaves}{tree}$
+\For{$leaf \gets leaves$}
+	\State $id \gets \Call{UTXO-ID}{leaf}$
+	\State $block' \gets \Call{Find-Block-With}{id}$
+	\State $tree' \gets \Call{Get-TXOUT-Merkle-Tree}{block'}$
+	\State $leaf' \gets \Call{Find-Leaf}{tree', id}$
+	\State \Call{Mark-As-Spent}{$leaf'$} \Comment{Does not touch the hash of the leaf}
+	\For {$sibling \gets \Call{Get-Sibling}{leaf'}, \Call{Is-Spent}{sibling$}}
+		\State $parent \gets \Call{Get-Parent}{leaf'}$
+		\State \Call{Mark-As-Spent}{$parent$}
+		\State \Call{Delete-Node}{$leaf'$} \Comment{Removes the hash}
+		\State \Call{Delete-Node}{$sibling$}
+		\State $leaf' \gets parent$
+	\EndFor
+\EndFor
+
+\If {$\Call{Is-Empty}{tree}$}
+	\State $\Call{Delete-Tree}{block, tree}$ \Comment{Leaves just the hash in the block header}
+\EndIf
+
+\end{algorithmic}
+\caption{Pruning algorithm}
+\label{code:pruning}
+\end{algorithm}
 
 \section{FastData}
 Stegos introduces data transactions in addition to regular payment transactions. Both types of transactions enjoy the same encryption and privacy protection. In fact, there's no way to tell payments apart from data messages. 
@@ -700,6 +723,7 @@ If the election winner is absent or comes under attack, it may not respond to it
 \section{A fault-tolerant and self-healing protocol} 
 Immediately after a leader election, each validator should determine its role for the new epoch:
 
+
 \begin{itemize}
   \item If elected leader, then begin next block assembly. 
   \item If the node should become a member of a RandHound++ group, then start running the protocol within its group.
@@ -710,9 +734,10 @@ Immediately after a leader election, each validator should determine its role fo
 
 All validators should pay attention to leader election messages:
 
+\todo[inline]{Format leader election as pseudocode}
 \begin{itemize}
-  \item{\textit{New Election Message}: run an election with the random value provided in the election message, and determine next role for this validator --- one of leader, witness signer, RandHound++ participant, facilitator, or standby. Reset the counter of calls for new election.}
-  \item{\textit{Call For New Election Message}: Increment the count, $n$, of such calls seen from different validators, and if $n \ge 2 f +1$, then run another election round based on the last election's random value, with a decision tree that excludes current leader. Determine new leader and next role for this validator. Reset the counter of calls for new election.}
+  \item{\em New Election Message}: run an election with the random value provided in the election message, and determine next role for this validator --- one of leader, witness signer, RandHound++ participant, facilitator, or standby. Reset the counter of calls for new election.
+  \item{\em Call For New Election Message}: Increment the count, $n$, of such calls seen from different validators, and if $n \ge 2 f +1$, then run another election round based on the last election's random value, with a decision tree that excludes current leader. Determine new leader and next role for this validator. Reset the counter of calls for new election.
 \end{itemize}
 
 \chapter{Blocks and transactions}\label{app:blocks}
@@ -1054,6 +1079,7 @@ Because network communications do not guarantee message arrival order, it may be
 
 In this section we are going to clarify the details of the Stegos consensus protocol, which occurs in two passes among the witness group.
 
+\todo[inline]{Format consensus as pseudocode}
 \begin{itemize}
   \item {\textbf{PrePrepare Phase}: \textit{The leader} broadcasts the contents of the signed \textit{Block Proposal} message, and its hash, to all witnesses in a \textit{PrePrepare} message. This is the only time that the entire message will be transmitted. All further communications will refer only to its hash value.}
   \item {Each witness will attempt to validate the block construction from the ordered list of transactions:
