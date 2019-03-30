@@ -358,10 +358,8 @@ Stegos data messaging is a lot like UDP/IP and serves as a message bus that all 
 
 Data messages are automatically recycled and removed from the blockchain using BlockCrunch (Appendix \ref{app:pruning}).
 
-\section{Token economics}
+\section{Incentives}
 Stegos is powered by the STG token, available once the mainnet is launched. When posted as a performance bond by nodes wishing to support the Stegos platform, the STG token gives validators the right to earn fees and block rewards when they are elected as the leader of the consensus round. The probability of a validator being elected the leader is proportional to the size of their stake.
-
-STG token emission will start at 14\% during the first 4 years and halve every 4 years thereafter.
 
 \subsection{Validator service award}\label{ValidatorAward}
 \todo[inline]{Expand the award description}
@@ -484,11 +482,10 @@ Roman is a database and distributed systems expert who enjoys working on the cut
 \section{Eugene Chupriyanov Site Reliability Engineer}
 Eugene is the Site Reliability Engineer at Stegos, taking care of our development and production infrastructure. Eugene has more than thirty years of experience in DevOps/SRE, beginning at the Siberian Branch of the prestigious Russian Academy of Sciences in the early days of the Internet. He has helped build and manage networking and operational infrastructure in industries as diverse as science, telecom, media, and finance, and has held Senior DevOps/SRE positions with companies including The Russian Trading System, RosBusinessConsulting, Lucent Technologies, and Vimpelcom/VEON. He brings a deep passion for information technology and is dedicated to continuously learning the latest techniques and tricks to ensure that the systems he manages operate at the peak of security and efficiency. 
 
-\chapter{Token Sales}\label{app:token-sales}
+\chapter{Token Economics}\label{app:token-economics}
 
 \section{Distribution}
-
-Stegos will generate a total of 1,000,000,000 (1 billion) of STG tokens and sell 51.25\% of tokens to raise \$39M (million). The fundraising target has been carefully selected to enable us to reach our development milestones and jumpstart the Stegos ecosystem.
+Stegos will generate the initial supply of 1,000,000,000 (1 billion) of STG tokens and sell 51.25\% of tokens to raise \$39M (million). The fundraising target has been carefully selected to enable us to reach our development milestones and jumpstart the Stegos ecosystem.
 
 Stegos will follow strict KYC/AML procedures during both stages of fundraising, with funds used to, among other things:
 
@@ -574,6 +571,9 @@ Team tokens will be locked up for 18 months.
 Stegos will set aside a token reserve which will be 100\% used for promotion, publicity, airdrops, community expansion, bounties, etc. as determined by the Stegos team.
 
 Any tokens unsold after the private sales will be kept in reserve by Stegos, to be used for future funding needs.
+
+\section{Emission}
+STG token emission will start at 14\% from initial supply during the first 4 years and halve every 4 years thereafter. Thew newly created tokens will be used for block rewards as well as the validator service award \ref{sec:service-award}.
 
 \section{Tokens sold}
 
@@ -734,7 +734,6 @@ Immediately after a leader election, each validator should determine its role fo
 
 All validators should pay attention to leader election messages:
 
-\todo[inline]{Format leader election as pseudocode}
 \begin{itemize}
   \item{\em New Election Message}: run an election with the random value provided in the election message, and determine next role for this validator --- one of leader, witness signer, RandHound++ participant, facilitator, or standby. Reset the counter of calls for new election.
   \item{\em Call For New Election Message}: Increment the count, $n$, of such calls seen from different validators, and if $n \ge 2 f +1$, then run another election round based on the last election's random value, with a decision tree that excludes current leader. Determine new leader and next role for this validator. Reset the counter of calls for new election.
