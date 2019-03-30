@@ -49,13 +49,30 @@
 \newcommand{\code}[1]{{\em #1}}
 \newcommand{\semibold}[1]{\textpdfrender{TextRenderingMode=FillStroke,LineWidth=.1pt,FillColor=black}{#1}}
 
-\title{\textbf{\sffamily\color{white} \
-Stegos -- A Platform for Privacy Applications}}
-\author{\small\sffamily\color{white}
-Stegos AG}
-\date{\small\sffamily\color{white} \today \\v1.0\\
-\small\colorlet{urllinkcolor}{white}\url{https://github.com/stegos/whitepaper}
+
+%% Redefine \maketitle macro
+
+\makeatletter
+\renewcommand{\maketitle}{\bgroup\setlength{\parindent}{0pt}
+\begin{flushleft}
+	\vspace*{260pt}
+	{\fontsize{42}{42}\selectfont
+	\textbf{\sffamily\color{white}\@title\\}}
+
+	\vspace*{100pt}
+
+	{\sffamily\color{white}\fontsize{16}{20}\selectfont
+	\@author\\
+	\@date}
+\end{flushleft}\egroup
 }
+\makeatother
+
+%% Title parameters
+
+\title{A Platform for Privacy Applications}
+\author{Stegos AG}
+\date{\today \\v1.0\\ \vspace{10pt}\colorlet{urllinkcolor}{white}\url{https://github.com/stegos/whitepaper}}
 
 \input{structure}
 

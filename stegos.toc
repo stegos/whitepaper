@@ -1,0 +1,108 @@
+\babel@toc {english}{}
+\contentsline {section}{\numberline {0.1}Abstract}{6}{section.0.1}
+\contentsline {section}{\numberline {0.2}Feedback}{6}{section.0.2}
+\contentsline {chapter}{\numberline {1}Introduction}{7}{chapter.1}
+\contentsline {chapter}{\numberline {2}Why Stegos?}{8}{chapter.2}
+\contentsline {section}{\numberline {2.1}Using Blockchain for the Greater Good}{8}{section.2.1}
+\contentsline {section}{\numberline {2.2}Big Brother is Watching}{8}{section.2.2}
+\contentsline {section}{\numberline {2.3}Disruptive Change}{8}{section.2.3}
+\contentsline {section}{\numberline {2.4}Why Blockchain?}{9}{section.2.4}
+\contentsline {section}{\numberline {2.5}Private by Default}{9}{section.2.5}
+\contentsline {chapter}{\numberline {3}What is Stegos?}{10}{chapter.3}
+\contentsline {chapter}{\numberline {4}Features}{12}{chapter.4}
+\contentsline {section}{\numberline {4.1}Absolute privacy}{12}{section.4.1}
+\contentsline {section}{\numberline {4.2}Proof-of-stake (PoS) consensus}{12}{section.4.2}
+\contentsline {section}{\numberline {4.3}Data compaction}{12}{section.4.3}
+\contentsline {section}{\numberline {4.4}Sharding for scalability}{13}{section.4.4}
+\contentsline {section}{\numberline {4.5}Fast message bus}{13}{section.4.5}
+\contentsline {section}{\numberline {4.6}Stegos mobile app}{13}{section.4.6}
+\contentsline {subsection}{\numberline {4.6.1}Trusted Application Container (TAC)}{13}{subsection.4.6.1}
+\contentsline {subsection}{\numberline {4.6.2}App Store}{13}{subsection.4.6.2}
+\contentsline {section}{\numberline {4.7}Private marketplaces}{14}{section.4.7}
+\contentsline {section}{\numberline {4.8}Incentives to drive adoption}{14}{section.4.8}
+\contentsline {chapter}{\numberline {5}Stegos in depth}{15}{chapter.5}
+\contentsline {section}{\numberline {5.1}Networking}{15}{section.5.1}
+\contentsline {section}{\numberline {5.2}Randomness}{15}{section.5.2}
+\contentsline {section}{\numberline {5.3}Consensus}{16}{section.5.3}
+\contentsline {section}{\numberline {5.4}Collective Signing}{16}{section.5.4}
+\contentsline {section}{\numberline {5.5}Leader Election}{16}{section.5.5}
+\contentsline {section}{\numberline {5.6}Snowball}{17}{section.5.6}
+\contentsline {subsection}{\numberline {5.6.1}A problem of establishing untraceability}{17}{subsection.5.6.1}
+\contentsline {subsection}{\numberline {5.6.2}Possible solutions}{17}{subsection.5.6.2}
+\contentsline {subsubsection}{Mixers}{17}{section*.2}
+\contentsline {subsubsection}{Ring Signatures}{18}{section*.3}
+\contentsline {subsubsection}{zk-SNARK}{18}{section*.4}
+\contentsline {subsubsection}{CoinJoin}{18}{section*.5}
+\contentsline {subsection}{\numberline {5.6.3}ValueShuffle}{19}{subsection.5.6.3}
+\contentsline {section}{\numberline {5.7}BlockCrunch}{19}{section.5.7}
+\contentsline {section}{\numberline {5.8}FastData}{20}{section.5.8}
+\contentsline {section}{\numberline {5.9}Incentives}{20}{section.5.9}
+\contentsline {subsection}{\numberline {5.9.1}Validator service award}{21}{subsection.5.9.1}
+\contentsline {subsection}{\numberline {5.9.2}Red packets}{21}{subsection.5.9.2}
+\contentsline {section}{\numberline {5.10}Privacy applications platform}{22}{section.5.10}
+\contentsline {subsection}{\numberline {5.10.1}Trusted Application Container}{22}{subsection.5.10.1}
+\contentsline {subsection}{\numberline {5.10.2}Identities}{22}{subsection.5.10.2}
+\contentsline {subsection}{\numberline {5.10.3}Privacy App Store}{22}{subsection.5.10.3}
+\contentsline {subsection}{\numberline {5.10.4}Chat}{23}{subsection.5.10.4}
+\contentsline {subsection}{\numberline {5.10.5}Marketplaces}{23}{subsection.5.10.5}
+\contentsline {section}{\numberline {5.11}Future work}{23}{section.5.11}
+\contentsline {subsubsection}{Mobile staking}{23}{section*.12}
+\contentsline {subsubsection}{Bitcoin-style smart contracts}{23}{section*.14}
+\contentsline {section}{\numberline {5.12}Conclusion}{24}{section.5.12}
+\contentsline {chapter}{\numberline {6}Team}{25}{chapter.6}
+\contentsline {section}{\numberline {6.1}Joel Reymont CEO, The Buck Stops With Me!}{25}{section.6.1}
+\contentsline {section}{\numberline {6.2}Vladimir Lebedev VP of Engineering}{25}{section.6.2}
+\contentsline {section}{\numberline {6.3}David McClain, PhD Chief Rocket Scientist}{25}{section.6.3}
+\contentsline {section}{\numberline {6.4}Roman Tsisyk, Core Blockchain Team Lead}{26}{section.6.4}
+\contentsline {section}{\numberline {6.5}Eugene Chupriyanov Site Reliability Engineer}{26}{section.6.5}
+\contentsline {chapter}{\numberline {7}Token Economics}{27}{chapter.7}
+\contentsline {section}{\numberline {7.1}Distribution}{27}{section.7.1}
+\contentsline {section}{\numberline {7.2}Emission}{28}{section.7.2}
+\contentsline {section}{\numberline {7.3}Tokens sold}{28}{section.7.3}
+\contentsline {chapter}{\numberline {8}Legal Disclaimer}{29}{chapter.8}
+\setcounter {tocdepth}{0}
+\contentsline {chapter}{\numberline {A}Randomness}{31}{appendix.A}
+\contentsline {section}{\numberline {A.1}Distributed Randomness Generation}{31}{section.A.1}
+\contentsline {section}{\numberline {A.2}RandHound++}{31}{section.A.2}
+\contentsline {chapter}{\numberline {B}Consensus}{33}{appendix.B}
+\contentsline {section}{\numberline {B.1}Stakes lottery}{33}{section.B.1}
+\contentsline {section}{\numberline {B.2}Handling leader election failures}{34}{section.B.2}
+\contentsline {section}{\numberline {B.3}A fault-tolerant and self-healing protocol}{34}{section.B.3}
+\contentsline {chapter}{\numberline {C}Blocks and transactions}{36}{appendix.C}
+\contentsline {section}{\numberline {C.1}Key Blocks}{36}{section.C.1}
+\contentsline {section}{\numberline {C.2}Basic Transactions}{37}{section.C.2}
+\contentsline {subsection}{\numberline {C.2.1}UTXO Structure}{37}{subsection.C.2.1}
+\contentsline {subsubsection}{Pedersen commitment and Bulletproof}{37}{section*.21}
+\contentsline {subsubsection}{Destination address cloaking}{37}{section*.22}
+\contentsline {subsubsection}{Encrypted payload}{38}{section*.23}
+\contentsline {subsubsection}{TTL and Data Size}{38}{section*.24}
+\contentsline {subsubsection}{UTXO ID}{38}{section*.25}
+\contentsline {subsubsection}{UTXO structure}{38}{section*.26}
+\contentsline {section}{\numberline {C.3}Transaction Structure}{39}{section.C.3}
+\contentsline {chapter}{\numberline {D}Snowball}{42}{appendix.D}
+\contentsline {section}{\numberline {D.1}Forming the pool of senders}{42}{section.D.1}
+\contentsline {section}{\numberline {D.2}Establishing the pooled transaction session}{42}{section.D.2}
+\contentsline {subsection}{\numberline {D.2.1}Collecting inputs}{43}{subsection.D.2.1}
+\contentsline {subsection}{\numberline {D.2.2}Establishing pair-wise shared keys}{43}{subsection.D.2.2}
+\contentsline {subsection}{\numberline {D.2.3}Producing DiceMix arrays for outputs}{44}{subsection.D.2.3}
+\contentsline {subsection}{\numberline {D.2.4}Forming the super-transaction}{45}{subsection.D.2.4}
+\contentsline {subsection}{\numberline {D.2.5}Forming the collective Schnorr signature}{45}{subsection.D.2.5}
+\contentsline {subsection}{\numberline {D.2.6}Publishing the super-transaction}{46}{subsection.D.2.6}
+\contentsline {subsection}{\numberline {D.2.7}The blame cycle}{46}{subsection.D.2.7}
+\contentsline {chapter}{\numberline {E}Validation of Blocks and Transactions}{47}{appendix.E}
+\contentsline {section}{\numberline {E.1}Validation of Transactions}{47}{section.E.1}
+\contentsline {section}{\numberline {E.2}Formation and Validation of Monetary Blocks}{48}{section.E.2}
+\contentsline {subsection}{\numberline {E.2.1}Block formation}{48}{subsection.E.2.1}
+\contentsline {subsection}{\numberline {E.2.2}Block validation}{49}{subsection.E.2.2}
+\contentsline {chapter}{\numberline {F}FastData}{52}{appendix.F}
+\contentsline {section}{\numberline {F.1}Structure of the Data UTXO}{52}{section.F.1}
+\contentsline {section}{\numberline {F.2}Transactions involving data UTXOs}{53}{section.F.2}
+\contentsline {section}{\numberline {F.3}Pruning of used and expired data}{54}{section.F.3}
+\contentsline {chapter}{\numberline {G}Overview of privacy coins}{55}{appendix.G}
+\contentsline {section}{\numberline {G.1}Terminology}{55}{section.G.1}
+\contentsline {section}{\numberline {G.2}Existing privacy coins}{56}{section.G.2}
+\contentsline {subsection}{\numberline {G.2.1}Monero}{56}{subsection.G.2.1}
+\contentsline {subsection}{\numberline {G.2.2}ZCash}{56}{subsection.G.2.2}
+\contentsline {subsection}{\numberline {G.2.3}Dash}{57}{subsection.G.2.3}
+\contentsline {subsection}{\numberline {G.2.4}Mimblewimble}{57}{subsection.G.2.4}
+\contentsfinish 
