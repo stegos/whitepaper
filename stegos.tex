@@ -49,7 +49,6 @@
 \newcommand{\code}[1]{{\em #1}}
 \newcommand{\semibold}[1]{\textpdfrender{TextRenderingMode=FillStroke,LineWidth=.1pt,FillColor=black}{#1}}
 
-
 %% Redefine \maketitle macro
 
 \makeatletter
@@ -104,13 +103,13 @@ and brands does not imply endorsement.}
 
 \section{Abstract}
 
-The Stegos Privacy Platform (Stegos) combines a unique blockchain and token design to implement the first cryptocurrency that’s absolutely private, secure, efficient and friendly to the environment. Stegos is fully scalable and prunable, ensuring the chain is always kept small without compromising trust. This makes Stegos the world’s first public blockchain to offer secure and confidential data storage and transmission, in addition to payment transactions. It also ensures that Stegos is compact enough to run on smartphones, meaning anyone can run the Stegos blockchain from their pocket and earn tokens by staking.
+The Stegos Privacy Platform (Stegos) combines a unique blockchain and token design to implement the first cryptocurrency that’s absolutely private, secure, efficient and friendly to the environment. Stegos is fully scalable and prunable, ensuring the chain is always kept small without compromising trust. This makes Stegos the first public blockchain to offer secure and confidential messaging and data storage, in addition to payment transactions. It also ensures that Stegos is compact enough to run on smartphones, meaning anyone can run the Stegos blockchain from their pocket and earn tokens by staking.
   
-In this paper we describe the design of the blockchain foundation used to send payments and data with absolute privacy and complete confidentiality. We extend this foundation to provide a platform for building privacy applications that communicate via messages sent with minimal latency. We describe a Trusted Application Container (TAC), a mobile application that simplifies building privacy applications while providing additional security to users. Last but not least, we describe the design of the Privacy App Store and private marketplaces.
+In this paper we describe the design of the blockchain foundation used to send payments and data with absolute privacy and complete confidentiality. We extend this foundation to describe a platform for building privacy applications that communicate via messages sent with minimal latency. We introduce the  Trusted Application Container (TAC), a secure mobile sandbox that simplifies building privacy applications while protecting users from malicious code. Last but not least, we sketch the design of the App Store for privacy apps, as well as private marketplaces.
 
 \section{Feedback}
 
-Please address correspondence to \href{mailto:paper@stegos.com}{paper@stegos.com}.
+Please address comments and suggestions on this paper to \href{mailto:paper@stegos.com}{paper@stegos.com}.
 
 \chapter{Introduction}\label{chap:intro}
 
@@ -118,7 +117,7 @@ Everyone deserves privacy. But there are many people whose jobs and sometimes ev
 
 Whistleblowers expose lies and corruption in governments and corporations. Activists rally like-minded people to bring about positive change. Journalists uncover the truth and guard it. Businesspeople travel the world creating wealth and prosperity, all while protecting clients’ sensitive information.
 
-All of these people have important secrets, secrets which benefit the whole of society when they’re kept safe. To protect these secrets and the people that carry them, the Stegos team is proud to introduce the Stegos Vault application.
+All of these people have important secrets, secrets which benefit the whole of society when they’re kept safe. To protect these secrets and the people that carry them, the Stegos team is proud to introduce the Stegos Privacy Platform and mobile application.
 
 \chapter{Why Stegos?}\label{chap:why-stegos}
 
@@ -127,7 +126,7 @@ At Stegos, we believe everyone has the right to privacy. Every individual should
 
 We are increasingly forced to give up our privacy — online, at the airport, and even on the street. 
 
-We're passionate about technology that keeps secrets safe from prying eyes. We’ve put years of research into making key improvements to cutting-edge blockchain technology to make sure privacy is within everyone’s reach. Stegos lets everyone send and receive coins and data completely anonymously and privately, as well as earn and win coins for supporting the network. Best of all, it can all be done right from your smartphone.
+We're passionate about technology that keeps secrets safe from prying eyes. We’ve put years of research into making key improvements to cutting-edge blockchain technology to make sure privacy is within everyone’s reach. Stegos lets everyone send and receive messages and payments completely anonymously and privately, as well as earn tokens for supporting the network. Best of all, it can all be done right from your smartphone.
 
 \section{Big Brother is Watching}
 Solid-state technology, smartphones, and the Internet of Things have made it easier than ever to carry large amounts of data with us wherever we go. We carry our lives in our pockets, on our phones and on our laptops. But under the guise of protecting us — from terrorism, from hackers, from our own alleged lack of responsibility — our privacy has been decimated. In airports, online, even on the street, we are being forced to reveal our private information with alarming frequency.
@@ -142,9 +141,9 @@ Traditional data sharing and storage technologies (online cloud storage, email, 
 The Stegos team believes that blockchain is a far better way to keep your private information safe in the modern online world.
 
 \section{Why Blockchain?}
-Stegos Privacy Blockchain is the best mechanism for securing secrets and communications because, unlike traditional email and online messaging services, it’s completely decentralized, cryptographically secure, and leaves no telltale clues in the open. It’s impossible to see who sends or receives information or establish how anyone is connecting to the Stegos Privacy Blockchain. No-one but the intended recipient of a communication or transaction can see what or how much was sent, and there’s nothing to link data or transactions to anyone’s real-life identities.
+Stegos Privacy Blockchain is the best mechanism for securing secrets and communications because, unlike traditional email and online messaging services, it’s completely decentralized, cryptographically secure, and leaves no telltale clues in the open. It’s impossible to see who sends or receives information or establish how anyone is connecting to Stegos. No-one but the intended recipient of a communication or transaction can see what or how much was sent, and there’s nothing to link data or transactions to anyone’s real-life identities.
 
-With the Stegos Privacy Blockchain, there is no central place for Big Brother or other bad actors to tap into our secrets.
+With the Stegos Privacy Platform, there is no central place for Big Brother or other bad actors to tap into our secrets.
 
 \section{Private by Default}
 The original Bitcoin paper was seminal in its proposal for a mechanism to prevent double-spending of electronic cash, but it only included a very small section on privacy. It assumed that even though transaction amounts are public, it would be impossible to link those transactions to anyone’s real identities. This assumption has been proven wrong over the years by researchers, hackers, and blockchain analysis companies. Transaction analysis has become trivial with the help of software like ChainAnalysis, allowing anyone to quickly de-anonymize users of Bitcoin and other cryptocurrencies.
@@ -155,13 +154,15 @@ There’s a reason why your credit card spending isn’t published online, even 
 
 We live in an era of unprecedented state surveillance and crackdowns on freedom of the press and even thought. It’s nobody’s business what you do with your money, whether paper or digital, and it’s nobody's business who you transact with on the blockchain. With the rise of privacy technologies like Bulletproofs and zk-SNARKs, there’s no excuse to perpetuate Bitcoin’s mistake. Blockchain should be private by default.
 
-In the following sections we describe the design for \textit{Stegos}, a blockchain which uses the \textit{UTXO} (coin) model and \textit{PoS} (Proof-of-Stake) consensus. We also explain how Stegos builds and improves on existing privacy coin ideas and employs latest research in cryptography in order to create highly scalable privacy blockchain and application platform. 
+In the following sections we describe the features of \textit{Stegos}, a blockchain which uses the \textit{UTXO} (coin) model and \textit{PoS} (Proof-of-Stake) consensus. We also explain how Stegos builds and improves on existing privacy coin ideas and employs latest research in cryptography in order to create highly scalable privacy blockchain and application platform. 
 
 \chapter{What is Stegos?}\label{chap:what-is-stegos}
 
+\section{Summary}
+
 The \textit{Stegos Privacy Platform (Stegos)} combines a unique blockchain and token design to implement the first cryptocurrency that’s absolutely private, secure, efficient and friendly to the environment. Stegos is fully scalable and prunable, ensuring the chain is always kept small without compromising trust. This makes Stegos the world’s first public blockchain to offer secure and confidential data storage and transmission, in addition to payment transactions. It also ensures that Stegos is compact enough to run on smartphones, meaning anyone can run the Stegos blockchain from their pocket and earn tokens by staking.
 
-Other privacy tokens — such as Monero, Dash, ZCash, and Grin — can only be used for payments, and all display weaknesses in terms of scalability, privacy, security, or usability. Stegos builds and improves upon these and other privacy coins and can be used to send both payments and data with complete confidentiality. The Stegos Privacy Platform can also be used to build applications that communicate anonymously, privately, and efficiently.
+Other privacy tokens — such as Monero, Dash, ZCash, and Grin — can only be used for payments, and all display weaknesses in terms of scalability, privacy, security, or usability. Stegos builds and improves upon these and other privacy coins and can be used to send both messages and payments with complete confidentiality. The Stegos Privacy Platform can also be used to build applications that communicate anonymously, privately, and efficiently.
 
 Payment and data transactions in Stegos are unlinkable, untraceable, and completely confidential. Every Stegos transaction is directed to a new and unique stealth address, making it impossible to identify the recipients. It’s also impossible to trace Stegos transaction history, since individual transactions are first joined together to form a supertransaction before being submitted to blockchain validators. This is all done in a secure and privacy-preserving way, while ensuring that Stegos coins remain fully fungible.
 
@@ -178,8 +179,6 @@ In addition to standard block rewards, Stegos implements a unique \textit{Valida
 \textit{Red Packets}, another unique Stegos feature, helps viral marketing by letting anyone create a custom token airdrop that anyone with a Stegos app mobile app can claim by scanning a QR code.
 
 Everyone deserves privacy. The Stegos Privacy Platform doesn’t just keep your money and secrets safe. It rewards you for maintaining the network, even on your phone.    
-
-\chapter{Features}\label{chap:features}
 
 \section{Absolute privacy}
 Transactions in Stegos are \textit{unlinkable}, \textit{untraceable}, and \textit{confidential}.
@@ -204,7 +203,7 @@ Stegos is a \textit{compact} blockchain. Spent coins are safely removed from the
 Stegos uses transactional \textit{sharding} to scale. Separate groups of Stegos validators keep the whole blockchain state but verify only a subset of incoming transactions, using cross-shard atomic commits to eliminate double-spending. This scalability approach enables Stegos process thousands of transactions per second.
 
 \section{Fast message bus}
-Unlike other blockchain, Stegos does not restrict the user to sending just payments. Data is a first-class citizen on the Stegos blockchain and users can exchange data messages with the same privacy guarantees that are afforded to payments. Sending data messages is actually much faster than sending payments. Fast data messaging underpins the Stegos Privacy Platform. 
+Unlike other blockchain, Stegos does not restrict the user to sending just payments. Data is a first-class citizen on the Stegos blockchain and users can exchange data messages with the same privacy guarantees that are afforded to payments. Fast messaging underpins the Stegos Privacy Platform. 
 
 Think of Stegos as the message bus for cooperating privacy applications.
 
@@ -225,17 +224,16 @@ Stegos builds on top of private payments, fast messages, chat and the TAC to del
 \section{Incentives to drive adoption}
 Stegos includes incentives to drive adoption and encourage viral marketing. 
 
-\textit{Validator Service Award} is a feature unique to Stegos that rewards validators for being online and helping support the network. A portion of the fees from each block are added to the service award pool and any stake forfeited by a validator caught cheating goes into this pool as well. 
+\textit{Validator Service Award} is a feature unique to Stegos that rewards validators for staying online and helping support the network. A portion each blow reward is added to the service award pool. The award pool is distributed every few days when validators run a cryptographic lottery based on verifiable distributed randomness to select one validator to receive the award.
 
-The service award pool is distributed every few thousand blocks when validators run a cryptographic lottery based on verifiable distributed randomness to select one validator to receive the award.
-
-\textit{Red packets}\footnote{https://en.m.wikipedia.org/wiki/Red\_envelope\#Digital\_red\_envelopes} is a WeChat-like feature that we implement to promote viral growth. Users create red packets with a given number of tokens and post the corresponding QR code or URL on social networks. Each attempt to open a red packet may result in a few tokens or none at all. 
+\textit{Red packets}\footnote{https://en.m.wikipedia.org/wiki/Red\_envelope\#Digital\_red\_envelopes} is a WeChat-like feature that promotes viral growth. Users create red packets with a given number of tokens and post the corresponding QR code or URL on social networks. Each attempt to open a red packet may result in a few tokens or none at all, gamifying the experience.
 
 In the following chapters we explain the Stegos features in more detail.
 
 \chapter{Stegos in depth}\label{chap:stegos-in-depth}
 
 \section{Networking}
+\todo[inline]{Add Kademlia and RaptorQ}
 
 The Stegos network is composed of \textit{bootstrap nodes}, \textit{compact nodes} and \textit{light wallets}. Bootstrap and compact nodes maintain a copy of the blockchain and associated data structures. They post a performance bond (stake) to become \textit{validators}, then participate in the consensus protocol and earn block rewards, as well as transaction fees. These nodes also respond for request from light wallet nodes.
 
@@ -326,6 +324,7 @@ We improve on \textit{ValueShuffle}\cite{c19}, an extension of CoinShuffle++ tha
 We implement a protocol where a \textit{facilitator} elected among the validators provides the services of the \textit{Bulletin Board} (as defined in the ValueShuffle protocol). We also implement collective Schnorr signatures\cite{c22} on the resulting transaction. Details of these protocols, as well as a brief explanation of our implementation of ValueShuffle, are given in Appendix \ref{SnowballAppendix}.
 
 \section{BlockCrunch}
+\todo[inline]{Rewrite BlockCrunch}
 
 As described in Appendix \ref{app:blocks}, a Stegos block is composed of a header and a body, where the header contains root hashes of two Merkle trees, that comprise the body of the block. Those two trees are a tree of all inputs (TXIN Merkle Tree) and a tree of all outputs (TXOUT Merkle Tree). 
 
@@ -376,6 +375,7 @@ Stegos data messaging is a lot like UDP/IP and serves as a message bus that all 
 Data messages are automatically recycled and removed from the blockchain using BlockCrunch (Appendix \ref{app:pruning}).
 
 \section{Incentives}
+\todo[inline]{Add block rewards and fees}
 Stegos is powered by the STG token, available once the mainnet is launched. When posted as a performance bond by nodes wishing to support the Stegos platform, the STG token gives validators the right to earn fees and block rewards when they are elected as the leader of the consensus round. The probability of a validator being elected the leader is proportional to the size of their stake.
 
 \subsection{Validator service award}\label{ValidatorAward}
@@ -480,6 +480,10 @@ The Stegos team is working on implementation of the blockchain and the developme
 
 As our implementation progresses, we will publish separate, more detailed papers focused on our most essential contributions to the blockchain ecosystem, like improved distributed randomness generation (\textit{RandHound++}), our flavor of collective signing protocol and consensus based on it (\textit{BLS CoSi/pBFT}), and our approach for transactions and data sharding. 
 
+- We will pursue blockchain privacy, including latest and greatest mechanisms of combining it with a fast and scalable blockchain.
+
+- We will advance blockchain privacy into mainstream applications.
+
 \chapter{Team}\label{app:team}
 
 The Stegos team doesn't just bring blockchain experience to the table (although we have plenty of that, too). With backgrounds in finance, aerospace, and cryptography, the team has a breadth of experience in applying technology to some of the most sensitive challenges facing society.
@@ -501,17 +505,21 @@ Eugene is the Site Reliability Engineer at Stegos, taking care of our developmen
 
 \chapter{Token Economics}\label{app:token-economics}
 
-\section{Distribution}
-Stegos will generate 1,000,000,000 (1 billion) of STG tokens (initial supply) and sell 51.25\% of tokens to raise \$39M (million). The fundraising target has been carefully selected to enable us to reach our development milestones and jumpstart the Stegos ecosystem.
+\section{Fundraising}
+Stegos will generate 1,000,000,000 (1 billion) of STG tokens (initial supply) and sell up to 51.25\% of tokens to raise \$20M (million). This fundraising target has been carefully selected to enable us to reach our development milestones and jumpstart the Stegos ecosystem.
 
-Stegos will follow strict KYC/AML procedures during both stages of fundraising, with funds used to, among other things:
+Stegos will follow strict KYC/AML procedures during all stages of fundraising, with funds used to, among other things:
 
-Expand the the Stegos ecosystem through educational programs;
-Build a world-class in-house research team;
-To accelerate blockchain adoption across the mass-market and enterprise; and
-Stegos will aggressively pursue development, acquire the best talent, and explore new solutions. The Stegos vision is ambitious, with equally ambitious goals.
+\begin{itemize}
+	\item Expand the the Stegos ecosystem through educational programs
+	\item Build a world-class research \& development (R\&D) team
+	\item To accelerate blockchain adoption across the mass-market and enterprise
+	\item Aggressively pursue development and acquire the best talent
+\end{itemize}
 
-Tokens will be allocated as follows:
+The Stegos vision is ambitious, with equally ambitious goals!
+
+\section{Token allocation}
 
 \begin{figure}[h!]
 \centering
@@ -581,14 +589,6 @@ Tokens will be allocated as follows:
 \caption{Token allocation} 
 \end{table}
 
-Tokens will be purchased in ETH, with an ETH/USD exchange rate equal to the rate at the time of contribution.
-
-Team tokens will be locked up for 18 months.
-
-Stegos will set aside a token reserve which will be 100\% used for promotion, publicity, airdrops, community expansion, bounties, etc. as determined by the Stegos team.
-
-Any tokens unsold after the private sales will be kept in reserve by Stegos, to be used for future funding needs.
-
 \section{Emission}
 STG token emission will start at 14\% from initial supply during the first 4 years and halve every 4 years thereafter. Thew newly created tokens will be used for block rewards as well as the validator service award \ref{sec:service-award}.
 
@@ -609,6 +609,28 @@ STG token emission will start at 14\% from initial supply during the first 4 yea
 \caption{Previous token sales} 
 \end{table}
 
+\section{Lockups and vesting}
+
+A vesting schedule will apply tokens purchased during the private sale. These tokens will be gradually released after mainnet according to the following schedule:
+
+\begin{table}[ht]
+\centering
+	\begin{tabular}{@{\extracolsep{4pt}}lccccccccccc}
+	\toprule[2pt] 
+	{} & \multicolumn{11}{c}{Month from Mainnet Launch} \\
+ \cmidrule{2-12}
+	{} & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 \\
+	\midrule[2pt]
+	Seed & {} & {} & {} & 12.5\% & 12.5\% & 12.5\% & 12.5\% & 12.5\% & 12.5\% & 12.5\% & 12.5\% \\
+	Round 1 & 50\% & 10\% & 10\% & 10\% & 10\% & 10\% & {} & {} & {} & {} & {} \\
+	Round 2 & 70\% & 10\% & 10\% & 10\% & {} & {} & {} & {} & {} & {} & {} \\
+	\bottomrule[2pt]
+	\end{tabular}
+\caption{Vesting schedule} 
+\end{table}
+
+Team tokens will be locked up for 18 months from mainnet launch.
+
 \chapter{Legal Disclaimer}
 
 No part of this white paper constitutes legal, financial, business, or tax advice, and you should consult your own legal, financial, tax, or other professional adviser before engaging in any activity in connection herewith. Stegos AG (“Stegos”), its affiliates, and the Stegos team members shall not be liable for any kind of direct or indirect damage, loss, or liability whatsoever which you may suffer or incur in connection with accessing this white paper or any other materials published by Stegos. 
@@ -617,21 +639,24 @@ There is no official translation of this white paper from its original English, 
 
 By accessing this white paper or any part thereof, you represent and warrant to Stegos, its affiliates, and the Stegos team that you acknowledge, understand, and agree that: 
 
-(a) the STG tokens (the “Tokens”) described herein may have no value, there is no guarantee or representation of future value or liquidity for the Tokens, and the Tokens are not intended for speculative investment; 
+\begin{enumerate}[label=(\alph*)]
+	\item the STG tokens (the “Tokens”) described herein may have no value, there is no guarantee or representation of future value or liquidity for the Tokens, and the Tokens are not intended for speculative investment; 
 
-(b) Stegos, its affiliates, and the Stegos team members shall not be responsible for or liable for the value of the Tokens, the transferability and/or liquidity of the Tokens, and/or the availability of any market for the Tokens through third parties or otherwise; 
+	\item Stegos, its affiliates, and the Stegos team members shall not be responsible for or liable for the value of the Tokens, the transferability and/or liquidity of the Tokens, and/or the availability of any market for the Tokens through third parties or otherwise; 
 
-(c) in any decision to acquire Tokens, you have not relied on any statement set out in this white paper; 
+	\item in any decision to acquire Tokens, you have not relied on any statement set out in this white paper; 
 
-(d) you will and shall at your own expense ensure compliance with all laws, regulatory requirements and restrictions applicable to you; 
+	\item you will and shall at your own expense ensure compliance with all laws, regulatory requirements and restrictions applicable to you; 
 
-(e) the information contained herein shall be subject solely to Swiss law, and the place of jurisdiction shall be Zug, Switzerland; 
+	\item the information contained herein shall be subject solely to Swiss law, and the place of jurisdiction shall be Zug, Switzerland; 
 
-(f) Stegos, its affiliates, and the Stegos team, as a result of future applicable law, decree, regulation, treaty, or administrative act, may be restricted or limited to hold a token generation event (“TGE”) or any similar event as currently planned, and may elect, at their discretion, to issue Tokens through or by a legal entity other than Stegos; 
+	\item Stegos, its affiliates, and the Stegos team, as a result of future applicable law, decree, regulation, treaty, or administrative act, may be restricted or limited to hold a token generation event (“TGE”) or any similar event as currently planned, and may elect, at their discretion, to issue Tokens through or by a legal entity other than Stegos; 
 
-(g) Stegos, its affiliates, and the Stegos team may be prohibited from offering any Tokens at either the TGE or in a secondary market to certain jurisdictions and their subjects, and may have to restrict trading of the Tokens on certain trading platforms as a result of applicable law, decree, regulation, treaty, or administrative act; and 
+	\item Stegos, its affiliates, and the Stegos team may be prohibited from offering any Tokens at either the TGE or in a secondary market to certain jurisdictions and their subjects, and may have to restrict trading of the Tokens on certain trading platforms as a result of applicable law, decree, regulation, treaty, or administrative act; and 
 
-(h) you may not be eligible to acquire any Tokens if you are a citizen, national, resident (tax or otherwise), domiciliary and/or green card holder of a geographic area or country where it is likely that the sale or distribution of the Tokens would be construed as the sale of a security (howsoever named) or investment product, and/or in which access to or participation in any token distribution event or the Stegos platform is prohibited by applicable law, decree, regulation, treaty, or administrative act. 
+	\item you may not be eligible to acquire any Tokens if you are a citizen, national, resident (tax or otherwise), domiciliary and/or green card holder of a geographic area or country where it is likely that the sale or distribution of the Tokens would be construed as the sale of a security (howsoever named) or investment product, and/or in which access to or participation in any token distribution event or the Stegos platform is prohibited by applicable law, decree, regulation, treaty, or administrative act. 
+
+\end{enumerate}
 
 This white paper shall not be construed to be an invitation or solicitation to enter into an investment or participate in the sale of a security (howsoever named) or investment product in any jurisdiction. The information in this white paper is given for general illustrative and discussion purposes only, and Stegos does not provide any warranty as to the accuracy and completeness of this information. Stegos reserves the right to change the information contained herein at its sole discretion. The information set out in this white paper is not legally binding upon Stegos, its affiliates, and the Stegos team members. The agreement for any issuance or distribution of the Tokens shall be governed by a separate agreement setting out the terms and conditions thereof. In the event of any inconsistencies between such an agreement and this whitepaper, the terms and conditions of the agreement shall prevail. 
 
