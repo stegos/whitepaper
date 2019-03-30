@@ -298,7 +298,7 @@ We deal with them as follows...
 	\item {\em Delays} - Validators can take a long time to produce a block, either because they went offline or because they are being malicious. In both cases, we change the slot owner using the pBFT view change protocol. 
 \end{enumerate}
 
-We introduce _slashing_ to punish misbehaving validators. Slashing confiscates the stake of the validator who produced a fork. The only proof needed is two block headers, at the same slot, signed by the same validator. The slashed stake is evenly distributed between the rest of the validators in the current epoch.
+We introduce \textit{slashing} to punish misbehaving validators. Slashing confiscates the stake of the validator who produced a fork. The only proof needed is two block headers, at the same slot, signed by the same validator. The slashed stake is evenly distributed between the rest of the validators in the current epoch.
 
 \subsection{Collective Signing}
 We adopt \textit{CoSi}\cite{c10,c11}, a scalable witness co-signing protocol ensuring that every authoritative statement is validated and publicly logged by a diverse group of witnesses before any client will accept it. A statement $S$ collectively signed by $W$ witnesses assures clients that $S$ has been seen, and not immediately found erroneous, by those $W$ observers. Even if $S$ is compromised in a fashion not readily detectable by the witnesses, CoSi still guarantees $S$’s exposure to public scrutiny, forcing secrecy-minded attackers to risk that the compromise will soon be detected by one of the $W$ witnesses. 
@@ -325,7 +325,7 @@ To discourage bad actors, we employ a mechanism to both throttle peers and punis
 The Stegos blockchain uses a gossip protocol to spread information without depending on a fixed network topology. This protocol does not require every node to be reliable or always up and running, and does not require every node to know about every other node. Each node knows about just a few peers and information can safely propagate through the network as long as most nodes know of at least two peers.
 
 \section{Randomness}
-\todo[inline}{Describe our randomness}
+\todo[inline]{Describe our randomness}
 
 \section{Incentives}
 \todo[inline]{Add block rewards and fees}
