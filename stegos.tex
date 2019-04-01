@@ -102,132 +102,134 @@ and brands does not imply endorsement.}
 \tableofcontents\newpage
 
 \section{Abstract}
+Multipurpose mobile apps and social media platforms have allowed millions of people to access online services and communities which would otherwise be out of reach. However, they do so at unacceptable costs to user privacy. Conversely, blockchain and cryptocurrency platforms offer unprecedented privacy benefits, but are currently unsustainably slow and resource-intensive, making them inaccessible to the average user. We need a way to marry privacy and accessibility in a single platform.
 
-The Stegos Privacy Platform (Stegos) combines a unique blockchain and token design to implement the first cryptocurrency that’s absolutely private, secure, efficient and friendly to the environment. Stegos is fully scalable and prunable, ensuring the chain is always kept small without compromising trust. This makes Stegos the first public blockchain to offer secure and confidential messaging and data storage, in addition to payment transactions. It also ensures that Stegos is compact enough to run on smartphones, meaning anyone can run the Stegos blockchain from their pocket and earn tokens by staking.
-  
-In this paper we describe the design of the blockchain foundation used to send payments and data with absolute privacy and complete confidentiality. We extend this foundation to describe a platform for building privacy applications that communicate via messages sent with minimal latency. We introduce the  Trusted Application Container (TAC), a secure mobile sandbox that simplifies building privacy applications while protecting users from malicious code. Last but not least, we sketch the design of the App Store for privacy apps, as well as private marketplaces.
+The Stegos Privacy Platform (Stegos) combines a unique blockchain and token design to implement the first cryptocurrency that’s completely private, secure, efficient and environmentally sustainable. Stegos is fully scalable and prunable, ensuring the chain is always kept small without compromising trust. This makes Stegos the world’s first public blockchain to offer secure and confidential data storage and transmission, in addition to payment transactions. 
 
+Stegos extends this blockchain foundation to provide a platform for building privacy applications that communicate via messages sent with minimal latency. Our trusted application container (TAC) and privacy app store simplify the process of building and distributing privacy applications while providing additional security for users. Last but not least, Stegos marketplaces, chat and red packets replicate popular features of modern multipurpose apps in a decentralized way, allowing users to transact and communicate in complete privacy.
+
+Stegos is secured by the egalitarian proof-of-stake (ePoS) consensus mechanism based on verifiably unbiased distributed randomness. ePoS allows anyone to run the Stegos blockchain from their pocket and earn tokens by staking. This encourages an extremely wide user base by ensuring that mobile users are properly incentivized to validate the network.
 \section{Feedback}
 
 Please address comments and suggestions on this paper to \href{mailto:paper@stegos.com}{paper@stegos.com}.
 
 \chapter{Introduction}\label{chap:intro}
 
-Everyone deserves privacy. But there are many people whose jobs and sometimes even lives depend on the ability to send and receive crucial information privately and with confidence. People like whistleblowers, activists, journalists, and businesspeople. These people are all vital elements of a free and safe society. 
+\section{We All Deserve Privacy}
 
-Whistleblowers expose lies and corruption in governments and corporations. Activists rally like-minded people to bring about positive change. Journalists uncover the truth and guard it. Businesspeople travel the world creating wealth and prosperity, all while protecting clients’ sensitive information.
+Everyone deserves privacy. They also deserve access to all the services and benefits of our modern digital world. But current technologies and business models are unable, or perhaps unwilling, to provide both of these simultaneously.
+	
+The past decade has seen the rise of global social media platforms and multipurpose apps with integrated payments such as WeChat and Facebook. This, combined with rapid advances in mobile internet and hardware, have allowed almost a billion people to get online and communicate, trade, and collaborate. But these platforms are a privacy nightmare: your every action can be tracked and linked to provide a full history of everyone you've ever communicated or transacted with, whether you want to share this information or not. In addition, user data is often harvested indiscriminately into enormous data silos, making them a target for unscrupulous advertisers, state actors, and hackers. Current efforts to curb this abuse are proving ineffectual and heavy-handed, often because governments and regulators are unwilling to cede control and let users take responsibility for their own online actions.
 
-All of these people have important secrets, secrets which benefit the whole of society when they’re kept safe. To protect these secrets and the people that carry them, the Stegos team is proud to introduce the Stegos Privacy Platform and mobile application.
+On the hardware side, solid-state technology, smartphones, and the Internet of Things have made it easier than ever to carry large amounts of data wherever we go. We carry our lives in our pockets, on our phones and on our laptops. But under the guise of protecting us — from terrorism, from hackers, from our own alleged lack of responsibility — our privacy has been decimated. In airports, online, even on the street, we are forced to reveal our private information with alarming frequency. There’s a reason why your credit card spending isn’t published online, even with your name stripped. Your pseudononymous payment history can be put together with other data collected from the Internet and you can still be identified, making you a target for unscrupulous marketers and scammers. %I've moved this here for now, although I don't think it's ideal. I quite like this phrasing, but the privacy by default section was getting rather long, and by the time we get to it I feel the point is already well made and we've moved on to more technical considerations. 
 
-\chapter{Why Stegos?}\label{chap:why-stegos}
+This intrusion leaves many of us feeling exposed and powerless. Some people face even more chilling consequences, such as the loss of their jobs, liberty, or even lives. 
 
-\section{Using Blockchain for the Greater Good}
-At Stegos, we believe everyone has the right to privacy. Every individual should have the right to decide for themselves what they want to share and what they want to keep secret. And those secrets should be safe and secure from hackers, corporations, and governments.
+We live in an era of unprecedented state surveillance and crackdowns on freedom of the press and even thought. It’s nobody’s business what you do with your money, whether paper or digital, and it’s nobody's business who you transact with on the blockchain.
 
-We are increasingly forced to give up our privacy — online, at the airport, and even on the street. 
+But these trends have not gone unnoticed. Across the world, people are voicing their displeasure at how their privacy and data are being exploited for profit. There is a groundswell of demand for more secure and private alternatives, and this is only going to grow over the coming months and years.
 
-We're passionate about technology that keeps secrets safe from prying eyes. We’ve put years of research into making key improvements to cutting-edge blockchain technology to make sure privacy is within everyone’s reach. Stegos lets everyone send and receive messages and payments completely anonymously and privately, as well as earn tokens for supporting the network. Best of all, it can all be done right from your smartphone.
+\section{Blockchain and Privacy}
 
-\section{Big Brother is Watching}
-Solid-state technology, smartphones, and the Internet of Things have made it easier than ever to carry large amounts of data with us wherever we go. We carry our lives in our pockets, on our phones and on our laptops. But under the guise of protecting us — from terrorism, from hackers, from our own alleged lack of responsibility — our privacy has been decimated. In airports, online, even on the street, we are being forced to reveal our private information with alarming frequency.
+At the other end of the spectrum, blockchain and decentralized technologies have facilitated massive leaps forward in digital privacy and security. While traditional data sharing and storage technologies (online cloud storage, email, laptops, etc.) have built-in security, these technologies can easily be compromised. If someone is able to obtain and enter your password, your data is permanently exposed for everyone to see.
 
-This intrusion by Big Brother leaves many of us feeling exposed and powerless. Even worse, people face much more chilling consequences such as the loss of their jobs, liberty, or even lives.
+A private decentralized solution based on blockchain is a far better way to keep your private information safe and share it with people you trust.
 
-Privacy is a universal human right that we must all fight to preserve.
-  
-\section{Disruptive Change}
-Traditional data sharing and storage technologies (online cloud storage, email, our laptops, etc.) have built-in security. But all these technologies can easily be compromised. If the password is obtained and entered, the data is permanently exposed for everyone to see.
+However, adoption levels have been disappointing. The problems are numerous: current blockchains are slow, unwieldly, and environmentally disastrous, and even privacy coins are not as private as they claim to be. The reliance on resource-hungry static hardware and unfriendly interfaces puts this technology beyond the reach of regular users, without whom blockchain platforms are doomed to wither and recentralize. As users in all walks of online life increasingly migrate from desktop to mobile, crypto is failing to keep pace. 
 
-The Stegos team believes that blockchain is a far better way to keep your private information safe in the modern online world.
+The solution is clear: In order to thrive, blockchain platforms need to find a way to emulate the mass appeal and usability of platforms such as WeChat and Facebook while maintaining strong privacy, anonymity, and decentralization.
 
-\section{Why Blockchain?}
-Stegos Privacy Blockchain is the best mechanism for securing secrets and communications because, unlike traditional email and online messaging services, it’s completely decentralized, cryptographically secure, and leaves no telltale clues in the open. It’s impossible to see who sends or receives information or establish how anyone is connecting to Stegos. No-one but the intended recipient of a communication or transaction can see what or how much was sent, and there’s nothing to link data or transactions to anyone’s real-life identities.
+Stegos is the first blockchain which is able to combine these worlds. Stegos provides transactions which are more secure and private than existing privacy coins, the ability to send messages and data quickly and privately, all combined with the scalability, efficiency, and above all usability of a modern multipurpose app platform.    
 
-With the Stegos Privacy Platform, there is no central place for Big Brother or other bad actors to tap into our secrets.
+Stegos is the best mechanism for secure transactions, data transmission, and communications because, unlike traditional email and online messaging services, it’s completely decentralized, cryptographically secure, and leaves no telltale clues in the open. It’s impossible to see who sends or receives information or establish how anyone is connecting to Stegos. No-one but the intended recipient of a communication or transaction can see what or how much was sent, and there’s nothing to link data or transactions to anyone’s real-life identities.
 
-\section{Private by Default}
-The original Bitcoin paper was seminal in its proposal for a mechanism to prevent double-spending of electronic cash, but it only included a very small section on privacy. It assumed that even though transaction amounts are public, it would be impossible to link those transactions to anyone’s real identities. This assumption has been proven wrong over the years by researchers, hackers, and blockchain analysis companies. Transaction analysis has become trivial with the help of software like ChainAnalysis, allowing anyone to quickly de-anonymize users of Bitcoin and other cryptocurrencies.
+With Stegos, there's no central place for Big Brother or other bad actors to tap into your private data.
 
-Most blockchains have followed in Bitcoin’s footsteps with a totally transparent design that includes visible addresses and amounts, including the balance of any wallet, how much money has been sent and received and the addresses of every sender and recipient. All this readily available information paints a large and highly visible target for hackers and Big Brother.
+Stegos is also the first blockchain that's truly mobile compatible: smartphone nodes have full validation capabilities and there's no hardware-intensive proof of work, meaning anyone can earn coins for supporting the network. By giving data transmission and messaging the same priority as regular transactions, Stegos is a platform that people will actually want to use. And the focus on smartphones means people will actually be able to use it.
 
-There’s a reason why your credit card spending isn’t published online, even with your name stripped. Your pseudo-anonymous payment history can be put together with other data collected from the Internet and you can still be identified, making you a target for unscrupulous marketers and scammers.
-
-We live in an era of unprecedented state surveillance and crackdowns on freedom of the press and even thought. It’s nobody’s business what you do with your money, whether paper or digital, and it’s nobody's business who you transact with on the blockchain. With the rise of privacy technologies like Bulletproofs and zk-SNARKs, there’s no excuse to perpetuate Bitcoin’s mistake. Blockchain should be private by default.
-
-In the following sections we describe the features of \textit{Stegos}, a blockchain which uses the \textit{UTXO} (coin) model and \textit{PoS} (Proof-of-Stake) consensus. We also explain how Stegos builds and improves on existing privacy coin ideas and employs latest research in cryptography in order to create highly scalable privacy blockchain and application platform. 
-
+In our modern connected world, everyone should have access to secure and private transactions and communications. Stegos is the first and only blockchain platform that can provide this.  
+	
 \section{Smart contracts not sufficient}
 \todo[inline]{Describe why smart contracts are not sufficient}
 
 \chapter{What is Stegos?}\label{chap:what-is-stegos}
 
 \section{Summary}
+The Stegos Privacy Platform (Stegos) combines a unique blockchain and token design to implement the first cryptocurrency that’s absolutely private, secure, efficient and environmentally sustainable. Stegos uses the \textit{UTXO} (coin) model and \textit{ePoS} (egalitarian proof of stake) consensus, combining existing privacy coin ideas and the latest cryptographic research to create a fully scalable and prunable privacy blockchain and application platform. 
+ 
+Stegos is a fast and highly scalable blockchain and, unlike other blockchains, it’s kept small without compromising trust. Details of spent coins and consumed data are safely removed from the blockchain using secure cryptographic pruning. It's also highly scalable thanks to transactional sharding. This makes Stegos the world’s first public blockchain that can offer secure and confidential data storage and transmission in addition to payment transactions. It also ensures that Stegos is compact enough to run on smartphones.
 
-The \textit{Stegos Privacy Platform (Stegos)} combines a unique blockchain and token design to implement the first cryptocurrency that’s absolutely private, secure, efficient and friendly to the environment. Stegos is fully scalable and prunable, ensuring the chain is always kept small without compromising trust. This makes Stegos the world’s first public blockchain to offer secure and confidential data storage and transmission, in addition to payment transactions. It also ensures that Stegos is compact enough to run on smartphones, meaning anyone can run the Stegos blockchain from their pocket and earn tokens by staking.
-
-Other privacy tokens — such as Monero, Dash, ZCash, and Grin — can only be used for payments, and all display weaknesses in terms of scalability, privacy, security, or usability. Stegos builds and improves upon these and other privacy coins and can be used to send both messages and payments with complete confidentiality. The Stegos Privacy Platform can also be used to build applications that communicate anonymously, privately, and efficiently.
+Other privacy tokens — such as Monero, Dash, ZCash, and Grin — can only be used for payments, and all display weaknesses in terms of scalability, privacy, security, or usability. Stegos builds and improves upon these and other privacy coins and can be used to send both payments and data with complete confidentiality. The Stegos trusted application container (TAC) allows developers to easily build applications that communicate anonymously, privately, and efficiently.
 
 Payment and data transactions in Stegos are unlinkable, untraceable, and completely confidential. Every Stegos transaction is directed to a new and unique stealth address, making it impossible to identify the recipients. It’s also impossible to trace Stegos transaction history, since individual transactions are first joined together to form a supertransaction before being submitted to blockchain validators. This is all done in a secure and privacy-preserving way, while ensuring that Stegos coins remain fully fungible.
 
-All amounts in Stegos are hidden using cryptographic commitments and zero-know\-ledge proofs. Validator stakes and transaction fees are the only exception, since these must be visible for blockchain validation to work. 
+All amounts in Stegos are hidden using cryptographic commitments and zero-knowledge proofs. Validator stakes and transaction fees are the only exception, since these must be visible for blockchain validation to work. 
 
-Stegos is a fast and highly scalable blockchain and, unlike other blockchains, it’s kept small. Details of spent coins and consumed data are safely removed from the blockchain using secure cryptographic pruning. It's also highly scalable thanks to transactional sharding. Separate groups of Stegos validators keep the whole blockchain state but verify only a subset of incoming transactions, using cross-shard atomic commits to eliminate double-spending. These breakthroughs let Stegos process hundreds of thousands of transactions per second across billions of mobile devices, making Stegos the first and only blockchain that can run and earn you money entirely in your pocket.
+Stegos is environmentally friendly and does not waste megawatts of electricity mining blocks. Instead, Stegos uses a bespoke egalitarian proof-of-stake (ePoS) consensus, building on advancements in distributed systems theory and cryptography. Each new Stegos block must be verified and confirmed by a group of validators, all of whom must post tokens as bonds. The value of the tokens staked in this way directly affects the probability that a validator will win a block and earn the associated transaction fees. In addition, a randomly awarded validator service award ensures that validators at every level of stake are incentivized to maintain the network. A portion of the reward from each block is added to the service award pool, which continues to grow until a winner is selected in an ongoing cryptographic lottery based on verifiable distributed randomness. 
 
-Stegos is environmentally friendly and does not waste megawatts of electricity mining blocks. Instead, Stegos uses a bespoke proof-of-stake (PoS) consensus, building on advancements in distributed systems theory and cryptography. Each new Stegos block must be verified and confirmed by a group of validators, all of whom must post tokens as bonds. The value of the tokens staked in this way directly effects the probability that a validator will win a block and earn the associated transaction fees. 
+Separate groups of Stegos validators keep the whole blockchain state but verify only a subset of incoming transactions, using cross-shard atomic commits to eliminate double-spending. These breakthroughs let Stegos process hundreds of thousands of transactions per second across millions or even billions of mobile devices, making Stegos the first and only blockchain that can run entirely in your pocket. Because smartphone nodes can have full validation capabilities, anyone can earn tokens from their pocket.
 
-The Stegos mobile app is the portal into the ecosystem and a showcase of the potential of our platform. The app integrates the wallet with a secure environment for running privacy-focused applications, the Stegos App Store, as well as one-on-one and group chat.
+The Stegos mobile app is the portal into the Stegos ecosystem and a showcase of the potential of our platform. The app integrates the wallet with a secure environment for running privacy-focused applications. In this way, Stegos can provide all the functionality of existing centralized multipurpose apps such as WeChat, but in a fully private and decentralized way. Features include one-on-one and group chat facilitated by the Stegos fast message bus, integrated payments and red packets, and extremely popular WeChat feature, which allows anyone to create a custom token airdrop that anyone can claim by scanning a QR code.
 
-In addition to standard block rewards, Stegos implements a unique \textit{Validator Service Award} feature. A portion of the reward from each block is added to the service award pool, which continues to grow until a winner is selected in an ongoing cryptographic lottery based on verifiable distributed randomness. 
+Everyone deserves privacy. And everyone should be rewarded for contributing to a more private world. Stegos doesn’t just keep your money and secrets safe. It rewards you for maintaining the network, even on your phone.
 
-\textit{Red Packets}, another unique Stegos feature, helps viral marketing by letting anyone create a custom token airdrop that anyone with a Stegos app mobile app can claim by scanning a QR code.
+\subsection{Private by Default}
+The original Bitcoin paper was seminal in its proposal for a mechanism to prevent double-spending of electronic cash, but it only included a very small section on privacy\cite{c1}. It assumed that even though transaction amounts are public, it would be impossible to link those transactions to anyone’s real identities. This assumption has been proven wrong over the years by researchers, blockchain analysis companies, and hackers. Software like ChainAnalysis has made transaction analysis trivial, allowing anyone to quickly de-anonymize users of Bitcoin and other cryptocurrencies.
 
-Everyone deserves privacy. The Stegos Privacy Platform doesn’t just keep your money and secrets safe. It rewards you for maintaining the network, even on your phone.    
+Most blockchains have followed in Bitcoin’s footsteps with a totally transparent design that includes visible addresses and amounts, including the balance of any wallet, how much money has been sent and received, and the addresses of every sender and recipient. All this readily available information paints a large and highly visible target for hackers and Big Brother. With the rise of privacy technologies like Bulletproofs and zk-SNARKs, there’s no excuse to perpetuate Bitcoin’s mistake. Blockchain should be private by default.
 
-\section{Absolute privacy}
-Transactions in Stegos are \textit{unlinkable}, \textit{untraceable}, and \textit{confidential}. Stegos uses stealth addresses and confidential transactions (CT). Amounts in Stegos are hidden from public view.
+To this end, transactions in Stegos are \textit{unlinkable}, \textit{untraceable}, and \textit{confidential}:
 
-\section{Proof-of-stake (PoS) consensus}
-Stegos is friendly to the environment and does not require terawatts of electricity to be spent for mining blocks. Stegos uses PoS (Proof-of-Stake) consensus, building on ideas of pBFT\cite{c9} and Collective Signing\cite{c10, c11}. Each new Stegos block must be verified and confirmed by a group of validators, all of which must put a performance bond or stake.
+\begin{itemize}
+	\item {Stegos uses one-time payment addresses which make it impossible to identify recipients of a transaction, e.g., to link addresses of recipients to their identities, because all transactions are directed to new and unique addresses. The technique we use for one-time addresses is very similar to stealth addresses used in Monero and ZCash.}
+	\item {Stegos makes it impossible to trace the history of transactions since many individual transactions are pooled together to form a super-transaction. For this purpose, we adopted and enhanced the ValueShuffle protocol\cite{c7}, the first coin mixing protocol compatible with Confidential Transactions.}
+	\item {All amounts in Stegos are hidden using Pedersen commitments\cite{c8} and Bulletproofs (range proofs)\cite{c4}. Validator stakes and transaction fees are the only exception since these must be visible for blockchain validation.}
+\end{itemize}
 
-The size of the coins staked has a direct effect on the probability of a validator becoming the leader of a consensus round and earning block rewards and transaction fees.
+\subsection{Egalitarian Proof-of-stake (ePoS) consensus}
+Stegos is environmentally sustainable and does not require terawatts of electricity to be spent mining blocks. To achieve this, Stegos uses a unique consensus mechanism we call egalitarian proof-of-stake (ePoS), building on ideas from pBFT\cite{c9} and Collective Signing\cite{c10}\cite{c11}. Each new Stegos block must be verified and confirmed by a group of validators, all of which must put up a performance bond or stake. The size of the coins staked has a direct effect on the probability that a given validator will become the leader of a consensus round and thus earn block rewards and transaction fees.
 
-\section{Mobile staking}
-\todo[inline]{Describe mobile staking}
+ePoS is egalitarian because every validator which has been running for a certain amount of time has the chance to receive a $Validator service award$, regardless of the size of their stake\footnote{A nominal minimum threshold will apply to prevent users from gaming the system, but since every eligible node must provide validation services to qualify, it is impossible to spam the system, as one goal of the $Validator service award$ is to maximize the number of different nodes.}.
 
-\section{Data compaction}
-Many projects claim to be able to process a million transactions per second (TPS) but none of them explain how they are going to maintain all the accumulated data. Bitcoin provides for 7--10 TPS and the Bitcoin blockchain is expected to grow past 170 gigabytes by the end of 2018. If we assume that Bitcoin suddenly supports 16,000 TPS, the Bitcoin blockchain will grow by \textbf{350 gigabytes} every day\footnote{https://hackernoon.com/if-we-lived-in-a-bitcoin-future-how-big-would-the-blockchain-have-to-be-bd07b282416f}, or \textbf{127 terabytes} every year. This amount of data is completely unsustainable unless the blockchain will be centralized on a few supercomputers, something that’s contrary to blockchain’s decentralization ethos.
+\subsection{Sharding for scalability}
+Stegos uses transactional \textit{sharding} to scale. Separate groups of Stegos validators keep the whole blockchain state but verify only a subset of incoming transactions, using cross-shard atomic commits to eliminate double-spending. This scalability approach enables to Stegos process thousands of transactions per second (tps).
 
-Stegos is a \textit{compact} blockchain. Spent coins are safely removed from the blockchain using secure cryptographic pruning. To keep our blockchain free of spent coins, we are using the technique proposed originally by Satoshi Nakamoto in the Bitcoin paper\cite{c1}.
+\subsection{Pruning for data compaction}
+Many projects claim to be able to process hundred of thousands or even millions of transactions per second, but few explain how they plan to maintain all the accumulated data. Even a its paltry 7--10 tps, the Bitcoin blockchain is expected to grow past 170 gigabytes by the end of 2018. Assuming Bitcoin could suddenly support 16,000 tps, the Bitcoin blockchain would grow by 350 gigabytes every day\footnote{https://hackernoon.com/if-we-lived-in-a-bitcoin-future-how-big-would-the-blockchain-have-to-be-bd07b282416f}, or 127 terabytes every year. This amount of data is completely unsustainable without the blockchain being centralized on a few supercomputers, which runs contrary to the decentralization ethos of blockchain.
 
-\section{Fast message bus}
-Unlike other blockchain, Stegos does not restrict the user to sending just payments. Data is a first-class citizen on the Stegos blockchain and users can exchange data messages with the same privacy guarantees that are afforded to payments. Fast messaging underpins the Stegos Privacy Platform. 
+Stegos is a \textit{compact} blockchain. Spent coins are safely removed from the blockchain using secure cryptographic pruning. To keep our blockchain free of spent coins, we use the technique proposed by Satoshi Nakamoto in the original Bitcoin paper\cite{c1}.
 
-Think of Stegos as the message bus for cooperating privacy applications.
+\subsection{Data messaging}
+Unlike other blockchains, Stegos does not restrict users to sending just payments. Stegos supports FastData messaging, allowing users to exchange data messages with the same privacy guarantees afforded to payments. In fact, because data cannot be meaningfully ``double spent", sending data messages is actually much faster than sending payments because it requires fewer confirmations. Data is a first-class citizen on the Stegos blockchain, which is only logical as the average user is expected to send many more data transactions than standard payments.
 
-\section{Sharding for scalability}
-Stegos uses transactional \textit{sharding} to scale. Separate groups of Stegos validators keep the whole blockchain state but verify only a subset of incoming transactions, using cross-shard atomic commits to eliminate double-spending. This scalability approach enables Stegos process thousands of transactions per second.
+\subsection{Privacy applications}
+Stegos is committed to meeting the growing demand for privacy and data security without sacrificing usability or accessibility. Research shows that millions of users are dissatisfied with platforms such as Facebook and WeChat, but without a functionally equivalent alternative they feel locked in and unable to switch. To meet this need, Stegos is designed to encourage a blooming ecosystem of privacy applications, with Stegos messaging acting as a secure and private message bus between them.      
 
-\section{Stegos mobile app}
-Stegos is developing an native mobile application that integrates a wallet, one-one-one and group chat, the \textit{TAC}, as well as the \textit{App Store}.
+\subsubsection{Trusted application container (TAC)}
+Accessibility and usability are not solely user requirements. Developers also need to be catered to if they are going to switch to developing to a new platform. Developing native mobile applications is hard and error-prone. Developing secure mobile applications is harder still, and blockchain only adds an extra level of difficulty. Stegos aims to make developing mobile privacy applications simple and painless while protecting users from malicious or badly written applications. 
 
-\subsection{Trusted Application Container (TAC)}
-Developing native mobile applications is hard and error-prone. Developing secure mobile applications much harder still and blockchain only adds an extra level of difficulty. Stegos aims to make developing mobile privacy applications quick and simple. 
+The Stegos trusted application container (TAC) is a native mobile application and a container for deploying privacy applications. Applications can be built using familiar technologies like Javascript, HTML and CSS, and run as plugins in a \textit{sandbox}, with tightly controlled access to the user's wallet and the outside world.
 
-The Stegos \textit{Trusted Application Container (TAC)} is a native mobile application and a container for deploying privacy applications. The applications are built using familiar technologies like Javascript, HTML and CSS, and run as plugins in a \textit{sandbox}, with tightly controlled access to the user's wallet as well as the outside world.
+\subsubsection{App Store}
+ Users need a way to easily discover and install applications. The Stegos Privacy App Store will provide a mechanism to search and install privacy applications, developed to run in the TAC as well as rate their usefulness.  
 
-\subsection{App Store}
-We look forward to a blooming ecosystem of privacy applications, developed to run in the Trusted Application Container (TAC). The experience of existing mobile app stores shows that users need a way to easily discover and install applications. The Stegos Privacy App Store provides a mechanism to search and install privacy applications, as well as rate their usefulness. 
+\subsubsection{Stegos mobile app}
+To showcase the power of the platform, Stegos is developing its own native multi-purpose mobile application that integrates a wallet, one-one-one and group chat, the TAC, the Privacy App Store and the Stegos red packets \ref{RedPackets}. This app will be the gateway for users onto the Stegos Privacy Platform.
 
-\section{Private marketplaces}
-Stegos builds on top of private payments, fast messages, chat and the TAC to deliver private marketplaces where items can be sold anonymously and privately. Stegos will release a separate mobile as the marketplaces interface. 
+\subsection{Private marketplaces}
+Private transactions aren't just limited to token payments. While transferring tokens is an extremely important use case for many users (e.g., remittances), most transactions involve payment for some kind of tangible goods or services. By combining private payments, fast messages, chat, and the TAC, Stegos can deliver private marketplaces where items can be sold anonymously and privately. 
 
-\section{Incentives to drive adoption}
-Stegos includes incentives to drive adoption and encourage viral marketing. 
+Stegos will release a separate mobile app as the marketplaces interface.  
 
-\textit{Validator Service Award} is a feature unique to Stegos that rewards validators for staying online and helping support the network. A portion each blow reward is added to the service award pool. The award pool is distributed every few days when validators run a cryptographic lottery based on verifiable distributed randomness to select one validator to receive the award.
+\subsection{Incentives to drive adoption}
+Decentralized networks draw strength from the breadth and engagement of their user base. To encourage widespread adoption, Stegos includes various incentives aimed at a variety of different user groups. 
 
-\textit{Red packets}\footnote{https://en.m.wikipedia.org/wiki/Red\_envelope\#Digital\_red\_envelopes} is a WeChat-like feature that promotes viral growth. Users create red packets with a given number of tokens and post the corresponding QR code or URL on social networks. Each attempt to open a red packet may result in a few tokens or none at all, gamifying the experience.
+In addition to standard staking payouts which reward validators in proportion to their stake, the \textit{Validator service award} is a unique Stegos feature that rewards validators simply for being online and helping support the network. A portion of the fees from each block are added to the service award pool,\footnote{Along with any tokens from expired red packets and stakes forfeited by validators caught cheating.} which is then distributed every few thousand blocks. Validators run a cryptographic lottery based on verifiable distributed randomness \ref{Randomness} to select a single validator to receive the award. The current size of the service award pool is visible to all users via the Stegos app.
 
+\textit{Red packets}\footnote{https://en.m.wikipedia.org/wiki/Red\_envelope\#Digital\_red\_envelopes} are a feature designed disseminate to tokens and promote awareness, both for Stegos itself and for individual privacy apps and private marketplaces within the Stegos Privacy Platform. Red packets are similar to airdrops, but encourage more active participation among a wider pool of users. Anyone can create a red packet with a given number of tokens and distribute the corresponding QR code or URL to the target audience. Each attempt to open a red packet may result in randomly determined token prize. Prizes are awarded until the packet is empty. 
+
+Red packets are based on a popular WeChat feature which is in turn based on the Chinese tradition of hongbao. Reports indicate that the introduction of the Red Packet feature encouraged millions more users to sign up to WeChat, including revealing their personal banking details. Stegos intends to replicate the popularity of this feature without invading user privacy.
+		
 In the following chapters we explain the Stegos features in more detail.
 
 \chapter{Stegos in depth}\label{chap:stegos-in-depth}
@@ -242,7 +244,18 @@ All amounts in Stegos are hidden using Pedersen commitments\cite{c8} and Bulletp
 
 \section{Consensus}
 
+\todo[inline]{Merge egaletarian PoS}
+%%
+The Stegos egalitarian proof-of-stake (ePoS)consensus protocol is based on pBFT\cite{c9} but adds strong consistency, which enables all validators to agree on the validity of blocks without wasting computational power resolving inconsistencies. 
+%%
+
 The Stegos consensus protocol is based on \textit{Albatross}\cite{c23}, a novel blockchain consensus algorithm inspired by speculative BFT\cite{c9} algorithms, and has strong consistency with oftentimes instant transaction confirmation. The Stegos consensus protocol is secure and has a performance close to the maximum for single-chain PoS consensus algorithm.
+
+%%%
+	Stegos is environmentally sustainable and does not require terawatts of electricity to be spent mining blocks. To achieve this, Stegos uses a unique consensus mechanism we call egalitarian proof-of-stake (ePoS), building on ideas from pBFT\cite{c9} and Collective Signing\cite{c10}\cite{c11}. Each new Stegos block must be verified and confirmed by a group of validators, all of which must put up a performance bond or stake. The size of the coins staked has a direct effect on the probability that a given validator will become the leader of a consensus round and thus earn block rewards and transaction fees.
+	
+	ePoS is egalitarian because every validator which has been running for a certain amount of time has the chance to receive a $Validator service award$, regardless of the size of their stake\footnote{A nominal minimum threshold will apply to prevent users from gaming the system, but since every eligible node must provide validation services to qualify, it is impossible to spam the system, as one goal of the $Validator service award$ is to maximize the number of different nodes.}.
+%%%
 
 \subsection{Speculative BFT}
 Speculative BFT refers to a class of algorithms that have two modes for consensus: 
@@ -274,6 +287,9 @@ One macro block is always followed by $m$ micro blocks. An \textit{epoch} is com
 \subsection{Leader Election}
 Leader election is done using a stake-weighted lottery. The larger the validator's stake, the greater the chances of becoming the leader of the current consensus round.
 
+\todo[inline]{Merge leader election}
+Stegos is a public ledger, so anyone can join the network, become a validator and earn rewards for maintaining the blockchain. Stegos uses egalitarian proof-of-stake (ePoS) consensus and all validators need to post a performance bond (stake). Requiring a performance bond protects against Sybil attacks by requiring a financial commitment from validators.%Originally this said "significant" commitment, but doesn't that run contrary to claims about ePoS being available to almost everyone?
+
 \subsection{Fork resolution}
 Validators will choose the longest chain, i.e. the chain with the most blocks, as the main chain. Macro blocks have finality (are forkless) and forks can only happen between two macro blocks. So, nodes only need to consider chains that include the last macro block.
 
@@ -304,26 +320,33 @@ We introduce \textit{slashing} to punish misbehaving validators. Slashing confis
 We adopt \textit{CoSi}\cite{c10,c11}, a scalable witness co-signing protocol ensuring that every authoritative statement is validated and publicly logged by a diverse group of witnesses before any client will accept it. A statement $S$ collectively signed by $W$ witnesses assures clients that $S$ has been seen, and not immediately found erroneous, by those $W$ observers. Even if $S$ is compromised in a fashion not readily detectable by the witnesses, CoSi still guarantees $S$’s exposure to public scrutiny, forcing secrecy-minded attackers to risk that the compromise will soon be detected by one of the $W$ witnesses. 
 
 CoSi builds on existing cryptographic multi-signature methods, scaling them to support thousands of witnesses via signature aggregation over efficient communications. The default implementation of CoSi uses Schnorr signatures which we replace with BLS signatures for performance reasons.
+%%
+\todo[inline]{Merge description of CoSi}
+We adopt \textit{CoSi}\cite{c10}\cite{c11}, a scalable witness cosigning protocol ensuring that every authoritative statement is validated and publicly logged by a diverse group of witnesses before any client will accept it. A statement $S$ collectively signed by $W$ witnesses assures clients that $S$ has been seen, and not immediately found erroneous, by those $W$ observers. Even if $S$ is compromised in a fashion not readily detectable by the witnesses, CoSi still guarantees $S$’s exposure to public scrutiny, forcing secrecy-minded attackers to risk that the compromise will soon be detected by one of the $W$ witnesses. 
 
+CoSi builds on existing cryptographic multi-signature methods, scaling them to support thousands of witnesses via signature aggregation over efficient communications. The default implementation of CoSi uses Schnorr signatures which we replace with BLS signatures for performance reasons.
+
+Please see the Appendix \ref{ValidationAppendix} for more details on how we use CoSi to sign blocks.
+	
+%%
 \section{Networking}
 \todo[inline]{Add Kademlia and RaptorQ}
+\section{Networking}\label{Networking}
 
-The Stegos network is composed of \textit{bootstrap nodes}, \textit{compact nodes} and \textit{light wallets}. Bootstrap and compact nodes maintain a copy of the blockchain and associated data structures. They post a performance bond (stake) to become \textit{validators}, then participate in the consensus protocol and earn block rewards, as well as transaction fees. These nodes also respond for request from light wallet nodes.
+The Stegos network is composed of \textit{bootstrap nodes}, \textit{compact nodes}, and \textit{light wallets}. Bootstrap and compact nodes maintain a copy of the blockchain and associated data structures. After posting a performance bond (stake) to become \textit{validators}, these nodes participate in the consensus protocol and can earn block rewards and transaction fees. These nodes also respond to requests from light wallet nodes.
 
-Bootstrap nodes carry the unpruned version of the blockchain and respond to bootstrap requests new compact and bootstrap nodes. Compact nodes carry the pruned version of the blockchain, i.e. the current UTXO set.
+Bootstrap nodes carry the unpruned version of the blockchain and respond to bootstrap requests from new compact and bootstrap nodes. Compact nodes carry the pruned version of the blockchain, i.e., the current UTXO set. Light nodes only keep blockchain headers and know how to talk to validators. 
 
-Light nodes only keep blockchain headers and know how to talk to validators. 
-
-Stegos will initially maintain the core of the network by running a number of validator nodes to ensure continuity and performance of the network. The addresses of the core nodes will be hard-coded into each release of the Stegos blockchain software.
+Stegos will initially maintain the core of the network by running a number of core bootstrap nodes to ensure newtork continuity and performance. The addresses of the core nodes will be hard-coded into each release of the Stegos blockchain software.
 
 Nodes keep a list of addresses of the nodes they know about (peers) and add new peers to the list as they become aware of them. A brand new node will connect to one of the core nodes to fetch a list of bootstrap nodes and download a copy of the blockchain. 
 
-Each full node quickly re-broadcasts received transactions to a subset of its peers, after a few  light checks. This both ensures that a node cannot be DDOS-ed with transactions to validate and that it does not re-broadcast junk transactions.
+After a few  light checks, each full node quickly rebroadcasts received transactions to a subset of its peers. This ensures that a node cannot be DDoS-ed with transactions to validate and that it does not rebroadcast junk transactions.
 
-To discourage bad actors, we employ a mechanism to both throttle peers and punish peers for bad transactions, e.g. by blocking them from further participation in the network.
+To discourage bad actors, we employ a mechanism to throttle peers and punish them for bad transactions, e.g., by blocking them from further participation in the network.
 
-The Stegos blockchain uses a gossip protocol to spread information without depending on a fixed network topology. This protocol does not require every node to be reliable or always up and running, and does not require every node to know about every other node. Each node knows about just a few peers and information can safely propagate through the network as long as most nodes know of at least two peers.
-
+The Stegos blockchain uses a gossip protocol to spread information without depending on a fixed network topology. This protocol does not require every node to be reliable or always up and running, and does not require every node to know about every other node. Each node knows about just a few peers, and information can safely propagate through the network as long as most nodes know of at least two peers.
+	
 \section{Randomness}
 \todo[inline]{Describe our randomness}
 
@@ -332,7 +355,7 @@ The Stegos blockchain uses a gossip protocol to spread information without depen
 Stegos is powered by the STG token, available once the mainnet is launched. When posted as a performance bond by nodes wishing to support the Stegos platform, the STG token gives validators the right to earn fees and block rewards when they are elected as the leader of the consensus round. The probability of a validator being elected the leader is proportional to the size of their stake.
 
 \subsection{Validator service award}\label{ValidatorAward}
-\todo[inline]{Expand the award description}
+\todo[inline]{Merge award description}
 
 - A portion of block rewards goes to the service award pool. 
 - Calculated as 1/3 of the inflation rate.
@@ -342,8 +365,18 @@ Stegos is powered by the STG token, available once the mainnet is launched. When
 
 Electing a leader of the consensus and choosing a winner in the validator service award drawing uses our algorithm for generating distributed, untainted, unbiasable randomness, in the spirit of the RandHound protocol\cite{c12}. Our algorithm, \textit{RandHound++}, actually derives much of its protocol from SCRAPE\cite{c13} as its primary deviation from original RandHound. SCRAPE defines a PVSS\cite{c14} protocol using symmetric bilinear pairing based cryptography and coding theory. But beyond SCRAPE, we had to adjust the algorithm to deal with asymmetric pairings which offer necessary stronger cryptographic security.
 
+%%%
+
+	Ledgers based on proof of stake can have difficulty maintaining a broad user base since most users have a vanishingly small chance of earning significant rewards. To mitigate this failing, ePoS includes a validator service award in addition to the standard staking awards to incentivize users with lower stakes to continue to maintain the network. Instead of weighting rewards by size of stake, any node which has been providing validation services for a certain number of blocks is eligible to win the award.%Is this right? There's a bit of inconsistency on how you've described this. Does everyone who has validated for a certain amount of time have the same odds of winning, or do odds increase with length of service? (Or perhaps a combination - odds increase with length of service but are capped at a certain point.) 
+
+	One third of emitted STG tokens will be added to the service award pool, along with tokens forfeited by malicious validators and tokens from expired red packets. Every block, there is a chance that the award pool will be awarded. The odds of this occurring starts small and increases with each block. Thus, the precise time of the drawing cannot be known in advance, but on average the validator service award will be distributed every few thousand blocks.
+
+	Electing a leader of the consensus and choosing a winner in the validator service award drawing uses our algorithm for generating distributed, untainted, unbiasable randomness, in the spirit of the RandHound protocol\cite{c12}. Our algorithm, \textit{RandHound++}, actually derives much of its protocol from SCRAPE\cite{c13} as its primary deviation from original RandHound. SCRAPE defines a PVSS\cite{c14} protocol using symmetric bilinear pairing based cryptography and coding theory. But beyond SCRAPE, we had to adjust the algorithm to deal with asymmetric pairings which offer necessary stronger cryptographic security.
+
+%%%
+
 \subsection{Red packets}
-\todo[inline]{Expand the description of red packets}
+\todo[inline]{Merge the description of red packets}
 
 - A lot like token airdrops but gamified due to randomness.
 - Anyone can create a red packet with a given number of tokens.
@@ -360,37 +393,57 @@ Electing a leader of the consensus and choosing a winner in the validator servic
 - A great onramp and way to acquire some tokens if you don't have any. No need to mess with exchanges.
 
 A great promotion and viral tool!
+%%
+Giveaways are one of the most popular and effective ways to increase participation and awareness of a platform. Since the launch of WeChat's digital red packet function in 2014, millions of people have signed up to WeChat and voluntarily shared their bank details. The red packet app was responsible for more than 2 billion transactions on January 1st 2016 alone.
+
+For cryptocurrency platforms, the most common form of giveaway is an airdrop. These are a modestly effective way to disseminate tokens, but the passive nature of airdrops does little to encourage participation, and their long-term effectiveness is unclear. While airdrops do seem to be an effective way to onboard community members, few of these make the jump to running nodes or actively using a platform.
+
+To address these issues, Stegos implements a red packet feature similar to that seen on WeChat, but without the requirement for users to disclose personally identifying information. Red packets are a gameified airdrop mechanism where the token payout is randomized.
+
+Anyone with the Stegos app can create a red packet and load it with STG tokens. In addition to the number of tokens in the packet, users also choose the number of prizes which will be awarded. The tokens are then randomly divided between different denomination coins (UTXOs) within the packet, with the number of coins equalling the number of chosen prizes. 
+
+The app then generates a QR code or URL which can be used to access the red packet. On accessing the red packet, validators will randomly determine whether the user has won a prize or not. If they have, one of the remaining predetermined coin denominations will be transferred from the packet to the user's STG wallet. This process continues until the red packet is empty or the expiry deadline passes.
+
+Users can keep accessing a red packet until it is empty, although the network will enforce a small delay between attempts to prevent DDoS attacks. Accessing a red packet is free, and does not require users to buy tokens or pay transaction fees. However, a portion of all prizes will be awarded to validators as a processing fee.
+
+Red packets expire after a day.  Because of the private nature of Stegos transactions, it is impossible to return unclaimed tokens to the user who originally set up the red packet. Therefore, any unclaimed tokens will be added to the validator service award pool.
+
+Users must install the Stegos app and set up a STG wallet before they can open the red packet. With this barrier to entry crossed, users will be able to start running their own mobile validator node with minimal effort.
+%%
 
 \section{Snowball}
+\todo[inline]{Move Snowball below app store, etc}
+\todo[inline]{Merge Snowball}
 
 \subsection{A problem of establishing untraceability}
 Even though user identities are cloaked in the blockchain, the spending history of every UTXO can be established by tracing blockchain transactions backwards, up to the genesis block.
 
-Despite having a serious hurdle for such tracing --- we don't store transactions in the blocks of out blockchain, but rather Merkle trees of inputs and outputs --- a malicious node may join our network right after mainnet release, to collect transaction history in order to analyze and trace UTXOs.
+Despite having a serious hurdle for such tracing --- we don't store transactions in the blocks of out blockchain, but rather Merkle trees of inputs and outputs --- a malicious node which joined our network immediately after mainnet release could theoretically collect all transaction histories in order to analyze and trace UTXOs.
 
-To counteract this, we want to implement a protocol that completely hides the relationship between inputs and outputs of each transaction. This is difficult because UTXOs must have a unique $ID$. Without such a unique $ID$ there's no way to validate transactions or prove ownership of a UTXO. Unique UTXO $ID$ establish a trail which we want to obscure by only showing that UTXO output could have come from one of many different and unrelated inputs. We want to hide the source of each UTXO but in a manner that allows public validation.
+To counteract this, Stegos will implement a protocol that completely hides the relationship between inputs and outputs of each transaction. This is difficult because UTXOs must have a unique $ID$, without which there would be no way to validate transactions or prove ownership of a UTXO. Unique UTXO IDs establish a trail which we want to obscure by only showing that UTXO output could have come from one of many different and unrelated inputs. We want to hide the source of each UTXO but in a manner that allows public validation.
 
 \subsection{Possible solutions}
 Currently there are four kinds of approaches for solving the problem of establishing untraceability: coin mixers, Ring Signatures, zk-SNARKs, and the CoinJoin family of protocols.
 
-\subsubsection{Mixers} require that users trust the third-party which provides mixing services, something that's unacceptable in a truly private and confidential blockchain.
-
+\subsubsection{Mixers} require that users trust the third party which provides mixing services, something that's unacceptable in a truly private and confidential blockchain.
+	
 \subsubsection{Ring Signatures} collect a large but random number of existing UTXOs and add those into the list of inputs actually being spent. A signature is formed on all of the inputs, enabling proof that the inputs are properly spent as a group, without revealing the exact inputs being spent. 
 
-Ring signatures prevent blockchain compaction since it's impossible to know if a UTXO becomes spent and prune it from the blockchain. All UTXOs \textit{that ever existed} must be retained which does not scale very well.
+Unfortunately, ring signatures prevent blockchain compaction since it's impossible to know when a UTXO has been spent and prune it from the blockchain. All UTXOs \textit{that ever existed} must be retained, which is impossible to adequately scale.
 
-\subsubsection{zk-SNARK} stands for ``Zero-Knowledge Succinct Non-Interactive Argument of Knowledge.'' Currently, the only known way to produce zero-knowledge proofs that are non-interactive and short enough to publish to a block chain is to have an initial setup phase that generates a common reference string shared between prover and verifier. Anyone with access to the secret randomness used to generate the reference string is able to create false proofs that will look valid to the verifier. For a cryptocurrency that uses zk-SNARKs, e.g. Zcash, this means creating counterfeit coins. 
+\subsubsection{zk-SNARK} stands for ``zero-knowledge succinct non-interactive argument of knowledge.'' Currently, the only known way to produce zero-knowledge proofs that are non-interactive and short enough to publish to a block chain is to have an initial setup phase that generates a common reference string shared between prover and verifier. Anyone with access to the secret randomness used to generate the reference string is able to create false proofs that will look valid to the verifier. For a cryptocurrency that uses zk-SNARKs, e.g., Zcash, this means the ability to create counterfeit coins. 
 
-To prevent double-spending in a zk-SNARK-based cryptocurrency, a cryptographical accumulator has to be maintained by all nodes and contain the serial numbers of all spent coins. This accumulator always grows and cannot be trimmed, which scales poorly.
+To prevent double-spending in a zk-SNARK-based cryptocurrency, a cryptographical accumulator has to be maintained by all nodes and contain the serial numbers of all spent coins. This accumulator always grows and cannot be trimmed, which prevents adequate scaling.
 
 \subsubsection{CoinJoin} is a protocol for joining several Bitcoin transactions together before submitting them to miners to include in the block. The protocol was originally proposed by Greg Maxwell in 2013 and is based on the following idea: ``When you want to make a payment, find someone else who also wants to make a payment and make a joint payment together.''\footnote{https://en.wikipedia.org/wiki/CoinJoin} CoinJoin implementations are based on the usage of trusted servers that provided the service of mixing multiple transactions together.
 
 In 2014, CoinJoin inspired researchers from Saarland University to develop a completely decentralized protocol they called \textit{CoinShuffle}\cite{c17}. It also allows users to mix their coins with those of other interested users and uses the accountable anonymous group communication protocol \textit{Dissent} to ensure anonymity and robustness against DoS attacks. 
 
+
 The same researchers presented an enhanced version of the protocol in 2016, which they called \textit{CoinShuffle++}\cite{c18}. The key innovation of CoinShuffle++ is replacing mix-nets with Dining Cryptographers Networks (DC-nets)\cite{c20}, a more efficient anonymity mechanism. 
 
 A mix-net requires sequential processing so the number of communication rounds in the original CoinShuffle protocol grows linearly with the number of users. By using DC-nets, CoinShuffle++ allows for mixing to proceed in parallel, requiring a constant number of communication rounds regardless of the number of users. 
-
+	
 \subsection{ValueShuffle}
 We improve on \textit{ValueShuffle}\cite{c19}, an extension of CoinShuffle++ that is compatible with confidential transactions. ValueShuffle ensures the anonymity of mixing participants as well as the confidentiality of their payment values, even against malicious mixing participants. The ValueShuffle paper is missing some key details, though. For example, the paper provides neither details on forming a pool of senders who wish to mix their transactions, nor the details on how to form a signature on the resulting pooled transaction. 
 
@@ -448,25 +501,35 @@ Stegos data messaging is a lot like UDP/IP and serves as a message bus that all 
 Data messages are automatically recycled and removed from the blockchain using BlockCrunch (Appendix \ref{app:pruning}).
 
 \section{Privacy applications platform}
-
+\todo[inline]{Merge}
 The Stegos Privacy Platform builds on top of our fast message bus (Appendix \ref{app:fastdata}) and makes developing mobile privacy apps a breeze. The Stegos mobile app is the primary window to the platform. It integrates the Trusted Application Container (TAC) with one-on-one and group chat as well as the  Privacy App Store. 
 
+The Stegos Privacy Platform builds on top of our fast message bus \ref{Data} and makes developing mobile privacy apps a breeze. The Stegos mobile app is the primary window to the platform. It integrates the trusted application container (TAC) with one-on-one and group chat as well as the privacy app store and red packet feature. 
+
 \subsection{Trusted Application Container}\label{TAC}
+\todo[inline]{Merge}
 The Trusted Application Container (TAC) is a sandbox and virtual machine (VM) for running plug-in apps written using HTML, CSS and JavaScript. The architecture is very similar to that of WeChat mini-programs \footnote{https://walkthechat.com/wechat-mini-programs-simple-introduction/}.
 
 The TAC prevents apps from wreaking havoc on the host mobile phone. It also completely abstracts the blockchain from running applications, providing instead an interface (API) to send messages and access the wallet. The TAC tightly controls access to the outside world and ensures that spending tokens requires confirmation from the user. 
 
 Stegos will provide the software development kit (SDK) and documentation for building privacy apps. The release date for the software development tools will be announced at a later date.
+%%
+The trusted application container (TAC) is a sandbox and virtual machine (VM) for running plug-in apps written using HTML, CSS and JavaScript. The architecture is very similar to that of WeChat mini-programs \footnote{https://walkthechat.com/wechat-mini-programs-simple-introduction/}.
 
+The TAC prevents apps from wreaking havoc on the host smartphone. It also completely abstracts the blockchain from running applications, instead providing an interface (API) to send messages and access the wallet. The TAC tightly controls access to the outside world and ensures that spending tokens requires confirmation from the user. 
+
+Stegos will provide a software development kit (SDK) and documentation for building privacy apps. 
+
+%%
 \subsection{Identities}\label{Identities}
-A Stegos wallet has a public key (address) associated with it. It's absolutely safe to post a Stegos public key on a website or plaster it on a street billboard. Stegos uses \textit{stealth addresses} and payments to a public key are cloaked with two random values. This makes it impossible to find payments to someone by analyzing the blockchain. Only the sender and the receiver are privy to any exchange of information. 
+Every Stegos wallet has a public key (address) associated with it. Stegos uses \textit{stealth addresses} and payments to a public key are cloaked with two random values. This makes it impossible to link payments to someone by analyzing the blockchain. Only the sender and the receiver are privy to any exchange of information. This means users do not have to be overly protective of their public key: it's absolutely safe to post a Stegos public key on a website or even plaster it on a street billboard. 
 
-Stegos uses the UTXO model and each UTXO is best seen as a coin. There's no notion of identity in Stegos, although the wallet address can be used as one for the purposes of building a reputation or keeping a social score. Identities come into play as we discuss chat and the Privacy App Store. 
- 
-Stegos users can export their wallet address as a QR code. 
- 
+Stegos uses the UTXO model and each UTXO is best seen as a coin. There's no separate notion of identity in Stegos, although wallet addresses can be used as an identifier or avatar for the purposes of messaging or building a reputation or social score on Stegos private marketplaces or other privacy applications. 
+
+Stegos users can export their wallet address as a QR code.
+	
 \subsection{Privacy App Store}
-\todo[inline]{Expand the App Store description}
+\todo[inline]{Merge the App Store description}
  
 - App manifests stored on the blockchain and include the description of the app, the URL used to download it, the fingerprint or hash of the app bundle, etc. 
 - Apps themselves can be stored elsewhere with download URLs in the app manifest.
@@ -475,17 +538,33 @@ Stegos users can export their wallet address as a QR code.
 - TAC installs the app bundle locally and makes the app available in the Stegos mobile app.
 - Users can delete the app at any time.
 - Users can search for apps and browse by category. 
+%%
+
+Users have different privacy needs, and sometimes even knowing that a user has a particular app can risk a privacy breach. Users need a way to privately browse and access apps, while being confident that the apps they install are private and secure. To achieve this, Stegos implements an on-chain privacy app store, where details of the apps are stored on the Stegos blockchain itself.
+
+The apps themselves must naturally be stored off chain for space purposes. But to be listed on the Stegos privacy app store, each privacy app must create a manifest and store it on the blockchain. This manifest includes a description of the app, the URL used to download it and a hash of the app bundle. App bundles are signed with the developers public key, which allows users to leave on-chain app reviews to rank individual apps and developers. Manifests also contain tags to allow users to search the app store by category.
+
+Apps are downloaded via the Stegos app. Once downloaded, the TAC verifies that the signature of the app bundle and the hash match the information in the manifest. The TAC installs the app bundle locally and makes the app available in the Stegos mobile app. Users can delete apps at any time.
+%%
 
 \subsection{Chat}\label{Chat}
-\todo[inline]{Expand the chat description}
+\todo[inline]{Merge the chat description}
 
 - Just your basic chat, except completely private. 
 - Your wallet address (public key) serves as your user id and identity. 
 - You can send the QR code of your wallet address to anyone and initiate an absolutely private chat.
 - You can create chat groups and invite people using QR codes.
 
+No matter how well a blockchain obscures user information in its transactions, users still need a way to find each other, which risks exposing their personal information. This affects some coins more than others. MimbleWimble, for example, requires users to communicate in advance to share the blinding factors needed to obfuscate identifying details about their transaction. But every transaction requires some initial communication between users, in order to determine the details of the transaction. If this communication can be intercepted, malicious third parties can use this information to begin deanonymizing a coin's transaction history. 
+
+In general, this problem is left up to users to solve, drastically reducing the appeal and effectiveness of these coins as privacy platforms. While information leaks can never be fully plugged, at Stegos we believe it is the responsibility of the platform to provide users with as many tools as possible to protect their privacy. Every transaction which can be protected in this way increases the privacy of all users across the platform.
+
+To this end, Stegos implements fully private communication and integrates it within the Stegos app. It functions like a standard messaging app which all users will be familiar with. Users use their public keys as an identifier \ref{Identities}, safe in the knowledge that this can be exposed without revealing any links to other users or transactions. Messages are transmitted via the fast message bus \ref{Data}, ensuring that messages are received almost instantly.
+
+Users can send a QR code via private chat to initiate an STG transaction. It is also possible to create chat groups and invite people to chats via QR codes. 
+
 \subsection{Marketplaces}\label{Marketplaces}
-\todo[inline]{Expand the description of marketplaces}
+\todo[inline]{Merge the description of marketplaces}
 
 - The wallet public key serves as identity. 
 - A form of hashlock (TBD) will be used to atomically swap a payment for the item's decription key.
@@ -498,6 +577,20 @@ Stegos users can export their wallet address as a QR code.
 - Categories of goods for ease of finding vendors.
 - Separate mobile marketplaces app.
 
+Fully private token transactions are extremely useful, but on their own they only provide a part of the necessary functionality for private transactions, most of which involve an exchange of goods and services. Being able to transfer tokens privately is only of limited use if the rest of the business of the transaction cannot be obfuscated. Currently, most privacy platforms leave this problem up to the user to solve, drastically reducing their usability.
+
+By building on the features described so far, Stegos private marketplaces provide all the necessary tools to sell goods and services and even operate entire stores in complete privacy.
+
+Vendors set up storefronts as mini-apps in the TAC, using their wallet public key as an identifies. An API will allow vendors to update their inventory. Using the same manifest system described for privacy apps \ref{AppStore}, users can browse for particular stores and verify the storefront via the vendor's public key signature. Users will access Stegos marketpaces via a separate marketplace app. Buyers and sellers can message each other using the Stegos chat service \ref{Chat}. 
+
+Private marketplaces use a form of hashlock (TBD) to atomically swap a payment for the item's description key. The swap will only occur once both parties are satisfied with the terms of the transaction.
+
+\subsubsection{Reputation}
+Online marketplaces often rely on a ranking an reputation system to allow buyers to determine which vendors are trustworthy (and vice versa). Stegos supports this feature by allowing users to upload reviews and ratings to the blockchain signed with their public key. When searching for a vendor via the marketplace app, reviews and ratings will be parsed from the chain and aggregated. Allowing buyers to see a verified overall ranking for each vendor.
+
+Unfortunately, anything which links transactions together is a potential privacy risk, so users must weigh the benefits against the risks depending on their own privacy requirements. As such, participation in the reputation system is entirely optional for vendors.
+
+
 \section{Future work}\label{FutureWork}
 \todo[inline]{Describe the future roadmap}
 
@@ -507,18 +600,22 @@ Stegos users can export their wallet address as a QR code.
 
 \subsubsection{Mobile staking}\label{MobileStaking}
 \todo[inline]{Talk about the advantages of mobile staking}
-
+Mobile staking will not immediately be available on the launch of the mainnet. However, we are making it a priority to implement mobile staking as soon as possible. As described in the introduction \ref{Introduction}, it is important to have full mobile support for as many features of the platform as possible in order to encourage adoption. Mobile staking will drastically increases the number of validator nodes, increasing the resilience and throughput of the network. Combined with ePoS, this will help prevent the stagnation and recentralization witnessed by many blockcahin projects.
+	
 \subsubsection{Bitcoin-style smart contracts}\label{SmartContracts}
 \todo[inline]{Describe programmable coins}
 
 \section{Conclusion}
 \todo[inline]{Rewrite the conclusion}
-In this paper we laid out a design for Stegos - a private, confidential, and scalable blockchain that is eco-friendly, upon which applications for sending monetary values and/or arbitrary data can be built.
+This paper laid out a design for Stegos - a private, confidential, and scalable blockchain which is environmentally sustainable and optimized for storing and transmitting both data and payments. By aggressively pruning the blockchain, Stegos is able to support a wide variety of on-chain features beyond simple token transfers. By combining chat, an on-chain app store and a trusted application container (TAC), Stegos facilitates every part of a fully private exchange of goods and services, not just the final payment step.
 
-The Stegos team is working on implementation of the blockchain and the development progress can be tracked online at \url{https://github.com/orgs/stegos/projects/1}. Our source code is and always be 100\% open.
+The Stegos team is currently working on implementing the blockchain. The development progress can be tracked online at \url{https://github.com/orgs/stegos/projects/1}. Our source code is and always be 100\% open.
+
+Stegos uses verifiably unbiased distributed randomness and an egalitarian proof-of-stake consensus mechanism to create the first truly mobile blockchain. By embracing smartphones and providing an integrated app as a gateway to the platform, Stegos intends to be the first truly accessible blockchain, giving everyone easy access to the privacy they deserve.     
 
 As our implementation progresses, we will publish separate, more detailed papers focused on our most essential contributions to the blockchain ecosystem, like improved distributed randomness generation (\textit{RandHound++}), our flavor of collective signing protocol and consensus based on it (\textit{BLS CoSi/pBFT}), and our approach for transactions and data sharding. 
 
+\todo[inline]{Expand conclusion}
 - We will pursue blockchain privacy, including latest and greatest mechanisms of combining it with a fast and scalable blockchain.
 
 - We will advance blockchain privacy into mainstream applications.
