@@ -19,6 +19,7 @@
 \usepackage{placeins}
 \usepackage{tabulary}
 \usepackage{pdfrender}
+\usepackage{array}
 
 \usepackage{inconsolata}
 \usepackage[defaultfam,light]{montserrat}
@@ -581,7 +582,7 @@ The Stegos vision is ambitious, with equally ambitious goals!
 \label{fig:token-allocation}
 \end{figure}
 
-\begin{table}[ht]
+\begin{table}[ht!]
 \centering
 	\begin{tabular}{@{\extracolsep{4pt}}ll}
 	\toprule[2pt] Proportion & Purpose \\ 
@@ -610,6 +611,12 @@ STG token emission will start at 14\% from initial supply during the first 4 yea
 \def\InitialSupply{1000000000} % 1 billion 
 \def\PctTokensForSale{51.25} % pct
 
+% Tokens for sale
+\pgfmathparse{\InitialSupply* \PctTokensForSale / 100.0}
+\edef\TokensForSale{\pgfmathresult}
+
+%%% Existing sales %%% 
+
 \def\SeedPrice{0.013333}
 \def\ROnePrice{0.07}
 \def\RTwoPrice{0.10}
@@ -618,17 +625,9 @@ STG token emission will start at 14\% from initial supply during the first 4 yea
 \def\ROneAmt{9816428}
 \def\RTwoAmt{4042148}
 
-% Total raise
+% Total raised
 \pgfmathparse{\SeedAmt + \ROneAmt + \RTwoAmt}
-\edef\TotalAmount{\pgfmathresult}
-
-% Tokens for sale
-\pgfmathparse{\InitialSupply* \PctTokensForSale / 100.0}
-\edef\TokensForSale{\pgfmathresult}
-
-% Total raise
-\pgfmathparse{\SeedAmt + \ROneAmt + \RTwoAmt}
-\edef\TotalAmt{\pgfmathresult}
+\edef\SoldAmt{\pgfmathresult}
 
 % Seed allocation
 \pgfmathparse{\SeedAmt / \SeedPrice / \InitialSupply}
@@ -642,9 +641,9 @@ STG token emission will start at 14\% from initial supply during the first 4 yea
 \pgfmathparse{\RTwoAmt / \RTwoPrice / \InitialSupply}
 \edef\RTwoAlloc{\pgfmathresult}
 
-% Total allocation
+% Sold allocation
 \pgfmathparse{\SeedAlloc + \ROneAlloc + \RTwoAlloc}
-\edef\TotalAlloc{\pgfmathresult}
+\edef\SoldAlloc{\pgfmathresult}
 
 % Seed tokens
 \def\SeedTokens{150000000}
@@ -659,22 +658,89 @@ STG token emission will start at 14\% from initial supply during the first 4 yea
 
 % Total tokens
 \pgfmathparse{\SeedTokens + \ROneTokens + \RTwoTokens}
-\edef\TotalTokens{\pgfmathresult}
+\edef\SoldTokens{\pgfmathresult}
 
-% Seed percentage for sale
+% Seed percentage sold
 \pgfmathparse{\SeedTokens / \TokensForSale}
-\edef\SeedPctSale{\pgfmathresult}
+\edef\SeedPctSold{\pgfmathresult}
 
-% Round 1 percentage for sale
+% Round 1 percentage sold
 \pgfmathparse{\ROneTokens / \TokensForSale}
-\edef\ROnePctSale{\pgfmathresult}
+\edef\ROnePctSold{\pgfmathresult}
 
 % Round 2 percentage for sale
 \pgfmathparse{\RTwoTokens / \TokensForSale}
-\edef\RTwoPctSale{\pgfmathresult}
+\edef\RTwoPctSold{\pgfmathresult}
 
 % Total percentage for sale
-\pgfmathparse{\SeedPctSale + \ROnePctSale + \RTwoPctSale}
+\pgfmathparse{\SeedPctSold + \ROnePctSold + \RTwoPctSold}
+\edef\TotalPctSold{\pgfmathresult}
+
+
+%%% Future sales %%% 
+
+\def\ExchOnePrice{0.013333}
+\def\ExchTwoPrice{0.025555}
+
+\def\ExchOneAlloc{0.09}
+\def\ExchTwoAlloc{0.0922}
+
+% Exchange allocation 
+\pgfmathparse{\ExchOneAlloc + \ExchTwoAlloc}
+\edef\ExchAlloc{\pgfmathresult}
+
+% Stage 1 tokens
+\pgfmathparse{\ExchOneAlloc * \InitialSupply}
+\edef\ExchOneTokens{\pgfmathresult}
+
+% Stage 2 tokens
+\pgfmathparse{\ExchTwoAlloc * \InitialSupply}
+\edef\ExchTwoTokens{\pgfmathresult}
+
+% Tokens sold 
+\pgfmathparse{\ExchOneTokens + \ExchTwoTokens}
+\edef\ExchTokens{\pgfmathresult}
+
+% Stage 1 amount
+\pgfmathparse{\ExchOneTokens * \ExchOnePrice}
+\edef\ExchOneAmt{\pgfmathresult}
+
+% Stage 2 amount
+\pgfmathparse{\ExchTwoTokens * \ExchTwoPrice}
+\edef\ExchTwoAmt{\pgfmathresult}
+
+% Total sold
+\pgfmathparse{\ExchOneAmt + \ExchTwoAmt}
+\edef\ExchAmt{\pgfmathresult}
+
+% Stage 1 percentage for sale
+\pgfmathparse{\ExchOneTokens / \TokensForSale}
+\edef\ExchOnePctSale{\pgfmathresult}
+
+% Stage 2 percentage for sale
+\pgfmathparse{\ExchTwoTokens / \TokensForSale}
+\edef\ExchTwoPctSale{\pgfmathresult}
+
+% Total percentage for sale
+\pgfmathparse{\ExchOnePctSale + \ExchTwoPctSale}
+\edef\ExchPctSale{\pgfmathresult}
+
+%%% Global totals
+
+% Tokens
+\pgfmathparse{\SoldTokens + \ExchTokens}
+\edef\TotalTokens{\pgfmathresult}
+
+% Amount
+\pgfmathparse{\SoldAmt + \ExchAmt}
+\edef\TotalAmt{\pgfmathresult}
+
+% Allocation
+\pgfmathparse{\SoldAlloc + \ExchAlloc}
+\edef\TotalAlloc{\pgfmathresult}
+
+% Percentage for sale
+\pgfmathparse{\TotalPctSold + \ExchPctSale}
 \edef\TotalPctSale{\pgfmathresult}
 
 % Seed percentage of raise
@@ -692,6 +758,22 @@ STG token emission will start at 14\% from initial supply during the first 4 yea
 % Total percentage of raise
 \pgfmathparse{\SeedPctRaise + \ROnePctRaise + \RTwoPctRaise}
 \edef\TotalPctRaise{\pgfmathresult}
+
+% Stage 1 percentage of raise
+\pgfmathparse{\ExchOneAmt / \TotalAmt}
+\edef\ExchOnePctRaise{\pgfmathresult}
+
+% Stage 2 percentage of raise
+\pgfmathparse{\ExchTwoAmt / \TotalAmt}
+\edef\ExchTwoPctRaise{\pgfmathresult}
+
+% Total percentage of raise
+\pgfmathparse{\ExchOnePctRaise + \ExchTwoPctRaise}
+\edef\ExchPctRaise{\pgfmathresult}
+
+% Total percentage of raise
+\pgfmathparse{\TotalPctRaise + \ExchPctRaise}
+\edef\PctRaise{\pgfmathresult}
 
 \pgfkeys{/pgf/fpu=false}
 
@@ -735,37 +817,47 @@ STG token emission will start at 14\% from initial supply during the first 4 yea
 	\$\pgfmathprintnumber[/ThreeDC]{#1}
 }
 
-Previous token sales:
+Previous and future token sales:
 
-\begin{table}[ht]
+\newcolumntype{\$}{>{\global\let\currentrowstyle\relax}}
+\newcolumntype{^}{>{\currentrowstyle}}
+\newcommand{\rowstyle}[1]{\gdef\currentrowstyle{#1}%
+    #1\ignorespaces
+}
+
+\begin{table}[htp!]
 \centering
-	\begin{tabular}{@{\extracolsep{4pt}}lllllll}
-	\toprule[2pt] 
+\begin{tabular}{@{\extracolsep{4pt}}\$l^l^l^l^l^l^l}
+	\toprule[1pt] 
+	{} & \multicolumn{6}{c}{Existing token sales} \\
+ \cmidrule{2-7}
 	Round & Tokens & Price & \% Tokens & \% for Sale & Amount & \% Raise \\
-	\midrule[2pt]
-	Seed & \pAmt{\SeedTokens} & \pPrice{\SeedPrice} & \pPct{\SeedAlloc} & \pPct{\SeedPctSale} & \$\pAmt{\SeedAmt} & \pPct{\SeedPctRaise} \\
-	Round 1 & \pAmt{\ROneTokens} & \pPrice{\ROnePrice} & \pPct{\ROneAlloc} & \pPct{\ROnePctSale} & \$\pAmt{\ROneAmt} & \pPct{\ROnePctRaise} \\
-	Round 2 & \pAmt{\RTwoTokens} & \pPrice{\RTwoPrice} & \pPct{\RTwoAlloc} & \pPct{\RTwoPctSale} & \$\pAmt{\RTwoAmt} & \pPct{\RTwoPctRaise} \\
-	\bottomrule[2pt]
-	Total & \pAmt{\TotalTokens} & {} & \pPct{\TotalAlloc} & \pPct{\TotalPctSale} & \$\pAmt{\TotalAmt} & \pPct{\TotalPctRaise} 
-	\end{tabular}
-\caption{Previous token sales} 
-\end{table}
-
-Tokens to be sold during a future exchange sale:
-
-\begin{table}[ht]
-\centering
-	\begin{tabular}{@{\extracolsep{4pt}}lllllll}
-	\toprule[2pt] 
+	\midrule[1pt]
+	Seed & \pAmt{\SeedTokens} & \pPrice{\SeedPrice} & \pPct{\SeedAlloc} & \pPct{\SeedPctSold} & \$\pAmt{\SeedAmt} & \pPct{\SeedPctRaise} \\
+	Round 1 & \pAmt{\ROneTokens} & \pPrice{\ROnePrice} & \pPct{\ROneAlloc} & \pPct{\ROnePctSold} & \$\pAmt{\ROneAmt} & \pPct{\ROnePctRaise} \\
+	Round 2 & \pAmt{\RTwoTokens} & \pPrice{\RTwoPrice} & \pPct{\RTwoAlloc} & \pPct{\RTwoPctSold} & \$\pAmt{\RTwoAmt} & \pPct{\RTwoPctRaise} \\
+	\bottomrule[1pt]
+	Total & \pAmt{\SoldTokens} & {} & \pPct{\SoldAlloc} & \pPct{\TotalPctSold} & \$\pAmt{\SoldAmt} & \pPct{\TotalPctRaise} \\
+	\toprule[1pt] 
+	{} & \multicolumn{6}{c}{Planned exchange token sales} \\
+ 	\cmidrule{2-7}
 	Round & Tokens & Price & \% Tokens & \% for Sale & Amount & \% Raise \\
-	\midrule[2pt]
-	Stage 1 & 94,580,000 & \$0.0133 & 9.46\% & 18.45\% & \$1,257,914 & 6.48\% \\
-	Stage 2 & 87,500,000	 & \$0.0266	 & 8.75\% & 17.07\% & \$2,327,500 & 11.98\% \\
+	\midrule[1pt]
+	Stage 1 & \pAmt{\ExchOneTokens} & \pPrice{\ExchOnePrice} & \pPct{\ExchOneAlloc} & \pPct{\ExchOnePctSale} & \$\pAmt{\ExchOneAmt} & \pPct{\ExchOnePctRaise} \\
+	Stage 2 & \pAmt{\ExchTwoTokens} & \pPrice{\ExchTwoPrice} & \pPct{\ExchTwoAlloc} & \pPct{\ExchTwoPctSale} & \$\pAmt{\ExchTwoAmt} & \pPct{\ExchTwoPctRaise} \\
+	\bottomrule[1pt]
+	Total & \pAmt{\ExchTokens} & {} & \pPct{\ExchAlloc} & \pPct{\ExchPctSale} & \$\pAmt{\ExchAmt} & \pPct{\ExchPctRaise} \\
+	\addlinespace
+	\toprule[2pt] 
+	\midrule[0pt]
+	Global Total & \pAmt{\TotalTokens} & {} & \pPct{\TotalAlloc} & \pPct{\TotalPctSale} & \$\pAmt{\TotalAmt} & \pPct{\PctRaise} \\
 	\bottomrule[2pt]
-	Total & 182,080,000 & {} & 18.21\% & 35.33\% & \$3,585,414 & 18.46\% 
-	\end{tabular}
-\caption{Planned exchange sale} 
+
+\end{tabular}
+\caption{Token sales} 
+
+\begin{tabular}{@{\extracolsep{4pt}}lllllll}
+\end{tabular}
 \end{table}
 
 \section{Token lockup and vesting}
