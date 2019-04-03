@@ -25,7 +25,7 @@
 \usepackage[italic]{mathastext}
 
 \usepackage{pgf-pie}
-\usetikzlibrary{positioning,shadows,arrows,backgrounds}
+\usetikzlibrary{positioning,shadows,arrows,backgrounds,fpu}
 \usepackage{booktabs}
 \usepackage{xcolor}
 % \newcommand\todo[1]{\textcolor{red}{\textbf{TODO}: [#1]}}
@@ -513,7 +513,7 @@ Eugene is the Site Reliability Engineer at Stegos, taking care of our developmen
 
 \chapter{Token Economics}\label{app:token-economics}
 
-\section{Fundraising}
+\section{Fundraising goals}
 Stegos will generate 1,000,000,000 (1 billion) of STG tokens (initial supply) and sell up to 51.25\% of tokens to raise \$20M (million). This fundraising target has been carefully selected to enable us to reach our development milestones and jumpstart the Stegos ecosystem.
 
 Stegos will follow strict KYC/AML procedures during all stages of fundraising, with funds used to, among other things:
@@ -600,21 +600,172 @@ The Stegos vision is ambitious, with equally ambitious goals!
 \section{Emission}
 STG token emission will start at 14\% from initial supply during the first 4 years and halve every 4 years thereafter. Thew newly created tokens will be used for block rewards as well as the validator service award \ref{sec:service-award}.
 
-\section{Tokens sold}
+\section{Token sales}
+
+\pgfkeys{
+	/pgf/fpu, 
+	/pgf/fpu/output format=fixed
+}
+
+\def\InitialSupply{1000000000} % 1 billion 
+\def\PctTokensForSale{51.25} % pct
+
+\def\SeedPrice{0.013333}
+\def\ROnePrice{0.07}
+\def\RTwoPrice{0.10}
+
+\def\SeedAmt{1995000}
+\def\ROneAmt{9816428}
+\def\RTwoAmt{4042148}
+
+% Total raise
+\pgfmathparse{\SeedAmt + \ROneAmt + \RTwoAmt}
+\edef\TotalAmount{\pgfmathresult}
+
+% Tokens for sale
+\pgfmathparse{\InitialSupply* \PctTokensForSale / 100.0}
+\edef\TokensForSale{\pgfmathresult}
+
+% Total raise
+\pgfmathparse{\SeedAmt + \ROneAmt + \RTwoAmt}
+\edef\TotalAmt{\pgfmathresult}
+
+% Seed allocation
+\pgfmathparse{\SeedAmt / \SeedPrice / \InitialSupply}
+\edef\SeedAlloc{\pgfmathresult}
+
+% Round 1 allocation
+\pgfmathparse{\ROneAmt / \ROnePrice / \InitialSupply}
+\edef\ROneAlloc{\pgfmathresult}
+
+% Round 2 allocation
+\pgfmathparse{\RTwoAmt / \RTwoPrice / \InitialSupply}
+\edef\RTwoAlloc{\pgfmathresult}
+
+% Total allocation
+\pgfmathparse{\SeedAlloc + \ROneAlloc + \RTwoAlloc}
+\edef\TotalAlloc{\pgfmathresult}
+
+% Seed tokens
+\def\SeedTokens{150000000}
+
+% Round 1 tokens
+\pgfmathparse{\InitialSupply * \ROneAlloc}
+\edef\ROneTokens{\pgfmathresult}
+
+% Round 2 tokens
+\pgfmathparse{\InitialSupply * \RTwoAlloc}
+\edef\RTwoTokens{\pgfmathresult}
+
+% Total tokens
+\pgfmathparse{\SeedTokens + \ROneTokens + \RTwoTokens}
+\edef\TotalTokens{\pgfmathresult}
+
+% Seed percentage for sale
+\pgfmathparse{\SeedTokens / \TokensForSale}
+\edef\SeedPctSale{\pgfmathresult}
+
+% Round 1 percentage for sale
+\pgfmathparse{\ROneTokens / \TokensForSale}
+\edef\ROnePctSale{\pgfmathresult}
+
+% Round 2 percentage for sale
+\pgfmathparse{\RTwoTokens / \TokensForSale}
+\edef\RTwoPctSale{\pgfmathresult}
+
+% Total percentage for sale
+\pgfmathparse{\SeedPctSale + \ROnePctSale + \RTwoPctSale}
+\edef\TotalPctSale{\pgfmathresult}
+
+% Seed percentage of raise
+\pgfmathparse{\SeedAmt / \TotalAmt}
+\edef\SeedPctRaise{\pgfmathresult}
+
+% Round 1 percentage of raise
+\pgfmathparse{\ROneAmt / \TotalAmt}
+\edef\ROnePctRaise{\pgfmathresult}
+
+% Round 2 percentage of raise
+\pgfmathparse{\RTwoAmt / \TotalAmt}
+\edef\RTwoPctRaise{\pgfmathresult}
+
+% Total percentage of raise
+\pgfmathparse{\SeedPctRaise + \ROnePctRaise + \RTwoPctRaise}
+\edef\TotalPctRaise{\pgfmathresult}
+
+\pgfkeys{/pgf/fpu=false}
+
+\pgfkeys{
+	/NoDC/.style={
+		/pgf/number format/.cd,% <- changes the prefix for the following options
+		fixed,
+		%use comma,
+		fixed zerofill,
+		precision=0,
+ 		1000 sep={,},
+	},
+	/TwoDC/.style={
+		/pgf/number format/.cd,% <- changes the prefix for the following options
+		fixed,
+		%use comma,
+		fixed zerofill,
+		precision=2,
+ 		1000 sep={,},
+	},
+	/ThreeDC/.style={
+		/pgf/number format/.cd,% <- changes the prefix for the following options
+		fixed,
+		%use comma,
+		fixed zerofill,
+		precision=3,
+ 		1000 sep={,},
+	},
+}
+
+\newcommand{\pAmt}[1] {
+	\pgfmathprintnumber[/NoDC]{#1}
+}
+
+\newcommand{\pPct}[1] {
+	\pgfmathparse{#1 * 100}
+	\pgfmathprintnumber[/TwoDC]{\pgfmathresult}\%
+}
+
+\newcommand{\pPrice}[1] {
+	\$\pgfmathprintnumber[/ThreeDC]{#1}
+}
+
+Previous token sales:
 
 \begin{table}[ht]
 \centering
-	\begin{tabular}{@{\extracolsep{4pt}}lllll}
+	\begin{tabular}{@{\extracolsep{4pt}}lllllll}
 	\toprule[2pt] 
-	Round & Allocation & Price & Amount & Tokens \\
+	Round & Tokens & Price & \% Tokens & \% for Sale & Amount & \% Raise \\
 	\midrule[2pt]
-	Seed & 15.00\% & \$0.013 & \$2,000,000 & 150,000,000 \\
-	Round 1 & 14.00\% & \$0.07 & \$9,816,428 & 140,234,685 \\
-	Round 2 & 4.00\% & \$0.10 & \$4,042,148 & 40,421,480 \\
+	Seed & \pAmt{\SeedTokens} & \pPrice{\SeedPrice} & \pPct{\SeedAlloc} & \pPct{\SeedPctSale} & \$\pAmt{\SeedAmt} & \pPct{\SeedPctRaise} \\
+	Round 1 & \pAmt{\ROneTokens} & \pPrice{\ROnePrice} & \pPct{\ROneAlloc} & \pPct{\ROnePctSale} & \$\pAmt{\ROneAmt} & \pPct{\ROnePctRaise} \\
+	Round 2 & \pAmt{\RTwoTokens} & \pPrice{\RTwoPrice} & \pPct{\RTwoAlloc} & \pPct{\RTwoPctSale} & \$\pAmt{\RTwoAmt} & \pPct{\RTwoPctRaise} \\
 	\bottomrule[2pt]
-	Total & 33\% & {} & \$15,858,576 & 330,656,165
+	Total & \pAmt{\TotalTokens} & {} & \pPct{\TotalAlloc} & \pPct{\TotalPctSale} & \$\pAmt{\TotalAmt} & \pPct{\TotalPctRaise} 
 	\end{tabular}
 \caption{Previous token sales} 
+\end{table}
+
+Tokens to be sold during a future exchange sale:
+
+\begin{table}[ht]
+\centering
+	\begin{tabular}{@{\extracolsep{4pt}}lllllll}
+	\toprule[2pt] 
+	Round & Tokens & Price & \% Tokens & \% for Sale & Amount & \% Raise \\
+	\midrule[2pt]
+	Stage 1 & 94,580,000 & \$0.0133 & 9.46\% & 18.45\% & \$1,257,914 & 6.48\% \\
+	Stage 2 & 87,500,000	 & \$0.0266	 & 8.75\% & 17.07\% & \$2,327,500 & 11.98\% \\
+	\bottomrule[2pt]
+	Total & 182,080,000 & {} & 18.21\% & 35.33\% & \$3,585,414 & 18.46\% 
+	\end{tabular}
+\caption{Planned exchange sale} 
 \end{table}
 
 \section{Token lockup and vesting}
@@ -637,7 +788,7 @@ A vesting schedule will apply tokens purchased during the private sale. These to
 \caption{Vesting schedule} 
 \end{table}
 
-Team tokens will be locked up for 18 months from mainnet launch.
+50\% of team tokens will be locked up for 12 months from mainnet launch. The rest may be sold in small regular batches, according to the financing needs of the company.
 
 \chapter{Legal Disclaimer}
 
