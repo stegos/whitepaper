@@ -622,8 +622,8 @@ STG token emission will start at 14\% from initial supply during the first 4 yea
 \def\RTwoPrice{0.10}
 
 \def\SeedAmt{1995000}
-\def\ROneAmt{9816428}
-\def\RTwoAmt{4042148}
+\def\ROneAmt{9816428.85}
+\def\RTwoAmt{4042148.39}
 
 % Total raised
 \pgfmathparse{\SeedAmt + \ROneAmt + \RTwoAmt}
@@ -649,11 +649,11 @@ STG token emission will start at 14\% from initial supply during the first 4 yea
 \def\SeedTokens{150000000}
 
 % Round 1 tokens
-\pgfmathparse{\InitialSupply * \ROneAlloc}
+\pgfmathparse{\ROneAmt / \ROnePrice}
 \edef\ROneTokens{\pgfmathresult}
 
 % Round 2 tokens
-\pgfmathparse{\InitialSupply * \RTwoAlloc}
+\pgfmathparse{\RTwoAmt / \RTwoPrice}
 \edef\RTwoTokens{\pgfmathresult}
 
 % Total tokens
