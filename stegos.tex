@@ -240,13 +240,6 @@ In the following chapters we explain the Stegos features in more detail.
 
 \chapter{Stegos in depth}\label{chap:stegos-in-depth}
 
-\section{Privacy}
-Stegos uses one-time payment addresses which make it impossible to identify recipients of a transaction, e.g. to link addresses of recipients to their identities, because all transactions are directed to new and unique addresses. The technique we use for one-time addresses is very similar to stealth addresses used in Monero and ZCash.
-
-Stegos makes it impossible to trace the history of transactions since many individual transactions are pooled together to form a super-transaction. For this purpose, we adopted and enhanced the ValueShuffle protocol\cite{c7}, the first coin mixing protocol compatible with Confidential Transactions.
-
-All amounts in Stegos are hidden using Pedersen commitments\cite{c8} and Bulletproofs (range proofs)\cite{c4}. Validator stakes and transaction fees are the only exception since these must be visible for blockchain validation.
-
 \section{Consensus}
 The Stegos consensus protocol is based on \textit{Albatross}\cite{c23}, a novel blockchain consensus algorithm inspired by speculative BFT\cite{c9} algorithms, and has strong consistency with oftentimes instant transaction confirmation. The Stegos consensus protocol is secure and has a performance close to the maximum for single-chain PoS consensus algorithm.
 
@@ -314,8 +307,6 @@ Even if $S$ is compromised in a fashion not readily detectable by the witnesses,
 CoSi builds on existing cryptographic multi-signature methods, scaling them to support thousands of witnesses via signature aggregation over efficient communications. The default implementation of CoSi uses Schnorr signatures which we replace with BLS signatures for performance reasons.
 	
 \section{Networking}
-\todo[inline]{Add Kademlia and RaptorQ}
-\section{Networking}\label{Networking}
 The Stegos network is composed of \textit{bootstrap nodes}, \textit{compact nodes}, and \textit{light wallets}. Bootstrap and compact nodes maintain a copy of the blockchain and associated data structures. After posting a performance bond (stake) to become \textit{validators}, these nodes participate in the consensus protocol and can earn block rewards and transaction fees. These nodes also respond to requests from light wallet nodes.
 
 Bootstrap nodes carry the unpruned version of the blockchain and respond to bootstrap requests from new compact and bootstrap nodes. Compact nodes carry the pruned version of the blockchain, i.e., the current UTXO set. Light nodes only keep blockchain headers and know how to talk to validators. 
@@ -330,19 +321,13 @@ To discourage bad actors, we employ a mechanism to throttle peers and punish the
 
 The Stegos blockchain uses a gossip protocol to spread information without depending on a fixed network topology. This protocol does not require every node to be reliable or always up and running, and does not require every node to know about every other node. Each node knows about just a few peers, and information can safely propagate through the network as long as most nodes know of at least two peers.
 	
-\section{Randomness}
-\todo[inline]{Describe our randomness}
-
 \section{Incentives}
-\todo[inline]{Add block rewards and fees}
 Stegos is powered by the STG token, available once the mainnet is launched. When posted as a performance bond by nodes wishing to support the Stegos platform, the STG token gives validators the right to earn fees and block rewards when they are elected as the leader of the consensus round. The probability of a validator being elected the leader is proportional to the size of their stake.
 
-\subsection{Validator service award}\label{ValidatorAward}
-Ledgers based on proof-of-stake can have difficulty maintaining a broad user base since most users have a vanishingly small chance of earning significant rewards. To mitigate this failing, ePoS includes a validator service award in addition to the standard staking awards to incentivize users with lower stakes to continue to maintain the network. Instead of weighting rewards by size of stake, any node which has been providing validation services for a certain number of blocks is eligible to win the award.%Is this right? There’s a bit of inconsistency on how you’ve described this. Does everyone who has validated for a certain amount of time have the same odds of winning, or do odds increase with length of service? (Or perhaps a combination - odds increase with length of service but are capped at a certain point.) 
+\subsection{Validator service award}
+Ledgers based on Proof-of-Stake (PoS) can have difficulty maintaining a broad user base since most users have a vanishingly small chance of earning significant rewards. To mitigate this failing, ePoS includes a \textit{Validator service award} in addition to the standard block rewards and transaction fees. The award is meant to incentivize validators with small stakes to maintain the network. Instead of weighting rewards by size of stake, any node which has been providing validation services for a certain number of days or weeks is eligible to win the award.
 
-One third (1/3) of emitted STG tokens will be added to the service award pool, along with tokens from expired red packets. Every block, there is a chance that the award pool will be awarded. The odds of this occurring starts small and increases with each block. Thus, the precise time of the drawing cannot be known in advance, but on average the validator service award will be distributed every 5-10 days.
-
-% Based on inflation of 14% and initial emission of 1B, we are adding around 38K tokens daily. Assuming a price of $0.05, that would be about $2k/day and $14k/week.
+One third (1/3) of every block reward will be added to the service award pool, along with tokens from expired red packets. The validator service award is completely random. The odds of the award happening start small and increases with every block. The precise time of the drawing cannot be predicted, but on average the validator service award will be distributed every 5-10 days.
 
 \subsection{Red packets}
 Giveaways are one of the most popular and effective ways to increase participation and awareness of a platform. Since the launch of WeChat’s digital red packet function in 2014, millions of people have signed up to WeChat and voluntarily shared their bank details. The red packet app was responsible for more than 2 billion transactions on January 1st 2016 alone.
@@ -396,10 +381,9 @@ We improve on \textit{ValueShuffle}\cite{c19}, an extension of CoinShuffle++ tha
 We implement a protocol where a \textit{facilitator} elected among the validators provides the services of the \textit{Bulletin Board} (as defined in the ValueShuffle protocol). We also implement collective Schnorr signatures\cite{c22} on the resulting transaction. Details of these protocols, as well as a brief explanation of our implementation of ValueShuffle, are given in Appendix \ref{SnowballAppendix}.
 
 \section{BlockCrunch}
-\todo[inline]{Polish the description of BlockCrunch}
-As described in Appendix \ref{app:blocks}, a Stegos block is composed of a header and a body, where the header contains root hashes of two Merkle trees, that comprise the body of the block. Those two trees are a tree of all inputs (TXIN Merkle Tree) and a tree of all outputs (TXOUT Merkle Tree). 
+As described in Appendix \ref{app:blocks}, a Stegos micro-block is composed of a header and a body, where the header contains root hashes of two Merkle trees, that comprise the body of the block. Those two trees are a tree of all inputs (\textit{TXIN} Merkle Tree) and a tree of all outputs (\textit{TXOUT} Merkle Tree). 
 
-When a new block is verified and signed by CoSi witnesses, the signatures are computed over just the block header. The body of the block is not signed because it is secured against modification by the nature of the Merkle tree. It will be impossible to modify the body of the block without invalidating the root hashes contained in the signed header.
+When a new block is verified and signed, the signature is computed over just the block header. The body of the block is not signed because it is secured against modification by the nature of the Merkle tree. It will be impossible to modify the body of the block without invalidating the root hashes contained in the signed header.
 
 Stegos blockchain compaction is a continuous process where each incoming and properly signed block triggers the pruning. As a result of this continuous pruning, the Stegos blockchain becomes a database of unspent coins (UTXO), with no transaction history kept.
 
@@ -493,29 +477,19 @@ Online marketplaces often rely on a ranking an reputation system to allow buyers
 Unfortunately, anything which links transactions together is a potential privacy risk, so users must weigh the benefits against the risks depending on their own privacy requirements. As such, participation in the reputation system is entirely optional for vendors.
 
 \chapter{Future work}\label{chap:future-work}
-\todo[inline]{Describe the future roadmap}
-- Bitcoin-style smart contracts for conditional and flexible spending of the payments.
-- Dandelion.
-- State sharding?
 
 \section{Mobile staking}\label{sec:mobile-staking}
-Mobile staking will not immediately be available on the launch of the mainnet. However, we are making it a priority to implement mobile staking as soon as possible. As described in the introduction \ref{Introduction}, it is important to have full mobile support for as many features of the platform as possible in order to encourage adoption. Mobile staking will drastically increases the number of validator nodes, increasing the resilience and throughput of the network. Combined with ePoS, this will help prevent the stagnation and recentralization witnessed by many blockcahin projects.
+Mobile staking will not be available on the launch of the mainnet. However, we are making it a priority to implement mobile staking as soon as possible. Mobile staking will drastically increases the number of validator nodes, increasing the resilience and throughput of the network. Combined with ePoS, this will help prevent the stagnation and centralization witnessed by many blockchain projects.
 	
-\section{Bitcoin-style smart contracts}\label{sec:smart-contracts}
-\todo[inline]{Describe programmable coins}
-
 \section{Conclusion}
 This paper laid out a design for Stegos - a private, confidential, and scalable blockchain which is environmentally sustainable and optimized for storing and transmitting both data and payments. By aggressively pruning the blockchain, Stegos is able to support a wide variety of on-chain features beyond simple token transfers. By combining chat, an on-chain app store and a trusted application container (TAC), Stegos facilitates every part of a fully private exchange of goods and services, not just the final payment step.
 
-The Stegos team is currently working on implementing the blockchain. The development progress can be tracked online at \url{https://github.com/orgs/stegos/projects/1}. Our source code is and always be 100\% open.
+The Stegos team is currently working on implementing the blockchain. The development progress can be tracked online at \url{https://github.com/orgs/stegos/projects/1}. Our platform source code is and always be 100\% open.
 
 Stegos uses verifiably unbiased distributed randomness and an egalitarian proof-of-stake consensus mechanism to create the first truly mobile blockchain. By embracing smartphones and providing an integrated app as a gateway to the platform, Stegos intends to be the first truly accessible blockchain, giving everyone easy access to the privacy they deserve.     
 
-As our implementation progresses, we will publish separate, more detailed papers focused on our most essential contributions to the blockchain ecosystem, like improved distributed randomness generation (\textit{RandHound++}), our flavor of collective signing protocol and consensus based on it (\textit{BLS CoSi/pBFT}), and our approach for transactions and data sharding. 
-
-\todo[inline]{Expand conclusion}
+\todo[inline]{Expand conclusion with privacy wording}
 - We will pursue blockchain privacy, including latest and greatest mechanisms of combining it with a fast and scalable blockchain.
-
 - We will advance blockchain privacy into mainstream applications.
 
 \chapter{Team}\label{app:team}
