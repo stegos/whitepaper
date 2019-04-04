@@ -169,7 +169,7 @@ Stegos is a fast and highly scalable blockchain and, unlike other blockchains, i
 Stegos is environmentally friendly and does not waste megawatts of electricity mining blocks. Instead, Stegos uses a bespoke egalitarian proof-of-stake (ePoS) consensus, building on advancements in distributed systems theory and cryptography. Each new Stegos block must be verified and confirmed by a group of validators, all of whom must post tokens as bonds. The value of the tokens staked in this way directly affects the probability that a validator will win a block and earn the associated transaction fees.
 
 \subsection{Mobile app}
-To showcase the power of the platform, Stegos is developing its own native multi-purpose mobile application that integrates a wallet, one-one-one and group chat, the TAC, the Privacy App Store and the Stegos red packets \ref{RedPackets}. This app will be the gateway for users onto the Stegos Privacy Platform.
+To showcase the power of the platform, Stegos is developing its own native multi-purpose mobile application that integrates a wallet, one-one-one and group chat, the TAC, the Privacy App Store and the Stegos red packets \ref{sec:red-packets}. This app will be the gateway for users onto the Stegos Privacy Platform.
 
 %% Overview
 
@@ -231,7 +231,7 @@ Stegos will release a separate mobile app as the marketplaces interface.
 \section{Incentives to drive adoption}
 Decentralized networks draw strength from the breadth and engagement of their user base. To encourage widespread adoption, Stegos includes various incentives aimed at a variety of different user groups. 
 
-In addition to standard staking payouts which reward validators in proportion to their stake, the \textit{Validator service award} is a unique Stegos feature that rewards validators simply for being online and helping support the network. A portion of the fees from each block are added to the service award pool,\footnote{Along with any tokens from expired red packets and stakes forfeited by validators caught cheating.} which is then distributed every few thousand blocks. Validators run a cryptographic lottery based on verifiable distributed randomness \ref{Randomness} to select a single validator to receive the award. The current size of the service award pool is visible to all users via the Stegos app.
+In addition to standard staking payouts which reward validators in proportion to their stake, the \textit{Validator service award} is a unique Stegos feature that rewards validators simply for being online and helping support the network. A portion of the fees from each block are added to the service award pool,\footnote{Along with any tokens from expired red packets and stakes forfeited by validators caught cheating.} which is then distributed every few thousand blocks. Validators run a \textit{cryptographic lottery} based on verifiable distributed randomness to select a single validator to receive the award. The current size of the service award pool is visible to all users via the Stegos app.
 
 \textit{Red packets}\footnote{https://en.m.wikipedia.org/wiki/Red\_envelope\#Digital\_red\_envelopes} are a feature designed disseminate to tokens and promote awareness, both for Stegos itself and for individual privacy apps and private marketplaces within the Stegos Privacy Platform. Red packets are similar to airdrops, but encourage more active participation among a wider pool of users. Anyone can create a red packet with a given number of tokens and distribute the corresponding QR code or URL to the target audience. Each attempt to open a red packet may result in randomly determined token prize. Prizes are awarded until the packet is empty. 
 
@@ -261,7 +261,7 @@ We select randomly select a subset of all available validators and call \textit{
 
 A validator elected to become the leader of the current round of consensus is rewarded with transaction fees from the blocks they sign, as well as the block reward. 
 
-\subsection{Blocks}
+\subsection{Blocks}\label{sec:blocks}
 There are two types of blocks that are produced by the validators:
 
 \begin{itemize}
@@ -329,12 +329,12 @@ The Stegos blockchain uses a gossip protocol to spread information without depen
 \section{Incentives}
 Stegos is powered by the STG token, available once the mainnet is launched. When posted as a performance bond by nodes wishing to support the Stegos platform, the STG token gives validators the right to earn fees and block rewards when they are elected as the leader of the consensus round. The probability of a validator being elected the leader is proportional to the size of their stake.
 
-\subsection{Validator service award}
+\subsection{Validator service award}\label{sec:service-award}
 Ledgers based on Proof-of-Stake (PoS) can have difficulty maintaining a broad user base since most users have a vanishingly small chance of earning significant rewards. To mitigate this failing, ePoS includes a \textit{Validator service award} in addition to the standard block rewards and transaction fees. The award is meant to incentivize validators with small stakes to maintain the network. Instead of weighting rewards by size of stake, any node which has been providing validation services for a certain number of days or weeks is eligible to win the award.
 
 One third (1/3) of every block reward will be added to the service award pool, along with tokens from expired red packets. The validator service award is completely random. The odds of the award happening start small and increases with every block. The precise time of the drawing cannot be predicted, but on average the validator service award will be distributed every 5-10 days.
 
-\subsection{Red packets}
+\subsection{Red packets}\label{sec:red-packets}
 Giveaways are one of the most popular and effective ways to increase participation and awareness of a platform. Since the launch of WeChat’s digital red packet function in 2014, millions of people have signed up to WeChat and voluntarily shared their bank details. The red packet app was responsible for more than 2 billion transactions on January 1st 2016 alone.
 
 For cryptocurrency platforms, the most common form of giveaway is an airdrop. These are a modestly effective way to disseminate tokens, but the passive nature of airdrops does little to encourage participation, and their long-term effectiveness is unclear. While airdrops do seem to be an effective way to onboard community members, few of these make the jump to running nodes or actively using a platform.
@@ -383,10 +383,10 @@ A mix-net requires sequential processing so the number of communication rounds i
 \subsection{ValueShuffle}
 We improve on \textit{ValueShuffle}\cite{c19}, an extension of CoinShuffle++ that is compatible with confidential transactions. ValueShuffle ensures the anonymity of mixing participants as well as the confidentiality of their payment values, even against malicious mixing participants. The ValueShuffle paper is missing some key details, though. For example, the paper provides neither details on forming a pool of senders who wish to mix their transactions, nor the details on how to form a signature on the resulting pooled transaction. 
 
-We implement a protocol where a \textit{facilitator} elected among the validators provides the services of the \textit{Bulletin Board} (as defined in the ValueShuffle protocol). We also implement collective Schnorr signatures\cite{c22} on the resulting transaction. Details of these protocols, as well as a brief explanation of our implementation of ValueShuffle, are given in Appendix \ref{SnowballAppendix}.
+We implement a protocol where a \textit{facilitator} elected among the validators provides the services of the \textit{Bulletin Board} (as defined in the ValueShuffle protocol). We also implement collective Schnorr signatures\cite{c22} on the resulting transaction. Details of these protocols, as well as a brief explanation of our implementation of ValueShuffle, are given in Appendix \ref{app:snowball}.
 
-\section{BlockCrunch}
-As described in Appendix \ref{app:blocks}, a Stegos micro-block is composed of a header and a body, where the header contains root hashes of two Merkle trees, that comprise the body of the block. Those two trees are a tree of all inputs (\textit{TXIN} Merkle Tree) and a tree of all outputs (\textit{TXOUT} Merkle Tree). 
+\section{BlockCrunch}\label{sec:pruning}
+As described in Section \ref{sec:blocks}, a Stegos micro-block is composed of a header and a body, where the header contains root hashes of two Merkle trees, that comprise the body of the block. Those two trees are a tree of all inputs (\textit{TXIN} Merkle Tree) and a tree of all outputs (\textit{TXOUT} Merkle Tree). 
 
 When a new block is verified and signed, the signature is computed over just the block header. The body of the block is not signed because it is secured against modification by the nature of the Merkle tree. It will be impossible to modify the body of the block without invalidating the root hashes contained in the signed header.
 
@@ -425,33 +425,33 @@ A node must perform the following pruning algorithm for every block:
 \label{code:pruning}
 \end{algorithm}
 
-\section{FastData}
+\section{FastData}\label{sec:fastdata}
 Stegos introduces data transactions in addition to regular payment transactions. Both types of transactions enjoy the same encryption and privacy protection. In fact, there’s no way to tell payments apart from data messages. 
 
 Data messages are meant to be handled at the application layer and the payload is expected to include a sequence number. Unlike payments, data cannot be double-spent and there’s no need to wait for data messages to become irreversible. The message sequence number should help applications order messages and check for messages that are missing. 
 
 Stegos data messaging is a lot like UDP/IP and serves as a message bus that all kinds of applications can use to communicate securely and privately.
 
-Data messages are automatically recycled and removed from the blockchain using BlockCrunch (Appendix \ref{app:pruning}).
+Data messages are automatically recycled and removed from the blockchain using BlockCrunch (Appendix \ref{sec:pruning).
 
 \chapter{Privacy applications platform}\label{chap:privacy-app-platform}
-The Stegos Privacy Platform builds on top of our fast message bus \ref{Data} and makes developing mobile privacy apps a breeze. The Stegos mobile app is the primary window to the platform. It integrates the trusted application container (TAC) with one-on-one and group chat as well as the Privacy App Store and Red Packet feature. 
+The Stegos Privacy Platform builds on top of our fast message bus (Section \ref{sec:fastdata}) and makes developing mobile privacy apps a breeze. The Stegos mobile app is the primary window to the platform. It integrates the trusted application container (TAC) with one-on-one and group chat as well as the Privacy App Store and Red Packet feature. 
 
-\section{Trusted Application Container}\label{TAC}
+\section{Trusted Application Container}\label{sec:tac}
 The Trusted Application Container (TAC) is a sandbox and virtual machine (VM) for running plug-in apps written using HTML, CSS and JavaScript. The architecture is very similar to that of WeChat mini-programs \footnote{https://walkthechat.com/wechat-mini-programs-simple-introduction/}.
 
 The TAC prevents apps from wreaking havoc on the host mobile phone. It also completely abstracts the blockchain from running applications, providing instead an interface (API) to send messages and access the wallet. The TAC tightly controls access to the outside world and ensures that spending tokens requires confirmation from the user. 
 
 Stegos will provide a software development kit (SDK) and documentation for building privacy apps. 
 
-\section{Identities}\label{Identities}
+\section{Identity}\label{sec:identity}
 Every Stegos wallet has a public key (address) associated with it. Stegos uses \textit{stealth addresses} and payments to a public key are cloaked with two random values. This makes it impossible to link payments to someone by analyzing the blockchain. Only the sender and the receiver are privy to any exchange of information. This means users do not have to be overly protective of their public key: it’s absolutely safe to post a Stegos public key on a website or even plaster it on a street billboard. 
 
 Stegos uses the UTXO model and each UTXO is best seen as a coin. There’s no separate notion of identity in Stegos, although wallet addresses can be used as an identifier or avatar for the purposes of messaging or building a reputation or social score on Stegos private marketplaces or other privacy applications. 
 
 Stegos users can export their wallet address as a QR code.
 	
-\section{Privacy App Store}
+\section{Privacy App Store}\label{sec:appstore}
 Users have different privacy needs, and sometimes even knowing that a user has a particular app can risk a privacy breach. Users need a way to privately browse and access apps, while being confident that the apps they install are private and secure. To achieve this, Stegos implements an on-chain privacy app store, where details of the apps are stored on the Stegos blockchain itself.
 
 The apps themselves must naturally be stored off chain for space purposes. But to be listed on the Stegos privacy app store, each privacy app must create a manifest and store it on the blockchain. This manifest includes a description of the app, the URL used to download it and a hash of the app bundle. App bundles are signed with the developers public key, which allows users to leave on-chain app reviews to rank individual apps and developers. Manifests also contain tags to allow users to search the app store by category.
@@ -463,7 +463,7 @@ No matter how well a blockchain obscures user information in its transactions, u
 
 In general, this problem is left up to users to solve, drastically reducing the appeal and effectiveness of these coins as privacy platforms. While information leaks can never be fully plugged, at Stegos we believe it is the responsibility of the platform to provide users with as many tools as possible to protect their privacy. Every transaction which can be protected in this way increases the privacy of all users across the platform.
 
-To this end, Stegos implements fully private communication and integrates it within the Stegos app. It functions like a standard messaging app which all users will be familiar with. Users use their public keys as an identifier \ref{Identities}, safe in the knowledge that this can be exposed without revealing any links to other users or transactions. Messages are transmitted via the fast message bus \ref{Data}, ensuring that messages are received almost instantly.
+To this end, Stegos implements fully private communication and integrates it within the Stegos app. It functions like a standard messaging app which all users will be familiar with. Users use their public keys as an identifier (Section \ref{sec:identity}), safe in the knowledge that this can be exposed without revealing any links to other users or transactions. Messages are transmitted via the fast message bus (Section \ref{sec:fastdata}), ensuring that messages are received almost instantly.
 
 Users can send a QR code via private chat to initiate an STG transaction. It is also possible to create chat groups and invite people to chats via QR codes. 
 
@@ -478,7 +478,7 @@ Fully private token transactions are extremely useful, but on their own they onl
 
 By building on the features described so far, Stegos private marketplaces provide all the necessary tools to sell goods and services and even operate entire stores in complete privacy.
 
-Vendors set up storefronts as mini-apps in the TAC, using their wallet public key as an identifies. An API will allow vendors to update their inventory. Using the same manifest system described for privacy apps \ref{AppStore}, users can browse for particular stores and verify the storefront via the vendor’s public key signature. Users will access Stegos marketpaces via a separate marketplace app. Buyers and sellers can message each other using the Stegos chat service \ref{Chat}. 
+Vendors set up storefronts as mini-apps in the TAC, using their wallet public key as an identifies. An API will allow vendors to update their inventory. Using the same manifest system described for privacy apps (Section \ref{sec:appstore}), users can browse for particular stores and verify the storefront via the vendor’s public key signature. Users will access Stegos marketpaces via a separate marketplace app. Buyers and sellers can message each other using the Stegos chat service (Section \ref{sec:chat}). 
 
 Private marketplaces use a form of hashlock (TBD) to atomically swap a payment for the item’s description key. The swap will only occur once both parties are satisfied with the terms of the transaction.
 
@@ -604,7 +604,7 @@ The Stegos vision is ambitious, with equally ambitious goals!
 \end{table}
 
 \section{Emission}
-STG token emission will start at 14\% from initial supply during the first 4 years and halve every 4 years thereafter. Thew newly created tokens will be used for block rewards as well as the validator service award \ref{sec:service-award}.
+STG token emission will start at 14\% from initial supply during the first 4 years and halve every 4 years thereafter. Thew newly created tokens will be used for block rewards as well as the validator service award (Section \ref{sec:service-award}).
 
 \section{Token sales}
 
@@ -873,7 +873,7 @@ This commitment value will be wrapped inside a Bulletproof range proof on the am
 
 \subsection{Destination address cloaking} Alice then cloaks Bob’s public key with a factor, $\delta \in Z_r$, so that instead of Bob’s original public key $P_B$, she will put into UTXO $P_{B, \delta} = P_B + \delta \, G$.
 
-\subsection{Encrypted payload} Alice must pass values for the amount $x$, and cloaking factors, $\gamma$ and $\delta$, to Bob. She can do it by including this information into the \textit{encrypted payload} of the UTXO. Besides the values mentioned above, the encrypted payload may also contain arbitrary data, that Alice wants to share with Bob. Detailed explanation of storing arbitrary data on Stegos blockchain will be given in Section \ref{Data}. 
+\subsection{Encrypted payload} Alice must pass values for the amount $x$, and cloaking factors, $\gamma$ and $\delta$, to Bob. She can do it by including this information into the \textit{encrypted payload} of the UTXO. Besides the values mentioned above, the encrypted payload may also contain arbitrary data, that Alice wants to share with Bob. 
 
 For generating the encrypted payload, Alice must choose random values $\alpha, k \in Z_r$ that will be used in creating and cloaking a symmetric data encryption key.
 The actual symmetric key for the encrypted data object will be $H(k \, G)$. In order to pass it safely via the blockchain to Bob, Alice needs to cloak it with $\alpha$ and store it in the UTXO as the following tuple: $$\mathit{Key}_{\alpha} = (\alpha \, P_{B} + k \, G, \alpha \, G )$$ 
@@ -882,7 +882,7 @@ Alice encrypts her payload with AES-128 using $H(k \, G)$ key and places the enc
 
 When Bob receives UTXO later on, he will take out $\mathit{Key}_{\alpha}$ from it, multiply the second element of the tuple by his secret key $s_B$, getting $s_B \, \alpha \, G = \alpha \, P_B$, then subtract that from the first element to find $k \, G$. Afterwards he produces $H(k \, G)$ thus computing the symmetric key and decrypts the payload that Alice sent to him.
 
-\subsection{TTL and Data Size} Alice sets TTL (time-to-live) and $Size_{data}$ slots of the UTXO to zero, indicating that this is a \textit{monetary UTXO}. Non-zero values of the mentioned slots will indicate that this is \textit{data UTXO}, handling of which will be described in details later in this document, it Section \ref{Data}.
+\subsection{TTL and Data Size} Alice sets TTL (time-to-live) and $Size_{data}$ slots of the UTXO to zero, indicating that this is a \textit{monetary UTXO}. 
 
 \subsection{UTXO ID} Alice forms a UTXO $\mathit{ID}$ by hashing the the whole UTXO object sans the ID slot, which contains the cloaked version of Bob’s public key, $P_{B, \delta}$, the Pedersen commitment and Bulletproof, TTL, $Size_{data}$, and the encrypted payload.
 
@@ -1195,8 +1195,6 @@ Ismail Khoffi, Linus Gasser, and Bryan Ford. ``Enhancing Bitcoin Security and Pe
 
 \bibitem{c22} C.P. Schnorr. ``Efficient Identification and Signatures for Smart Cards,’’
 in Advances in Cryptology — CRYPTO’ 89, 1990, Springer, pages 239–252.
-
-\bibitem{c12} Ewa Syta, Philipp Jovanovic, Eleftherios Kokoris Kogias, Nicolas Gailly, Linus Gasser, Ismail Khoffi, Michael J. Fischer, Bryan Ford. ``Scalable Bias-Resistant Distributed Randomness,’’ Cryptology ePrint Archive, Report 2016/1067, 2016. URL: https://eprint.iacr.org/2016/1067.
 
 \bibitem{c23} Bruno Fran{\c c}a, Marvin Wissfeld, Pascal Berrang, Philipp von Styp-Rekowsky, Reto Trinkler. ``Albatross: An optimistic consensus algorithm,’’ March 2019. URL: https://arxiv.org/abs/1903.01589
 
