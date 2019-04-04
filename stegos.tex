@@ -271,6 +271,10 @@ There are two types of blocks that are produced by the validators:
 
 One macro block is always followed by $m$ micro blocks. An \textit{epoch} is composed of a macro block and the $m$ micro blocks that precede it.
 
+\todo[inline]{Expand on the blocks}
+%% Microblocks are signed by the current leader and the leader gets changed for each microblock.
+%% We have no transactions in the block
+
 \subsection{Leader Election}
 Leader election is done using a stake-weighted lottery. The larger the validator’s stake, the greater the chances of becoming the leader of the current consensus round.
 
@@ -850,38 +854,11 @@ This white paper shall not be construed to be an invitation or solicitation to e
 \newpage \appendix
 \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
 
-\chapter{Randomness}\label{app:randomness}
-
-\section{Distributed Randomness Generation}
-The idea of performing distributed randomness generation is to have many nodes participate in the construction of an untainted and unpredictable random value in order to overcome Byzantine faults that might try to steer, or predict, the outcome.
-
-RandHound++ is based on the notion of publicly verifiable secret sharing (PVSS)\cite{c15}, which ensures that every step of the process can be audited using zero knowledge proofs (ZKP), while keeping vital details of the process fully cloaked through strong cryptography.
-
-Unlike distributed consensus protocols (e.g. pBFT), we do not need full Byzantine threshold participation at every stage. In the description that follows we assume a maximum number of $f$ faulty nodes in a collection of $(3 f + 1)$ participant nodes. 
-
-The usual Byzantine Fault Tolerance (BFT) requires responses from a super-majority of $(2 f + 1)$ nodes in order to reach consensus. Our randomness generation application, on the other hand, assumes that as long as at least one honest participant blends its randomness into the computation, the result will be purely random. We do not need consensus on the result as long as the randomness computation process can be verified.
-
-Hence we only need $(f + 1)$ responses from participants to overcome any Byzantine faults, where at least one participant is honest and supplies true randomness. There is no need for consensus on the actual value generated. It is sufficient to check only that at least one node was honest which is clearly true with $(f + 1)$ participants. Attackers can perturb the final value, but it will still become an honest random value by virtue of the inoculation property.
-
-\section{RandHound++}
-Our variant of the RandHound protocol is implemented using pairing-based cryptography (PBC). As such, it departs in a number of significant ways from the original RandHound algorithm. It is a distributed protocol for generating auditable, untainted, unpredictable randomness, as required for fair stake-weighted elections of the validator group leader, among the other purposes.
-
-After every election, a validator group’s \textit{leader} is selected, and then a \textit{beacon} node is chosen among the remaining validators. The \textit{beacon} node is responsible for partitioning all validators (including itself and the \textit{leader}) into RandHound++ groups. 
-
-The first validator in any group becomes a local group leader who collects randomness from all group members and itself, and then forwards the result back to the \textit{beacon}. The \textit{beacon} then combines all the group randomness values into a single result that becomes the seed value for the following elections. The \textit{beacon} then sends a \textit{HOLD-ELECTION} message with the seed value to all validators in the network.
-
-A major advantage of PBC is that we can make use of efficient BLS signatures\cite{c16} in the protocol. Such signatures can be collectively added, along with the group sum of their public keys, to produce a short collective-signature that can be validated just as easily as a single signature. BLS signatures are efficient because multi-signatures can be generated immediately and do not require another query of participants to produce their collective signature.
-
-PBC entails some complications in translating the RandHound algorithm to asymmetric pairs of elliptic curves. Although these complications are purely conceptual, the mathematics are more difficult. Still, PBC performs nicely, with the same efficiencies for producing PVSS data as are to be had with producing BLS signatures.
-
-We will publish a separate paper with details of our improvements on the original RandHound protocol in the near future.
-
-
 \chapter{Consensus}\label{app:consensus}
 
-\section{Stakes lottery}
-
-In order to produce a stake-weighted lottery, we could imagine dividing a circle into angular sections proportional to individual stakes, with the full circumference of the circle representing the sum of all stakes. A uniformly generated random number over a finite interval (this is where our RandHound++ protocol comes in handy) acts as a spinner in a dial readout. Wherever the dial points after a spin, that member is selected as the next leader. Larger stakeholders occupy a larger portion of the circumference, and have a better chance of winning.
+\section{Selecting the leader}
+\todo[inline]{Briefly explain that validators are selected based on their stakes and that the draw is a stake-weighted lottery}
+In order to produce a stake-weighted lottery, we could imagine dividing a circle into angular sections proportional to individual stakes, with the full circumference of the circle representing the sum of all stakes. A uniformly generated random number over a finite interval acts as a spinner in a dial readout. Wherever the dial points after a spin, that member is selected as the next leader. Larger stakeholders occupy a larger portion of the circumference, and have a better chance of winning.
 
 \begin{figure}[h!]
 \centering
@@ -940,6 +917,7 @@ Leader elections are held on a schedule and validators recognize the signal to h
 
 The list of validators is publicly known and can be re-built by processing staking transactions starting with the genesis block. Validators keep a number of data structures in memory, including the list of other validators, and update these data structures when accepting blocks to add to the end of the chain.
 
+\todo[inline]{Rewrite leader election based on Albatross}
 Each validator can re-run the election for themselves upon seeing the random value of the election signal, which arrives via RandHound++ protocol. All nodes should be able to agree on election outcome, but if not, then one of two things could happen: 
 
 \begin{itemize}
@@ -968,47 +946,15 @@ All validators should pay attention to leader election messages:
   \item{\em Call For New Election Message}: Increment the count, $n$, of such calls seen from different validators, and if $n \ge 2 f +1$, then run another election round based on the last election’s random value, with a decision tree that excludes current leader. Determine new leader and next role for this validator. Reset the counter of calls for new election.
 \end{itemize}
 
-\chapter{Blocks and transactions}\label{app:blocks}
+\chapter{Transactions}
 
-\section{Key Blocks}
-
-Stegos blockchain is able to accommodate multiple kinds of blocks. The kind of the block is defined by the \textit{Block Type ID} slot in the block header. In this paper we define two types of blocks: $0 (KeyBlock)$ and $1 (MonetaryBlock)$.
-
-Monetary blocks, the blocks that carry all cryptocurrency transactions, will be described in detail in Appendix \ref{BlocksAppendix}. We will be referring to them simply as \textit{blocks} throughout this paper. 
-
-The purpose of Key blocks is to deliver administrative information to blockchain participants. Any validator can search through key blocks to find out current and past epoch \textit{leaders}, as well as the validators (witnesses). Validators who need to submit a transaction consult with the latest key block to find the current pooled transactions \textit{facilitator}.
-
-The key block header is constructed by the current \textit{leader} filling in the following slots:
-
-\begin{itemize}
-  \item {Block Type ID, 0}
-  \item {Version Number}
-  \item {Epoch Number}
-  \item {Previous block hash, computed as the hash of the block header of the current blockchain tip block}
-  \item {\textit{Leader} public key}
-  \item {Ordered list of witness public keys; the leader node is also considered a witness}
-  \item {Pooled Transactions \textit{facilitator} public key}
-  \item {BLS Multi-signature, to be filled in as a result of the consensus on the block.}
-  \item {Bitmap of signers in the multi-signature}
-\end{itemize}
-
-There is no body in the key block.
-
-The initial contents of the BLS Multi-signature slots should be zero-filled and, even after being filled in, never contribute to the computation of any \textit{block header hash}. All other slots are concatenated to form a header hash pre-image.
-
-The key block verification and sealing should be done using the same consensus protocol as for the monetary blocks. We will describe this protocol in detail later on in this paper, in Appendix \ref{BlocksAppendix}.
-
-\section{Basic Transactions}
-
-In previous sections, we explained the high-level concepts of Stegos, including networking, randomness, and consensus. Now it is time to describe the inner details of Stegos, such as the composition of its coins and basic transactions.
-
-\subsection{UTXO Structure}
+\section{UTXO}
 
 For illustrative purposes, suppose that some coins have been sent from Alice to Bob. Alice’s public key is $P_A$, while Bob’s secret key is $s_B$ and his public key is $P_B$. To help preserve anonymity, all public keys in Stegos are cloaked with a random value chosen from a very large finite field, $Z_r$.
 
 When Alice sends coins to Bob, she cloaks their amount with a Pedersen commitment, which is both binding and hiding. It binds Alice to her commitment so that she can never alter the amount of coins. The commitment also hides the amount from the general public, while simultaneously providing proof to the public that the amount is legitimate. Only Alice and Bob know how many coins are being transferred. 
 
-\subsubsection{Pedersen commitment and Bulletproof} To form a Pedersen commitment, Alice multiplies the amount by a generator, $A$ for the Elliptic curve group, $E_r$, of prime order $r$. To that, she cloaks the commitment by adding a multiple, $\gamma$, of the publicly known generator point, $G$, with the multiple being chosen randomly from the finite field, $Z_r$. Generators $A$ and $G$ must have no known relationship. Placing the cloaking factor on the main generator curve will become important as we proceed. This is the same curve which holds all public keys. 
+\subsection{Pedersen commitment and Bulletproof} To form a Pedersen commitment, Alice multiplies the amount by a generator, $A$ for the Elliptic curve group, $E_r$, of prime order $r$. To that, she cloaks the commitment by adding a multiple, $\gamma$, of the publicly known generator point, $G$, with the multiple being chosen randomly from the finite field, $Z_r$. Generators $A$ and $G$ must have no known relationship. Placing the cloaking factor on the main generator curve will become important as we proceed. This is the same curve which holds all public keys. 
 
 The Pedersen commitment is thus:
 $$ C(x, \gamma) = x \, A + \gamma \, G \in E_r$$
@@ -1018,10 +964,9 @@ where $x$ denotes the number of coins being transferred, $A$ is the amount-curve
 
 This commitment value will be wrapped inside a Bulletproof range proof on the amount, $x$, which also proves that the amount lies within a legitimate range of values, typically a 64-bit number.
 
-\subsubsection{Destination address cloaking} Alice then cloaks Bob’s public key with a factor, $\delta \in Z_r$, so that instead of Bob’s original public key $P_B$, she will put into UTXO $P_{B, \delta} = P_B + \delta \, G$.
+\subsection{Destination address cloaking} Alice then cloaks Bob’s public key with a factor, $\delta \in Z_r$, so that instead of Bob’s original public key $P_B$, she will put into UTXO $P_{B, \delta} = P_B + \delta \, G$.
 
-
-\subsubsection{Encrypted payload} Alice must pass values for the amount $x$, and cloaking factors, $\gamma$ and $\delta$, to Bob. She can do it by including this information into the \textit{encrypted payload} of the UTXO. Besides the values mentioned above, the encrypted payload may also contain arbitrary data, that Alice wants to share with Bob. Detailed explanation of storing arbitrary data on Stegos blockchain will be given in Section \ref{Data}. 
+\subsection{Encrypted payload} Alice must pass values for the amount $x$, and cloaking factors, $\gamma$ and $\delta$, to Bob. She can do it by including this information into the \textit{encrypted payload} of the UTXO. Besides the values mentioned above, the encrypted payload may also contain arbitrary data, that Alice wants to share with Bob. Detailed explanation of storing arbitrary data on Stegos blockchain will be given in Section \ref{Data}. 
 
 For generating the encrypted payload, Alice must choose random values $\alpha, k \in Z_r$ that will be used in creating and cloaking a symmetric data encryption key.
 The actual symmetric key for the encrypted data object will be $H(k \, G)$. In order to pass it safely via the blockchain to Bob, Alice needs to cloak it with $\alpha$ and store it in the UTXO as the following tuple: $$\mathit{Key}_{\alpha} = (\alpha \, P_{B} + k \, G, \alpha \, G )$$ 
@@ -1030,14 +975,13 @@ Alice encrypts her payload with AES-128 using $H(k \, G)$ key and places the enc
 
 When Bob receives UTXO later on, he will take out $\mathit{Key}_{\alpha}$ from it, multiply the second element of the tuple by his secret key $s_B$, getting $s_B \, \alpha \, G = \alpha \, P_B$, then subtract that from the first element to find $k \, G$. Afterwards he produces $H(k \, G)$ thus computing the symmetric key and decrypts the payload that Alice sent to him.
 
-\subsubsection{TTL and Data Size} Alice sets TTL (time-to-live) and $Size_{data}$ slots of the UTXO to zero, indicating that this is a \textit{monetary UTXO}. Non-zero values of the mentioned slots will indicate that this is \textit{data UTXO}, handling of which will be described in details later in this document, it Section \ref{Data}.
+\subsection{TTL and Data Size} Alice sets TTL (time-to-live) and $Size_{data}$ slots of the UTXO to zero, indicating that this is a \textit{monetary UTXO}. Non-zero values of the mentioned slots will indicate that this is \textit{data UTXO}, handling of which will be described in details later in this document, it Section \ref{Data}.
 
-\subsubsection{UTXO ID} Alice forms a UTXO $\mathit{ID}$ by hashing the the whole UTXO object sans the ID slot, which contains the cloaked version of Bob’s public key, $P_{B, \delta}$, the Pedersen commitment and Bulletproof, TTL, $Size_{data}$, and the encrypted payload.
+\subsection{UTXO ID} Alice forms a UTXO $\mathit{ID}$ by hashing the the whole UTXO object sans the ID slot, which contains the cloaked version of Bob’s public key, $P_{B, \delta}$, the Pedersen commitment and Bulletproof, TTL, $Size_{data}$, and the encrypted payload.
 
 The UTXO $\mathit{ID}$ becomes a unique identifier, since, if all else were equal, the $\gamma$ and $\delta$ factors were randomly chosen from field $Z_r$.
 
-\subsubsection{UTXO structure}
-
+\subsection{UTXO structure}
 Thus the resulting structure of the UTXO object will be the following:
 
 \begin{multline*}
