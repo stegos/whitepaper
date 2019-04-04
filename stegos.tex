@@ -89,9 +89,12 @@
 
 \thispagestyle{fancy}
 \chapterimage{images/header.pdf}
-\AddToShipoutPicture*{\put(0,0){\includegraphics[width=\paperwidth,height=\paperheight]{images/front.pdf}}}
 
+\begingroup
+\thispagestyle{empty}
+\AddToShipoutPicture*{\put(0,0){\includegraphics[width=\paperwidth,height=\paperheight]{images/front.pdf}}}
 \maketitle
+\endgroup
 
 \nobreakspace
 
