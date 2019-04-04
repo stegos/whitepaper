@@ -42,7 +42,7 @@
 \usepackage[disable]{todonotes} % notes not shown
 % \usepackage[draft]{todonotes}
 
-% \newcommand{\comment}[1]{}  % comment not shown
+\renewcommand{\comment}[1]{}  % comment not shown
 % \newcommand{\comment}[1]{\par {\bfseries \color{blue} #1 \par}} %comment shown
 
 \setlength{\parskip}{1em}
@@ -869,6 +869,7 @@ Previous and future token sales:
 \end{tabular}
 \end{table}
 
+\newpage
 \section{Token lockup and vesting}
 
 A vesting schedule will apply tokens purchased during the private sale. These tokens will be gradually released after mainnet according to the following schedule:
@@ -891,11 +892,12 @@ A vesting schedule will apply tokens purchased during the private sale. These to
 
 50\% of team tokens will be locked up for 12 months from mainnet launch. The rest may be sold in small regular batches, according to the financing needs of the company.
 
+\comment{
 \chapter{Partners}
 
 \newcommand{\pic}[1]{
 	\framebox{
-		\includegraphics{images/partners/#1.png}
+		\includegraphics[clip]{images/partners/#1.png}
 	}
 }
 
@@ -905,11 +907,15 @@ A vesting schedule will apply tokens purchased during the private sale. These to
 	c<{\endcollectcell}
 }
 
+\begin{table}[ht] 
+\centering	
 \begin{tabular}{iii}
 	partners-1 & partners-2 & partners-3 \\
 	partners-4 & partners-5 & partners-6 \\
 	empty & partners-7 & empty \\
 \end{tabular}
+\end{table}
+}
 	
 \chapter{Legal Disclaimer}
 
