@@ -29,6 +29,9 @@
 \usetikzlibrary{positioning,shadows,arrows,backgrounds,fpu}
 \usepackage{booktabs}
 \usepackage{xcolor}
+\usepackage{fp}
+\usepackage{bm}
+
 % \newcommand\todo[1]{\textcolor{red}{\textbf{TODO}: [#1]}}
 
 \usepackage{algpseudocode}
@@ -608,12 +611,18 @@ STG token emission will start at 14\% from initial supply during the first 4 yea
 	/pgf/fpu/output format=fixed
 }
 
+\newcommand{\setvar}[2] {
+	\edef#1{0}
+	\FPeval#1{#2}
+%	\pgfmathparse{#2}
+%	\edef#1{\pgfmathresult}
+}
+
 \def\InitialSupply{1000000000} % 1 billion 
 \def\PctTokensForSale{51.25} % pct
 
 % Tokens for sale
-\pgfmathparse{\InitialSupply* \PctTokensForSale / 100.0}
-\edef\TokensForSale{\pgfmathresult}
+\setvar\TokensForSale{\InitialSupply * \PctTokensForSale / 100.0}
 
 %%% Existing sales %%% 
 
@@ -626,56 +635,34 @@ STG token emission will start at 14\% from initial supply during the first 4 yea
 \def\RTwoAmt{4042148.39}
 
 % Total raised
-\pgfmathparse{\SeedAmt + \ROneAmt + \RTwoAmt}
-\edef\SoldAmt{\pgfmathresult}
-
+\setvar\SoldAmt{\SeedAmt + \ROneAmt + \RTwoAmt}
 % Seed allocation
-\pgfmathparse{\SeedAmt / \SeedPrice / \InitialSupply}
-\edef\SeedAlloc{\pgfmathresult}
-
+\setvar\SeedAlloc{\SeedAmt / \SeedPrice / \InitialSupply}
 % Round 1 allocation
-\pgfmathparse{\ROneAmt / \ROnePrice / \InitialSupply}
-\edef\ROneAlloc{\pgfmathresult}
-
+\setvar\ROneAlloc{\ROneAmt / \ROnePrice / \InitialSupply}
 % Round 2 allocation
-\pgfmathparse{\RTwoAmt / \RTwoPrice / \InitialSupply}
-\edef\RTwoAlloc{\pgfmathresult}
-
+\setvar\RTwoAlloc{\RTwoAmt / \RTwoPrice / \InitialSupply}
 % Sold allocation
-\pgfmathparse{\SeedAlloc + \ROneAlloc + \RTwoAlloc}
-\edef\SoldAlloc{\pgfmathresult}
+\setvar\SoldAlloc{\SeedAlloc + \ROneAlloc + \RTwoAlloc}
 
 % Seed tokens
 \def\SeedTokens{150000000}
 
 % Round 1 tokens
-\pgfmathparse{\ROneAmt / \ROnePrice}
-\edef\ROneTokens{\pgfmathresult}
+\setvar\ROneTokens{\ROneAmt / \ROnePrice}
 
 % Round 2 tokens
-\pgfmathparse{\RTwoAmt / \RTwoPrice}
-\edef\RTwoTokens{\pgfmathresult}
-
+\setvar\RTwoTokens{\RTwoAmt / \RTwoPrice}
 % Total tokens
-\pgfmathparse{\SeedTokens + \ROneTokens + \RTwoTokens}
-\edef\SoldTokens{\pgfmathresult}
-
+\setvar\SoldTokens{\SeedTokens + \ROneTokens + \RTwoTokens}
 % Seed percentage sold
-\pgfmathparse{\SeedTokens / \TokensForSale}
-\edef\SeedPctSold{\pgfmathresult}
-
+\setvar\SeedPctSold{\SeedTokens / \TokensForSale}
 % Round 1 percentage sold
-\pgfmathparse{\ROneTokens / \TokensForSale}
-\edef\ROnePctSold{\pgfmathresult}
-
+\setvar\ROnePctSold{\ROneTokens / \TokensForSale}
 % Round 2 percentage for sale
-\pgfmathparse{\RTwoTokens / \TokensForSale}
-\edef\RTwoPctSold{\pgfmathresult}
-
+\setvar\RTwoPctSold{\RTwoTokens / \TokensForSale}
 % Total percentage for sale
-\pgfmathparse{\SeedPctSold + \ROnePctSold + \RTwoPctSold}
-\edef\TotalPctSold{\pgfmathresult}
-
+\setvar\TotalPctSold{\SeedPctSold + \ROnePctSold + \RTwoPctSold}
 
 %%% Future sales %%% 
 
@@ -686,94 +673,52 @@ STG token emission will start at 14\% from initial supply during the first 4 yea
 \def\ExchTwoAlloc{0.0922}
 
 % Exchange allocation 
-\pgfmathparse{\ExchOneAlloc + \ExchTwoAlloc}
-\edef\ExchAlloc{\pgfmathresult}
-
+\setvar\ExchAlloc{\ExchOneAlloc + \ExchTwoAlloc}
 % Stage 1 tokens
-\pgfmathparse{\ExchOneAlloc * \InitialSupply}
-\edef\ExchOneTokens{\pgfmathresult}
-
+\setvar\ExchOneTokens{\ExchOneAlloc * \InitialSupply}
 % Stage 2 tokens
-\pgfmathparse{\ExchTwoAlloc * \InitialSupply}
-\edef\ExchTwoTokens{\pgfmathresult}
-
+\setvar\ExchTwoTokens{\ExchTwoAlloc * \InitialSupply}
 % Tokens sold 
-\pgfmathparse{\ExchOneTokens + \ExchTwoTokens}
-\edef\ExchTokens{\pgfmathresult}
-
+\setvar\ExchTokens{\ExchOneTokens + \ExchTwoTokens}
 % Stage 1 amount
-\pgfmathparse{\ExchOneTokens * \ExchOnePrice}
-\edef\ExchOneAmt{\pgfmathresult}
-
+\setvar\ExchOneAmt{\ExchOneTokens * \ExchOnePrice}
 % Stage 2 amount
-\pgfmathparse{\ExchTwoTokens * \ExchTwoPrice}
-\edef\ExchTwoAmt{\pgfmathresult}
-
+\setvar\ExchTwoAmt{\ExchTwoTokens * \ExchTwoPrice}
 % Total sold
-\pgfmathparse{\ExchOneAmt + \ExchTwoAmt}
-\edef\ExchAmt{\pgfmathresult}
-
+\setvar\ExchAmt{\ExchOneAmt + \ExchTwoAmt}
 % Stage 1 percentage for sale
-\pgfmathparse{\ExchOneTokens / \TokensForSale}
-\edef\ExchOnePctSale{\pgfmathresult}
-
+\setvar\ExchOnePctSale{\ExchOneTokens / \TokensForSale}
 % Stage 2 percentage for sale
-\pgfmathparse{\ExchTwoTokens / \TokensForSale}
-\edef\ExchTwoPctSale{\pgfmathresult}
-
+\setvar\ExchTwoPctSale{\ExchTwoTokens / \TokensForSale}
 % Total percentage for sale
-\pgfmathparse{\ExchOnePctSale + \ExchTwoPctSale}
-\edef\ExchPctSale{\pgfmathresult}
+\setvar\ExchPctSale{\ExchOnePctSale + \ExchTwoPctSale}
 
 %%% Global totals
 
 % Tokens
-\pgfmathparse{\SoldTokens + \ExchTokens}
-\edef\TotalTokens{\pgfmathresult}
-
+\setvar\TotalTokens{\SoldTokens + \ExchTokens}
 % Amount
-\pgfmathparse{\SoldAmt + \ExchAmt}
-\edef\TotalAmt{\pgfmathresult}
-
+\setvar\TotalAmt{\SoldAmt + \ExchAmt}
 % Allocation
-\pgfmathparse{\SoldAlloc + \ExchAlloc}
-\edef\TotalAlloc{\pgfmathresult}
-
+\setvar\TotalAlloc{\SoldAlloc + \ExchAlloc}
 % Percentage for sale
-\pgfmathparse{\TotalPctSold + \ExchPctSale}
-\edef\TotalPctSale{\pgfmathresult}
-
+\setvar\TotalPctSale{\TotalPctSold + \ExchPctSale}
 % Seed percentage of raise
-\pgfmathparse{\SeedAmt / \TotalAmt}
-\edef\SeedPctRaise{\pgfmathresult}
-
+\setvar\SeedPctRaise{\SeedAmt / \TotalAmt}
 % Round 1 percentage of raise
-\pgfmathparse{\ROneAmt / \TotalAmt}
-\edef\ROnePctRaise{\pgfmathresult}
-
+\setvar\ROnePctRaise{\ROneAmt / \TotalAmt}
 % Round 2 percentage of raise
-\pgfmathparse{\RTwoAmt / \TotalAmt}
-\edef\RTwoPctRaise{\pgfmathresult}
-
+\setvar\RTwoPctRaise{\RTwoAmt / \TotalAmt}
 % Total percentage of raise
-\pgfmathparse{\SeedPctRaise + \ROnePctRaise + \RTwoPctRaise}
-\edef\TotalPctRaise{\pgfmathresult}
-
+\setvar\TotalPctRaise{\SeedPctRaise + \ROnePctRaise + \RTwoPctRaise}
 % Stage 1 percentage of raise
-\pgfmathparse{\ExchOneAmt / \TotalAmt}
-\edef\ExchOnePctRaise{\pgfmathresult}
-
+\setvar\ExchOnePctRaise{\ExchOneAmt / \TotalAmt}
 % Stage 2 percentage of raise
-\pgfmathparse{\ExchTwoAmt / \TotalAmt}
-\edef\ExchTwoPctRaise{\pgfmathresult}
-
+\setvar\ExchTwoPctRaise{\ExchTwoAmt / \TotalAmt}
 % Total percentage of raise
-\pgfmathparse{\ExchOnePctRaise + \ExchTwoPctRaise}
-\edef\ExchPctRaise{\pgfmathresult}
-
+\setvar\ExchPctRaise{\ExchOnePctRaise + \ExchTwoPctRaise}
 % Total percentage of raise
-\pgfmathparse{\TotalPctRaise + \ExchPctRaise}
-\edef\PctRaise{\pgfmathresult}
+\setvar\PctRaise{\TotalPctRaise + \ExchPctRaise}
 
 \pgfkeys{/pgf/fpu=false}
 
@@ -819,15 +764,9 @@ STG token emission will start at 14\% from initial supply during the first 4 yea
 
 Previous and future token sales:
 
-\newcolumntype{\$}{>{\global\let\currentrowstyle\relax}}
-\newcolumntype{^}{>{\currentrowstyle}}
-\newcommand{\rowstyle}[1]{\gdef\currentrowstyle{#1}%
-    #1\ignorespaces
-}
-
 \begin{table}[htp!]
 \centering
-\begin{tabular}{@{\extracolsep{4pt}}\$l^l^l^l^l^l^l}
+\begin{tabular}{@{\extracolsep{4pt}}lllllll}
 	\toprule[1pt] 
 	{} & \multicolumn{6}{c}{Existing token sales} \\
  \cmidrule{2-7}
@@ -850,7 +789,7 @@ Previous and future token sales:
 	\addlinespace
 	\toprule[2pt] 
 	\midrule[0pt]
-	Global Total & \pAmt{\TotalTokens} & {} & \pPct{\TotalAlloc} & \pPct{\TotalPctSale} & \$\pAmt{\TotalAmt} & \pPct{\PctRaise} \\
+	Global Total & \bm{\mathbf{\pAmt{\TotalTokens}}} & {} & \bm{\mathbf{\pPct{\TotalAlloc}}} & \bm{\mathbf{\pPct{\TotalPctSale}}} & \bm{\mathbf{\$\pAmt{\TotalAmt}}} & \bm{\mathbf{\pPct{\PctRaise}}} \\
 	\bottomrule[2pt]
 
 \end{tabular}
