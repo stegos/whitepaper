@@ -237,6 +237,39 @@ In addition to standard staking payouts which reward validators in proportion to
 
 Red packets are based on a popular WeChat feature which is in turn based on the Chinese tradition of hongbao. Reports indicate that the introduction of the Red Packet feature encouraged millions more users to sign up to WeChat, including revealing their personal banking details. Stegos intends to replicate the popularity of this feature without invading user privacy.
 		
+\chapter{Privacy applications platform}\label{chap:privacy-app-platform}
+The Stegos Privacy Platform builds on top of our fast message bus (Section \ref{sec:fastdata}) and makes developing mobile privacy apps a breeze. The Stegos mobile app is the primary window to the platform. It integrates the trusted application container (TAC) with one-on-one and group chat as well as the Privacy App Store and Red Packet feature. 
+
+\section{Trusted Application Container}\label{sec:tac}
+The Trusted Application Container (TAC) is a sandbox and virtual machine (VM) for running plug-in apps written using HTML, CSS and JavaScript. The architecture is very similar to that of WeChat mini-programs \footnote{https://walkthechat.com/wechat-mini-programs-simple-introduction/}.
+
+The TAC prevents apps from wreaking havoc on the host mobile phone. It also completely abstracts the blockchain from running applications, providing instead an interface (API) to send messages and access the wallet. The TAC tightly controls access to the outside world and ensures that spending tokens requires confirmation from the user. 
+
+Stegos will provide a software development kit (SDK) and documentation for building privacy apps. 
+
+\section{Identity}\label{sec:identity}
+Every Stegos wallet has a public key (address) associated with it. Stegos uses \textit{stealth addresses} and payments to a public key are cloaked with two random values. This makes it impossible to link payments to someone by analyzing the blockchain. Only the sender and the receiver are privy to any exchange of information. This means users do not have to be overly protective of their public key: it’s absolutely safe to post a Stegos public key on a website or even plaster it on a street billboard. 
+
+Stegos uses the UTXO model and each UTXO is best seen as a coin. There’s no separate notion of identity in Stegos, although wallet addresses can be used as an identifier or avatar for the purposes of messaging or building a reputation or social score on Stegos private marketplaces or other privacy applications. 
+
+Stegos users can export their wallet address as a QR code.
+	
+\section{Privacy App Store}\label{sec:appstore}
+Users have different privacy needs, and sometimes even knowing that a user has a particular app can risk a privacy breach. Users need a way to privately browse and access apps, while being confident that the apps they install are private and secure. To achieve this, Stegos implements an on-chain privacy app store, where details of the apps are stored on the Stegos blockchain itself.
+
+The apps themselves must naturally be stored off chain for space purposes. But to be listed on the Stegos privacy app store, each privacy app must create a manifest and store it on the blockchain. This manifest includes a description of the app, the URL used to download it and a hash of the app bundle. App bundles are signed with the developers public key, which allows users to leave on-chain app reviews to rank individual apps and developers. Manifests also contain tags to allow users to search the app store by category.
+
+Apps are downloaded via the Stegos app. Once downloaded, the TAC verifies that the signature of the app bundle and the hash match the information in the manifest. The TAC installs the app bundle locally and makes the app available in the Stegos mobile app. Users can delete apps at any time.
+
+\section{Chat}\label{sec:chat}
+No matter how well a blockchain obscures user information in its transactions, users still need a way to find each other, which risks exposing their personal information. This affects some coins more than others. MimbleWimble, for example, requires users to communicate in advance to share the blinding factors needed to obfuscate identifying details about their transaction. But every transaction requires some initial communication between users, in order to determine the details of the transaction. If this communication can be intercepted, malicious third parties can use this information to begin deanonymizing a coin’s transaction history. 
+
+In general, this problem is left up to users to solve, drastically reducing the appeal and effectiveness of these coins as privacy platforms. While information leaks can never be fully plugged, at Stegos we believe it is the responsibility of the platform to provide users with as many tools as possible to protect their privacy. Every transaction which can be protected in this way increases the privacy of all users across the platform.
+
+To this end, Stegos implements fully private communication and integrates it within the Stegos app. It functions like a standard messaging app which all users will be familiar with. Users use their public keys as an identifier (Section \ref{sec:identity}), safe in the knowledge that this can be exposed without revealing any links to other users or transactions. Messages are transmitted via the fast message bus (Section \ref{sec:fastdata}), ensuring that messages are received almost instantly.
+
+Users can send a QR code via private chat to initiate an STG transaction. It is also possible to create chat groups and invite people to chats via QR codes. 
+
 In the following chapters we explain the Stegos features in more detail.
 
 \chapter{Stegos in depth}\label{chap:stegos-in-depth}
@@ -433,40 +466,6 @@ Data messages are meant to be handled at the application layer and the payload i
 Stegos data messaging is a lot like UDP/IP and serves as a message bus that all kinds of applications can use to communicate securely and privately.
 
 Data messages are automatically recycled and removed from the blockchain using BlockCrunch (Appendix \ref{sec:pruning}).
-
-\chapter{Privacy applications platform}\label{chap:privacy-app-platform}
-The Stegos Privacy Platform builds on top of our fast message bus (Section \ref{sec:fastdata}) and makes developing mobile privacy apps a breeze. The Stegos mobile app is the primary window to the platform. It integrates the trusted application container (TAC) with one-on-one and group chat as well as the Privacy App Store and Red Packet feature. 
-
-\section{Trusted Application Container}\label{sec:tac}
-The Trusted Application Container (TAC) is a sandbox and virtual machine (VM) for running plug-in apps written using HTML, CSS and JavaScript. The architecture is very similar to that of WeChat mini-programs \footnote{https://walkthechat.com/wechat-mini-programs-simple-introduction/}.
-
-The TAC prevents apps from wreaking havoc on the host mobile phone. It also completely abstracts the blockchain from running applications, providing instead an interface (API) to send messages and access the wallet. The TAC tightly controls access to the outside world and ensures that spending tokens requires confirmation from the user. 
-
-Stegos will provide a software development kit (SDK) and documentation for building privacy apps. 
-
-\section{Identity}\label{sec:identity}
-Every Stegos wallet has a public key (address) associated with it. Stegos uses \textit{stealth addresses} and payments to a public key are cloaked with two random values. This makes it impossible to link payments to someone by analyzing the blockchain. Only the sender and the receiver are privy to any exchange of information. This means users do not have to be overly protective of their public key: it’s absolutely safe to post a Stegos public key on a website or even plaster it on a street billboard. 
-
-Stegos uses the UTXO model and each UTXO is best seen as a coin. There’s no separate notion of identity in Stegos, although wallet addresses can be used as an identifier or avatar for the purposes of messaging or building a reputation or social score on Stegos private marketplaces or other privacy applications. 
-
-Stegos users can export their wallet address as a QR code.
-	
-\section{Privacy App Store}\label{sec:appstore}
-Users have different privacy needs, and sometimes even knowing that a user has a particular app can risk a privacy breach. Users need a way to privately browse and access apps, while being confident that the apps they install are private and secure. To achieve this, Stegos implements an on-chain privacy app store, where details of the apps are stored on the Stegos blockchain itself.
-
-The apps themselves must naturally be stored off chain for space purposes. But to be listed on the Stegos privacy app store, each privacy app must create a manifest and store it on the blockchain. This manifest includes a description of the app, the URL used to download it and a hash of the app bundle. App bundles are signed with the developers public key, which allows users to leave on-chain app reviews to rank individual apps and developers. Manifests also contain tags to allow users to search the app store by category.
-
-Apps are downloaded via the Stegos app. Once downloaded, the TAC verifies that the signature of the app bundle and the hash match the information in the manifest. The TAC installs the app bundle locally and makes the app available in the Stegos mobile app. Users can delete apps at any time.
-
-\section{Chat}\label{sec:chat}
-No matter how well a blockchain obscures user information in its transactions, users still need a way to find each other, which risks exposing their personal information. This affects some coins more than others. MimbleWimble, for example, requires users to communicate in advance to share the blinding factors needed to obfuscate identifying details about their transaction. But every transaction requires some initial communication between users, in order to determine the details of the transaction. If this communication can be intercepted, malicious third parties can use this information to begin deanonymizing a coin’s transaction history. 
-
-In general, this problem is left up to users to solve, drastically reducing the appeal and effectiveness of these coins as privacy platforms. While information leaks can never be fully plugged, at Stegos we believe it is the responsibility of the platform to provide users with as many tools as possible to protect their privacy. Every transaction which can be protected in this way increases the privacy of all users across the platform.
-
-To this end, Stegos implements fully private communication and integrates it within the Stegos app. It functions like a standard messaging app which all users will be familiar with. Users use their public keys as an identifier (Section \ref{sec:identity}), safe in the knowledge that this can be exposed without revealing any links to other users or transactions. Messages are transmitted via the fast message bus (Section \ref{sec:fastdata}), ensuring that messages are received almost instantly.
-
-Users can send a QR code via private chat to initiate an STG transaction. It is also possible to create chat groups and invite people to chats via QR codes. 
-
 
 \chapter{Future work}\label{chap:future-work}
 
