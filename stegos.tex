@@ -298,18 +298,21 @@ A validator elected to become the leader of the current round of consensus is re
 There are two types of blocks that are produced by the validators:
 
 \begin{itemize}
-	\item {\em Macro blocks} These blocks are used to change the validator list and contain only the identities of the new subset of validators and the random seed used to select them. Macro blocks are produced with pBFT.
-	\item {\em Micro blocks} Each micro block is produced by a verifiably randomly chosen active validator and contains not only the user transactions to be included, but also the current state and a random seed produced by the validator. These blocks are produced optimistically and only need to be signed by the corresponding validator.
+	\item {\em Key blocks} These blocks are used to change the validator list and contain only the identities of the new subset of validators and the random seed used to select them. Key blocks are produced with pBFT.
+	\item {\em Regular blocks} Each regular block is produced by a verifiably randomly chosen active validator and contains not only the user transactions to be included, but also the current state and a random seed produced by the validator. These blocks are produced optimistically and only need to be signed by the corresponding validator.
 \end{itemize}
 
-One macro block is always followed by $m$ micro blocks. An \textit{epoch} is composed of a macro block and the $m$ micro blocks that precede it.
+One key block is always followed by $m$ regular blocks. An \textit{epoch} is composed of a key block and the $m$ regular blocks that precede it.
 
-\todo[inline]{Expand on the blocks}
-%% Microblocks are signed by the current leader and the leader gets changed for each microblock.
-%% We have no transactions in the block
+\subsubsection{Block frequency}
+Under test conditions and assuming a $16$-node network, we observe a block propagation time of $500ms$ - $700ms$. We expect this number to be higher but within $5s$ for a regular block. 
+
+Key blocks involves pBFT consensus and take longer. We observe times of around $5s$ for $16$ validators. The number of validators will be much larger in real-life scenarios but we expect a key block frequency in the range of $30s$ to $60s$.
+
+A key block frequency of $2min$ will ensure that a decent number of regular blocks is included between each key block.
 
 \subsection{Leader Election}
-Leader election is done using a stake-weighted lottery. The larger the validator’s stake, the greater the chances of becoming the leader of the current consensus round.
+Leader election is done using a stake-weighted lottery. The larger the validator’s stake, the greater the chances of becoming the leader of the current consensus round and sign the current regular block.
 
 \subsection{Fork resolution}
 Validators will choose the longest chain, i.e. the chain with the most blocks, as the main chain. Macro blocks have finality (are forkless) and forks can only happen between two macro blocks. So, nodes only need to consider chains that include the last macro block.
