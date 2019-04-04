@@ -643,8 +643,7 @@ STG token emission will start at 14\% from initial supply during the first 4 yea
 \setvar\SoldAlloc{\SeedAlloc + \ROneAlloc + \RTwoAlloc}
 
 % Seed tokens
-\def\SeedTokens{150000000}
-
+\setvar\SeedTokens{\SeedAmt / \SeedPrice}
 % Round 1 tokens
 \setvar\ROneTokens{\ROneAmt / \ROnePrice}
 
