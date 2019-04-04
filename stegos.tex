@@ -112,7 +112,7 @@ The Stegos Privacy Platform (Stegos) combines a unique blockchain and token desi
 
 Stegos extends this blockchain foundation to provide a platform for building privacy applications that communicate via messages sent with minimal latency. Our trusted application container (TAC) and privacy app store simplify the process of building and distributing privacy applications while providing additional security for users. Last but not least, Stegos marketplaces, chat and red packets replicate popular features of modern multipurpose apps in a decentralized way, allowing users to transact and communicate in complete privacy.
 
-Stegos is secured by the egalitarian proof-of-stake (ePoS) consensus mechanism based on verifiably unbiased distributed randomness. ePoS allows anyone to run the Stegos blockchain from their pocket and earn tokens by staking. This encourages an extremely wide user base by ensuring that mobile users are properly incentivized to validate the network.
+Stegos is secured by the gamified Proof-of-stake (gPoS) consensus mechanism based on verifiably unbiased distributed randomness. gPoS allows anyone to run the Stegos blockchain from their pocket and earn tokens by staking. This encourages an extremely wide user base by ensuring that mobile users are properly incentivized to validate the network.
 \section{Feedback}
 
 Please address comments and suggestions on this paper to \href{mailto:paper@stegos.com}{paper@stegos.com}.
@@ -154,7 +154,7 @@ In our modern connected world, everyone should have access to secure and private
 \chapter{What is Stegos?}\label{chap:what-is-stegos}
 
 \section{Summary}
-The Stegos Privacy Platform (Stegos) combines a unique blockchain and token design to implement the first cryptocurrency that’s absolutely private, secure, efficient and environmentally sustainable. Stegos uses the \textit{UTXO} (coin) model and \textit{ePoS} (egalitarian Proof-of-Stake) consensus, combining existing privacy coin ideas and the latest cryptographic research to create a fully scalable and prunable privacy blockchain and application platform. 
+The Stegos Privacy Platform (Stegos) combines a unique blockchain and token design to implement the first cryptocurrency that’s absolutely private, secure, efficient and environmentally sustainable. Stegos uses the \textit{UTXO} (coin) model and \textit{gPoS} (gamified Proof-of-Stake) consensus, combining existing privacy coin ideas and the latest cryptographic research to create a fully scalable and prunable privacy blockchain and application platform. 
  
 \subsection{Absolute privacy}
 Payment and data transactions in Stegos are unlinkable, untraceable, and completely confidential. Every Stegos transaction is directed to a new and unique stealth address, making it impossible to identify the recipients. It’s also impossible to trace Stegos transaction history, since individual transactions are first joined together to form a supertransaction before being submitted to blockchain validators. This is all done in a secure and privacy-preserving way, while ensuring that Stegos coins remain fully fungible.
@@ -166,7 +166,7 @@ Other privacy tokens — such as Monero, Dash, ZCash, and Grin — can only be u
 Stegos is a fast and highly scalable blockchain and, unlike other blockchains, it’s kept small without compromising trust. Details of spent coins and consumed data are safely removed from the blockchain using secure cryptographic pruning. It's also highly scalable thanks to transactional sharding. This makes Stegos the world’s first public blockchain that can offer secure and confidential data storage and transmission in addition to payment transactions. It also ensures that Stegos is compact enough to run on smartphones.
 
 \subsection{Proof-of-stake (PoS)}
-Stegos is environmentally friendly and does not waste megawatts of electricity mining blocks. Instead, Stegos uses a bespoke egalitarian proof-of-stake (ePoS) consensus, building on advancements in distributed systems theory and cryptography. Each new Stegos block must be verified and confirmed by a group of validators, all of whom must post tokens as bonds. The value of the tokens staked in this way directly affects the probability that a validator will win a block and earn the associated transaction fees.
+Stegos is environmentally friendly and does not waste megawatts of electricity mining blocks. Instead, Stegos uses a bespoke gamified Proof-of-stake (gPoS) consensus, building on advancements in distributed systems theory and cryptography. Each new Stegos block must be verified and confirmed by a group of validators, all of whom must post tokens as bonds. The value of the tokens staked in this way directly affects the probability that a validator will win a block and earn the associated transaction fees.
 
 \subsection{Mobile app}
 To showcase the power of the platform, Stegos is developing its own native multi-purpose mobile application that integrates a wallet, one-one-one and group chat, the TAC, the Privacy App Store and the Stegos red packets \ref{sec:red-packets}. This app will be the gateway for users onto the Stegos Privacy Platform.
@@ -185,19 +185,19 @@ To this end, transactions in Stegos are \textit{unlinkable}, \textit{untraceable
 	\item Stegos makes it impossible to trace the history of transactions since many individual transactions are pooled together to form a super-transaction. For this purpose, we adopted and enhanced the ValueShuffle protocol\cite{c7}, the first coin mixing protocol compatible with Confidential Transactions.
 	\item All amounts in Stegos are hidden using Pedersen commitments\cite{c8} and Bulletproofs (range proofs)\cite{c4}. Validator stakes and transaction fees are the only exception since these must be visible for blockchain validation.\end{itemize}
 
-\section{Egalitarian proof-of-stake (ePoS) consensus}
-ePoS is egalitarian because every validator which has been running for a certain amount of time has the chance to receive a \textit{Validator service award}, regardless of the size of their stake\footnotemark.
+\section{Gamified Proof-of-stake (gPoS) consensus}
+gPoS is gamified because every validator which has been running for a certain amount of time has the chance to receive a \textit{Validator service award}, regardless of the size of their stake\footnotemark.
 
 \footnotetext{A nominal minimum threshold will apply to prevent users from gaming the system, but since every eligible node must provide validation services to qualify, it is impossible to spam the system, as one goal of the \textit{Validator service award} is to maximize the number of different nodes.}
 
-In addition, a randomly awarded validator service award ensures that validators at every level of stake are incentivized to maintain the network. A portion of the reward from each block is added to the service award pool, which continues to grow until a winner is selected in an ongoing \textit{cryptographic lottery} based on verifiable distributed randomness. 
+Random validator service award ensures that validators at every level of stake are incentivized to maintain the network. To accomplish this, a portion of the reward from each block is added to the service award pool, which continues to grow until a winner is selected in an ongoing \textit{cryptographic lottery} based on verifiable distributed randomness. 
 
 Separate groups of Stegos validators keep the whole blockchain state but verify only a subset of incoming transactions, using cross-shard atomic commits to eliminate double-spending. These breakthroughs let Stegos process hundreds of thousands of transactions per second across millions or even billions of mobile devices, making Stegos the first and only blockchain that can run entirely in your pocket. Because smartphone nodes can have full validation capabilities, anyone can earn tokens from their pocket.
 
 \section{Sharding for scalability}
 Stegos uses transactional \textit{sharding} to scale. Separate groups of Stegos validators keep the whole blockchain state but verify only a subset of incoming transactions, using cross-shard atomic commits to eliminate double-spending. This scalability approach enables to Stegos process thousands of transactions per second (tps).
 
-\section{Pruning for data compaction}
+\section{Pruning and data compaction}
 Many projects claim to be able to process hundred of thousands or even millions of transactions per second, but few explain how they plan to maintain all the accumulated data. Even a its paltry 7--10 tps, the Bitcoin blockchain is expected to grow past 170 gigabytes by the end of 2018. Assuming Bitcoin could suddenly support 16,000 tps, the Bitcoin blockchain would grow by 350 gigabytes every day\footnote{https://hackernoon.com/if-we-lived-in-a-bitcoin-future-how-big-would-the-blockchain-have-to-be-bd07b282416f}, or 127 terabytes every year. This amount of data is completely unsustainable without the blockchain being centralized on a few supercomputers, which runs contrary to the decentralization ethos of blockchain.
 
 Stegos is a \textit{compact} blockchain. Spent coins are safely removed from the blockchain using secure cryptographic pruning. To keep our blockchain free of spent coins, we use the technique proposed by Satoshi Nakamoto in the original Bitcoin paper\cite{c1}.
@@ -288,7 +288,7 @@ Speculative BFT refers to a class of algorithms that have two modes for consensu
 The optimistic mode allows the Stegos consensus protocol to compete for speed with centralized systems. Nodes verify each update and when an invalid updated is detected, consensus switches to pessimistic mode, discards the invalid update and then changes back into optimistic mode.
 
 \subsection{Validators}
-Stegos is a public ledger, so anyone can join the network, become a validator and earn rewards for maintaining the blockchain. Stegos uses egalitarian proof-of-stake (ePoS) consensus and all validators need to post a performance bond (stake). Requiring a performance bond protects against Sybil attacks by requiring a financial commitment from validators.
+Stegos is a public ledger, so anyone can join the network, become a validator and earn rewards for maintaining the blockchain. Stegos uses gamified Proof-of-stake (gPoS) consensus and all validators need to post a performance bond (stake). Requiring a performance bond protects against Sybil attacks by requiring a financial commitment from validators.
 
 We select randomly select a subset of all available validators and call \textit{epoch} the period of time for which they are selected. The new set of validators is selected using the BLS signature of a block as the random seed.
 
@@ -491,7 +491,7 @@ This paper laid out a design for Stegos - a private, confidential, and scalable 
 
 The Stegos team is currently working on implementing the blockchain. The development progress can be tracked online at \url{https://github.com/orgs/stegos/projects/1}. Our platform source code is and always be 100\% open.
 
-Stegos uses verifiably unbiased distributed randomness and an egalitarian proof-of-stake consensus mechanism to create the first truly mobile blockchain. By embracing smartphones and providing an integrated app as a gateway to the platform, Stegos intends to be the first truly accessible blockchain, giving everyone easy access to the privacy they deserve.     
+Stegos uses verifiably unbiased distributed randomness and a gamified Proof-of-stake consensus mechanism to create the first truly mobile blockchain. By embracing smartphones and providing an integrated app as a gateway to the platform, Stegos intends to be the first truly accessible blockchain, giving everyone easy access to the privacy they deserve.     
 
 \todo[inline]{Expand conclusion with privacy wording}
 - We will pursue blockchain privacy, including latest and greatest mechanisms of combining it with a fast and scalable blockchain.
