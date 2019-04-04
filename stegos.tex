@@ -20,6 +20,7 @@
 \usepackage{tabulary}
 \usepackage{pdfrender}
 \usepackage{array}
+\usepackage{collcell}
 
 \usepackage{inconsolata}
 \usepackage[defaultfam,light]{montserrat}
@@ -890,6 +891,24 @@ A vesting schedule will apply tokens purchased during the private sale. These to
 
 50\% of team tokens will be locked up for 12 months from mainnet launch. The rest may be sold in small regular batches, according to the financing needs of the company.
 
+\chapter{Partners}
+
+\newcommand{\pic}[1]{
+	\includegraphics[keepaspectratio]{/images/partners/#1.png}
+}
+
+\newcolumntype{i}{
+	@{\hspace{1ex}}
+	>{\collectcell\pic}
+	c<{\endcollectcell}
+}
+
+\begin{tabular}{iii}
+	partners-1 & partners-2 & partners-3 \\
+	partners-4 & partners-5 & partners-6 \\
+	{} & partners-7 & {} \\
+\end{tabular}
+	
 \chapter{Legal Disclaimer}
 
 No part of this white paper constitutes legal, financial, business, or tax advice, and you should consult your own legal, financial, tax, or other professional adviser before engaging in any activity in connection herewith. Stegos AG (“Stegos”), its affiliates, and the Stegos team members shall not be liable for any kind of direct or indirect damage, loss, or liability whatsoever which you may suffer or incur in connection with accessing this white paper or any other materials published by Stegos. 
