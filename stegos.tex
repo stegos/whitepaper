@@ -256,9 +256,9 @@ The TAC prevents apps from wreaking havoc on the host mobile phone. It also comp
 Stegos will provide a software development kit (SDK) and documentation for building privacy apps. 
 
 \section{Identity}\label{sec:identity}
-Every Stegos wallet has a public key (address) associated with it. Stegos uses \textit{stealth addresses} and payments to a public key are cloaked with two random values. This makes it impossible to link payments to someone by analyzing the blockchain. Only the sender and the receiver are privy to any exchange of information. This means users do not have to be overly protective of their public key: it’s absolutely safe to post a Stegos public key on a website or even plaster it on a street billboard. 
+Every Stegos wallet has a public key (address) associated with it. Stegos uses \textit{stealth addresses} and payments to a public key are cloaked with two random values. This makes it impossible to link payments to someone by analyzing the blockchain. Only the sender and the receiver are privy to any exchange of information. This means users do not have to be overly protective of their public key: it’s completely safe to post a Stegos public key on a website or even plaster it on a street billboard. 
 
-Stegos uses the UTXO model and each UTXO is best understood as a coin. There’s no separate notion of identity in Stegos, although wallet addresses can be used as an identifier or avatar for the purposes of messaging or building a reputation or social score on Stegos private marketplaces or other privacy applications. 
+Stegos uses the UTXO model, where each UTXO is best understood as a coin. There’s no separate notion of identity in Stegos, although wallet addresses can be used as an identifier or avatar for the purposes of messaging or building a reputation or social score on Stegos private marketplaces or other privacy applications. 
 
 Stegos users can export their wallet address as a QR code.
 	
@@ -376,7 +376,7 @@ The Stegos blockchain uses a gossip protocol to spread information without depen
 Stegos is powered by the STG token, available once the mainnet is launched. When posted as a performance bond by nodes wishing to support the Stegos platform, the STG token gives validators the right to earn fees and block rewards when they are elected as the leader of the consensus round. The probability of a validator being elected the leader is proportional to the size of their stake.
 
 \subsection{Validator service award}\label{sec:service-award}
-Ledgers based on Proof-of-Stake (PoS) can have difficulty maintaining a broad user base since most users have a vanishingly small chance of earning significant rewards. To mitigate this failing, ePoS includes a \textit{Validator service award} in addition to the standard block rewards and transaction fees. The award is meant to incentivize validators with small stakes to maintain the network. Instead of weighting rewards by size of stake, any node which has been providing validation services for a certain number of days or weeks is eligible to win the award.
+Ledgers based on Proof-of-Stake (PoS) can have difficulty maintaining a broad user base since most users have a vanishingly small chance of earning significant rewards. To mitigate this failing, gPoS includes a \textit{Validator service award} in addition to the standard block rewards and transaction fees. The award is meant to incentivize validators with small stakes to maintain the network. Instead of weighting rewards by size of stake, any node which has been providing validation services for a certain number of days or weeks is eligible to win the award.
 
 One third (1/3) of every block reward will be added to the service award pool, along with tokens from expired red packets. The validator service award is completely random. The odds of the award happening start small and increases with every block. The precise time of the drawing cannot be predicted, but on average the validator service award will be distributed every 5-10 days.
 
