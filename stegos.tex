@@ -205,7 +205,7 @@ Stegos uses transactional \textit{sharding} to scale. Separate groups of Stegos 
 \section{Pruning and data compaction}
 Many projects claim to be able to process hundred of thousands or even millions of transactions per second (tps), but few explain how they plan to maintain all the accumulated data. Even at its paltry 7--10 tps, the Bitcoin blockchain is now larger than 200 gigabytes. Assuming Bitcoin could suddenly support 16,000 tps, the Bitcoin blockchain would grow by 350 gigabytes every day\footnote{https://hackernoon.com/if-we-lived-in-a-bitcoin-future-how-big-would-the-blockchain-have-to-be-bd07b282416f}, or 127 terabytes every year. This amount of data is completely unsustainable without the blockchain being centralized on a few supercomputers, which runs contrary to the decentralization ethos of blockchain.
 
-Stegos is a \textit{compact} blockchain. Spent coins and expired data are safely removed from the blockchain using secure cryptographic pruning. To keep our blockchain free of spent coins, we use the technique proposed by Satoshi Nakamoto in the original Bitcoin paper\cite{c1}. Data is removed after a user-selected number of blocks have passed. %Is this right?
+Stegos is a \textit{compact} blockchain. Spent coins and expired data are safely removed from the blockchain using secure cryptographic pruning. To keep our blockchain free of spent coins, we use the technique proposed by Satoshi Nakamoto in the original Bitcoin paper\cite{c1}. Data is removed quickly and automatically.
 
 \section{Fast data messaging}
 Unlike other blockchains, Stegos does not restrict users to sending just payments. Stegos supports data messaging, allowing users to exchange data messages with the same privacy guarantees afforded to payments. Data is a first-class citizen on the Stegos blockchain, which is only logical as the average user is expected to send many more data messages than standard payments.
@@ -597,6 +597,8 @@ Find out more about Volodymyr on his \href{https://linkedin.com/in/vldm}{LinkedI
 
 \chapter{Token Economics}\label{app:token-economics}
 
+\todo[inline]{Fix the partner images}
+\comment{
 \newcommand{\imgscale}{0.3}
 \begin{multicols}{7}[\columnsep=1cm]
 	\includegraphics[scale=\imgscale]{images/partners/partners-1.png}
@@ -613,6 +615,7 @@ Find out more about Volodymyr on his \href{https://linkedin.com/in/vldm}{LinkedI
 	\columnbreak
 	\includegraphics[scale=\imgscale]{images/partners/partners-7.png}
 \end{multicols}
+}
 
 \section{Fundraising goals}
 Stegos will generate 1,000,000,000 (1 billion) of STG tokens (initial supply) and sell up to 51.25\% of tokens to raise \$20M (million). This fundraising target has been carefully selected to enable us to reach our development milestones and jumpstart the Stegos ecosystem.
