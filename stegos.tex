@@ -502,6 +502,28 @@ Online marketplaces often rely on a ranking an reputation system to allow buyers
 
 Unfortunately, anything which links transactions together is a potential privacy risk, so users must weigh the benefits against the risks depending on their own privacy requirements. As such, participation in the reputation system is entirely optional for vendors.
 
+\section{Roadmap}\label{sec:roadmap}
+
+\begin{table}[ht]
+\centering
+	\begin{tabular}{@{\extracolsep{4pt}}lll}
+	\toprule[2pt] 
+	Year & Target date & Deliverable \\
+	\midrule[2pt]
+	2019 & 31.05 & Mainnet and native token\\
+	{} & June & Exchange token sale \\
+	{} & Q3 & Sharding \\
+	{} & Q4 & Mobile staking \\
+	2020 & Q1 & App Store \\
+	{} & {} & Private marketplaces \\
+	{} & {} & Dandelion \\
+	{} & Q2 & Pruning with no bootstrap nodes \\
+	{} & {} & zk-STARKs \\
+	\bottomrule[2pt]
+	\end{tabular}
+\caption{Roadmap} 
+\end{table}
+
 \section{Conclusion}
 This paper laid out a design for Stegos - a private, confidential, and scalable blockchain which is environmentally sustainable and optimized for storing and transmitting both data and payments. By aggressively pruning the blockchain, Stegos is able to support a wide variety of on-chain features beyond simple token transfers. By combining chat, an on-chain app store and a trusted application container (TAC), Stegos facilitates every part of a fully private exchange of goods and services, not just the final payment step.
 
@@ -1207,24 +1229,41 @@ But since secret shared keys were divulged during blame discovery, all participa
 
 In this chapter we give a brief overview of most prominent privacy coins and analyze their privacy-protecting and performance characteristics.
 
-\section{Terminology}
-Here we give definitions for the miscellaneous terms that we are using throughout this paper:
+\section{Comparison of privacy coins}
 
-\begin{description}
-  \item[Privacy] Protection from detection of the identity of blockchain participants and parties to transactions.
-  \item[Confidentiality] Protection from analyzing blockchain data (e.g. transaction details, including amounts) by unauthorized third parties.
-  \item[Unlinkability] For any two outgoing transactions it is impossible to prove they were sent to the same person\cite{c2}.
-  \item[Untraceability] For each incoming transaction all possible senders are equiprobable\cite{c2}.
-  \item[Compactness] Spent coins can be pruned from the blockchain and the blockchain can be compacted.
-  \item[Sharding] A transaction verification and block-sealing process that can be partitioned between participants or groups of participants.
-  \item[Interactivity] Senders and recipients of transactions must interact with each other \textit{off-chain} before posting a transaction to the blockchain.
-  \item[Trusted Setup] Blockchain participants need to trust someone to generate some initial parameters and then destroy those parameters.
-  \item[PoW] Proof-of-Work, an original consensus protocol for Bitcoin, where each node participating in the protocol should present a piece of data which is difficult (costly, time-consuming) to produce but easy for others to verify and which satisfies certain requirements. Due to complexity of computations needed and amount of miners, the current energy consumption by Bitcoin PoW consensus is approximately 73TWh per year\footnote{https://digiconomist.net/bitcoin-energy-consumption}.
-  \item[PoS] Proof-of-Stake is a consensus algorithm, where the creator of the next block is chosen via various combinations of random selection, wealth, age and staked funds. PoS blockchains can be more energy efficient than currencies based on PoS algorithms\footnote{http://cfa-consulting.ch/dlfiles/NxtEnergyandCostEfficiencyAnalysis.pdf}.
-  \item[UTXO] An Unspent Transaction Output that can be spent as an input in a new transaction.
-\end{description}
+\begin{table}[ht!]
+\centering
+	\begin{tabular}{llllllllll}
+	\toprule[2pt] 
+	{} & Unlink\textsuperscript{1}
+	 & Untrac\textsuperscript{2} & Conf \textsuperscript{3} & Prun\textsuperscript{4} & Shard\textsuperscript{5} & Inter \textsuperscript{6} & Cons\textsuperscript{7} & Trust\textsuperscript{8} & Apps \textsuperscript{9} \\
+	\midrule[2pt]
+	Monero & Yes & Yes & Yes & No & No & No & PoW & No & No \\
+	Zcash  & Yes & Yes & Yes & No  & No & No & PoW & Yes & No \\
+	Dash   & No  & Yes & No  & No  & No & No & PoW/PoS & No & No \\
+	Grin   & Yes & No  & Yes & Yes & No & Yes & PoW & No & No \\
+	Stegos & Yes & Yes & Yes & Yes & Yes & No & PoS & No  & Yes \\
+	\bottomrule[2pt]
+	\end{tabular}
+\caption{Features of privacy coins} 
+\end{table}
 
-\section{Existing privacy coins}
+\begin{enumerate}
+	\item Unlinkability. For any two outgoing transactions it is impossible to prove they were sent to the same person\cite{c2}.
+	\item Untraceability. For each incoming transaction all possible senders are equiprobable\cite{c2}.
+	\item Confidentiality. Protection from analyzing blockchain data (e.g. transaction details, including   	\item Pruning. Spent coins can be pruned from the blockchain and the blockchain can be compacted.
+	\item Sharding. A transaction verification and block-sealing process that can be partitioned between participants or groups of participants.
+	\item Interactivity. Senders and recipients of transactions must interact with each other \textit{off-chain} before posting a transaction to the blockchain.
+	\item Trusted Setup. Blockchain participants need to trust someone to generate some initial parameters and then destroy those parameters.
+	\item Consensus
+	\begin{enumerate}
+ 		\item PoW. Proof-of-Work, an original consensus protocol for Bitcoin, where each node participating in the protocol should present a piece of data which is difficult (costly, time-consuming) to produce but easy for others to verify and which satisfies certain requirements. Due to complexity of computations needed and amount of miners, the current energy consumption by Bitcoin PoW consensus is approximately 73TWh per year\footnote{https://digiconomist.net/bitcoin-energy-consumption}.
+		\item PoS. Proof-of-Stake is a consensus algorithm, where the creator of the next block is chosen via various combinations of random selection, wealth, age and staked funds. PoS blockchains can be more energy efficient than currencies based on PoS algorithms\footnote{http://cfa-consulting.ch/dlfiles/NxtEnergyandCostEfficiencyAnalysis.pdf}.
+	\end{enumerate}
+	\item Apps. Data can be sent as quickly and easily as payments. A wide variety of applications can communicate by exchanging data messages. 
+\end{enumerate}
+
+\section{Description of privacy coins}
 
 \subsection{Monero} originated as a Bytecoin fork in 2014 under the name Bitmonero. The cryptocurrency is using a UTXO model and PoW consensus, and based on the CryptoNote protocol\cite{c2}, employing the ring signatures method. In 2017, Monero implemented RingCT\cite{c3}, an improved version of the ring signatures. RingCT enables confidentiality of amounts and untraceability of transactions. In combination with the stealth addresses (also introduced in the original CryptoNote paper), which provide unlinkability of recipients, this provides full privacy and confidentiality.
 
