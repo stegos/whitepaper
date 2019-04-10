@@ -1295,13 +1295,13 @@ Mimblewimble is based on the ideas of Greg Maxwell’s design for Confidential T
 
 Untraceability of transactions in Mimblewimble is building on the ideas of CoinJoin and is implemented by breaking transaction boundaries and storing only inputs and outputs of all transactions verified by miner in a newly mined block.
 
-The two existing implementations of the protocol known at the moment are Grin\footnote{https://github.com/mimblewimble/grin} and Beam\footnote{https://www.beam.mw}. These projects use the UTXO model and PoW consensus. Spent UTXOs in both projects can be pruned by recursively applying a simple pruning algorithm for each UTXO referenced in inputs of the new minted block.
+MimbleWimble implementations use the UTXO model and PoW consensus. Spent UTXOs can be pruned by recursively applying a simple pruning algorithm for each UTXO referenced in inputs of the new minted block.
 
 There are several drawbacks in the design of Mimblewimble:
 
 \begin{itemize}
   \item {The first drawback is related to the transaction creation mechanism of MimbleWimble — in order to create a transaction, senders and recipients must interact with each other. The sender cannot post a transaction to the blockchain without first contacting the recipient with half-baked transaction data and receiving that data updated by applying a blinding factor back from the recipient.}
-  \item {The second is very similar to the problem from Dash where users must trust Dash masternodes. Currently, Grin and Beam users must trust miners that they will not trace the history of inputs and outputs in transactions, and discard this data completely after mining a block. Therefore, there is a threat to the coins’ fungibility and the privacy of users.}
+  \item {The second is very similar to the problem from Dash where users must trust Dash masternodes. Users of MimbleWimble implementations must trust miners that they will not trace the history of inputs and outputs in transactions, and discard this data completely after mining a block. Therefore, there is a threat to the coins’ fungibility and the privacy of users.}
 \end{itemize}
 
 
