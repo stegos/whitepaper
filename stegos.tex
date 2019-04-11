@@ -274,7 +274,7 @@ Stegos users can export their wallet address as a QR code.
 \section{Privacy App Store}\label{sec:appstore}
 Users have different privacy needs, and sometimes even knowing that a user has a particular app can risk a privacy breach. Users need a way to privately browse and access apps, while being confident that the apps they install are private and secure. To achieve this, Stegos implements an on-chain privacy app store, where details of the apps are stored on the Stegos blockchain itself.
 
-The apps themselves should be stored off chain to avoid bloating the Stegos chain, but to be listed on the Stegos privacy app store, each privacy app must create a manifest which includes a description of the app, the URL used to download it and a hash of the app bundle. This manifest is stored on the Stegos blockchain. App bundles are signed with the developers' public key, which allows users to leave on-chain app reviews to rank individual apps and developers. Manifests also contain tags to allow users to search the app store by category.
+The apps themselves should be stored off chain to avoid bloating the Stegos chain, but to be listed on the Stegos privacy app store, each privacy app must create a manifest which includes a description of the app, the URL used to download it, and a hash of the app bundle. This manifest is stored on the Stegos blockchain. App bundles are signed with the developers' public key, which allows users to leave on-chain app reviews to rank individual apps and developers. Manifests also contain tags to allow users to search the app store by category.
 
 Apps are downloaded via the Stegos app. Once downloaded, the TAC verifies that the signature of the app bundle and the hash match the information in the manifest. The TAC installs the app bundle locally and makes the app available in the Stegos mobile app. Users can delete apps at any time.
 
@@ -295,29 +295,29 @@ In the following chapters we explain the Stegos features in more detail.
 The Stegos consensus protocol is based on \textit{Albatross}\cite{c23}, a novel blockchain consensus algorithm inspired by speculative BFT\cite{c9} algorithms, and has strong consistency while often achieving instant transaction confirmation. The Stegos consensus protocol is secure and has a performance close to the theoretical maximum for a single-chain PoS consensus algorithm.
 
 \subsection{Speculative BFT}
-Speculative BFT refers to a class of algorithms that have two modes for consensus: 
+Speculative BFT algorithms that have two modes for consensus: 
 
 \begin{enumerate}
-	\item the optimistic mode, where speed is preferred and few security measures are applied, under the assumption that the nodes are well-behaved, and
-	\item the pessimistic mode, where the only goal is to make progress even in the presence of malicious nodes.
+	\item the \textit{optimistic mode}, where speed is preferred and few security measures are applied, under the assumption that the nodes are well-behaved, and
+	\item the \textit{pessimistic mode}, where the only goal is to make progress even in the presence of malicious nodes.
 \end{enumerate}
 
 The optimistic mode allows the Stegos consensus protocol to compete for speed with centralized systems. Nodes verify each update and when an invalid updated is detected, consensus switches to pessimistic mode. The invalid update is discarded and then consensus reverts to optimistic mode.
 
 \subsection{Validators}
-Stegos is a public ledger, so anyone can join the network, become a validator and earn rewards for maintaining the blockchain. Stegos uses gamified Proof-of-stake (gPoS) consensus and all validators need to post a performance bond (stake). Requiring a performance bond protects against Sybil attacks by requiring a financial commitment from validators. Locked tokens can be staked just like regular ones.
+Stegos is a public ledger, so anyone can join the network, become a validator, and earn rewards for maintaining the blockchain. Stegos uses gamified Proof-of-stake (gPoS) consensus to better incentivize smaller stakers compared to standard Proof-of-stake. Nodes need to post a performance bond (stake) to be eligible to provide validation services. Requiring a performance bond protects against Sybil attacks by requiring a financial commitment from validators. Locked tokens can be staked just like regular ones.
 
-Validators who have posted a performance bond are eligible to be randomly selected to participate in a consensus round as an active validator. One active validator is elected to become the leader of the current consensus round and is rewarded with transaction fees from the blocks they sign, as well as the block reward. 
+Validators who have posted a performance bond are eligible to be randomly selected to participate in a consensus round as an active validator. Individual active validators are selected to create blocks using verifiable distributed randomess and are rewarded with the block reward and transaction fees from the blocks they sign. The other active validators witness and cosign the created blocks, making them eligible for the validator service award (Section \ref{sec:service-award}).  
 
 \subsection{Blocks}\label{sec:blocks}
-There are two types of blocks that are produced by the validators:
+Stegos has two types of blocks:
 
 \begin{itemize}
-	\item {\em Key blocks} These blocks are used to change the validator list and contain only the identities of the new subset of active validators and the random seed used to select them. Key blocks are produced with pBFT.
+	\item {\em Key blocks} Key blocks are used to change the validator list and act as checkpoints in the Stegos chain. Key blocks only contain the identities of the new subset of active validators and the random seed used to select them. Key blocks are produced with pBFT and cannot be forked.
 	\item {\em Regular blocks} Each regular block is produced by a verifiably randomly chosen active validator and contains not only the user transactions to be included, but also the current state and a random seed produced by the validator. These blocks are produced optimistically and only need to be signed by the corresponding validator.
 \end{itemize}
 
-One key block is always followed by $m$ regular blocks. An \textit{epoch} is composed of a key block and the $m$ regular blocks that precede it. Every epoch, the list of validators is updated and a new list of active validators is randomly selected.
+One key block is always followed by a fixed number of regular blocks. An \textit{epoch} is composed of a key block and the regular blocks that precede it. Every epoch, the list of validators is updated and a new list of active validators is randomly selected.
 
 \subsubsection{Block frequency}
 Under test conditions and assuming a $16$-node network, we observe a block propagation time of $500ms$ - $700ms$. We expect this number to be higher but within $5s$ for a regular block. 
