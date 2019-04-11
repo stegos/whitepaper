@@ -320,40 +320,40 @@ Stegos has two types of blocks:
 One key block is always followed by a fixed number of regular blocks. An \textit{epoch} is composed of a key block and the regular blocks that precede it. Every epoch, the list of validators is updated and a new list of active validators is randomly selected.
 
 \subsubsection{Block frequency}
-Under test conditions and assuming a $16$-node network, we observe a block propagation time of $500ms$ - $700ms$. We expect this number to be higher but within $5s$ for a regular block. 
+Under test conditions and assuming a $16$-node network, we observed a block propagation time of $500ms$ - $700ms$. We expect this number to be higher in practice, but still within $5s$ for a regular block. 
 
-Key blocks involves pBFT consensus and take longer. We observe times of around $5s$ for $16$ validators. The number of validators will be much larger in real-life scenarios, but we expect a key block frequency in the range of $30s$ to $60s$.
+Key blocks involve pBFT consensus and take longer. In testing, we observed times of around $5s$ for $16$ validators. The number of validators will be much larger in practice, but we still expect a key block frequency in the range of $30s$ to $60s$.
 
-A key block frequency of $2min$ will ensure that a meaningful number of regular blocks is included between each key block.
+A key block frequency of $2min$ should ensure that the ratio between the number of key blocks and regular blocks is sufficient to capitalize on the optimistic mode without compromising security.
 
-\subsection{Leader Election}
-Leader election is done using a stake-weighted lottery. The larger the validator’s stake, the greater the chances of becoming the leader of the current consensus round and sign the current regular block.
+\subsection{Validator Selection}
+Validators are selected from the active validator pool using a stake-weighted lottery. The larger the validator’s stake, the greater their chance of becoming the pBFT leader (when creating a key block) or being selected as slot owner (when creating a regular block).
 
 \subsection{Fork resolution}
-Validators will choose the longest chain, i.e., the chain with the most blocks, as the main chain. Because key blocks require pBFT consensus, forks can only occur between two key blocks. Therefore, nodes only need to consider chains that include the last key block.
+Validators will choose the longest chain, i.e., the chain with the most blocks, as the main chain. Because key blocks require pBFT consensus, forks can only occur between two key blocks. Therefore, nodes only need to consider chains that include the latest key block.
 
 We apply the following heuristics from top to bottom to resolve a fork:
 
 \begin{enumerate}
 	\item The chain with the most key blocks.
-	\item The chain that has the blocks with the highest pBFT view change number.
+	\item The chain with the blocks with the highest pBFT view change number.
 	\item The chain with the most blocks.
 \end{enumerate}
 
 In case of a tie on all three conditions, the next validator can build on top of either chain.
 
 \subsection{Punishing misbehaving validators}
-There are three ways a validator can misbehave in our consensus implementation: producing an invalid block, creating a fork, and delaying a block.
+There are three ways a validator can misbehave in our consensus implementation: producing an invalid block, creating a fork, and delaying a block. These nead to be dealt with and disincentivized where appropriate.
 
-We deal with them as follows...
+We deal with the three types of misbehaviour as follows:
 
 \begin{enumerate}
-	\item {\em Invalid blocks} - When a validator produces an invalid block, the other validators will ignore that block. Validators will also ignore any more blocks from that validators during the current slot which helps prevent DoS attacks.
-	\item {\em Forks} - Forks are not possible during a key block, because pBFT is a forkless protocol. But a fork can be created if a validator produces more than one regular block in the same slot. 
-	\item {\em Delays} - Validators can take a long time to produce a block, either because they went offline or because they are being malicious. In both cases, we change the slot owner using the pBFT view change protocol. 
+	\item {\em Invalid blocks} - When a validator produces an invalid block, the other validators will ignore that block. Validators will also ignore any more blocks from that validator during the current slot, which helps prevent DoS attacks.
+	\item {\em Forks} - Forks are not possible during a key block, because pBFT is a forkless protocol. But a fork can be created if a validator produces more than one regular block in the same slot. In this case, both forks are ignored and a new active validator is selected using the pBFT view change protocol. 
+	\item {\em Delays} - Validators can too long to produce a block, or can go offline entirely. In both cases, we change the slot owner using the pBFT view change protocol. 
 \end{enumerate}
 
-We introduce \textit{slashing} to punish misbehaving validators. Slashing confiscates the stake of the validator who produced a fork. The only proof needed is two block headers, at the same slot, signed by the same validator. The slashed stake is evenly distributed between the rest of the validators in the current epoch.
+To disenctivize these behaviours, we introduce \textit{slashing} to punish misbehaving validators. Slashing confiscates the stake of the validator who produced an invalid block or fork. The only proof needed for a fork is two block headers, at the same slot, signed by the same validator. The slashed stake is evenly distributed between the rest of the validators in the current epoch. Delays are not punished by slashing, because it is impossible to tell whether the delay was malicious or not, and we do not want to discourage mobile nodes, who are likely to have less stable connections.
 
 \subsection{Collective Signing}
 We adopt \textit{CoSi}\cite{c10,c11}, a scalable witness co-signing protocol ensuring that every authoritative statement is validated and publicly logged by a diverse group of witnesses before any client will accept it. A statement $S$ collectively signed by $W$ witnesses assures clients that $S$ has been seen, and not immediately found erroneous, by those $W$ observers. 
@@ -367,7 +367,7 @@ The Stegos network is composed of \textit{bootstrap nodes}, \textit{compact node
 
 Bootstrap nodes carry the unpruned version of the blockchain and respond to bootstrap requests from new compact and bootstrap nodes. Compact nodes carry the pruned version of the blockchain, i.e., the current UTXO set. Light nodes only keep blockchain headers and know how to talk to validators. 
 
-Stegos will initially maintain the core of the network by running a number of core bootstrap nodes to ensure newtork continuity and performance. The addresses of the core nodes will be hard-coded into each release of the Stegos blockchain software.
+Stegos will initially maintain the core of the network by running a number of core bootstrap nodes to ensure network continuity and performance. The addresses of the core nodes will be hard-coded into each release of the Stegos blockchain software.
 
 Nodes keep a list of addresses of the nodes they know about (peers) and add new peers to the list as they become aware of them. A brand new node will connect to one of the core nodes to fetch a list of bootstrap nodes and download a copy of the blockchain. 
 
