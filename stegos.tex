@@ -663,43 +663,43 @@ The Stegos vision is ambitious, with equally ambitious goals!
 		
 \resizebox{.8\textwidth}{!}{%
 	
-	\def\angle{0}
-	\def\radius{3}
-	
-	\definecolor{aqua}{rgb}{0.0, 1.0, 1.0}
-	\definecolor{applegreen}{rgb}{0.55, 0.71, 0.0}
-	\definecolor{ao(english)}{rgb}{0.0, 0.5, 0.0}
-	
-	\def\cyclelist{{"green","blue","red","yellow","aqua","orange"}}
-	\newcount\cyclecount \cyclecount=-1
-	\newcount\ind \ind=-1
-	\begin{tikzpicture}[nodes = {font=\sffamily}]
-	\foreach \percent/\name in {
-		51.25/Sold to the public,
-		16.75/Development,
-		10.0/Marketing \& Ecosystem,
-		10.0/Reserve,
-		10.0/Team,
-		2.0/Advisors \& Key Backers
-	} {
-		\ifx\percent\empty\else               % If \percent is empty, do nothing
-		\global\advance\cyclecount by 1     % Advance cyclecount
-		\global\advance\ind by 1            % Advance list index
-		\ifnum6<\cyclecount                 % If cyclecount is larger than list
-		\global\cyclecount=0              %   reset cyclecount and
-		\global\ind=0                     %   reset list index
-		\fi
-		\pgfmathparse{\cyclelist[\the\ind]} % Get color from cycle list
-		\edef\color{\pgfmathresult}         %   and store as \color
-		% Draw angle and set labels
-		\draw[fill={\color!50},draw={\color}] (0,0) -- (\angle:\radius)
-		arc (\angle:\angle+\percent*3.6:\radius) -- cycle;
-		\node at (\angle+0.5*\percent*3.6:0.7*\radius) {\percent\,\%};
-		\node[pin=\angle+0.5*\percent*3.6:\name]
-		at (\angle+0.5*\percent*3.6:\radius) {};
-		\pgfmathparse{\angle+\percent*3.6}  % Advance angle
-		\xdef\angle{\pgfmathresult}         %   and store in \angle
-		\fi
+\def\angle{0}
+\def\radius{3}
+
+\definecolor{aqua}{rgb}{0.0, 1.0, 1.0}
+\definecolor{applegreen}{rgb}{0.55, 0.71, 0.0}
+\definecolor{ao(english)}{rgb}{0.0, 0.5, 0.0}
+
+\def\cyclelist{{"green","blue","red","yellow","aqua","orange"}}
+\newcount\cyclecount \cyclecount=-1
+\newcount\ind \ind=-1
+\begin{tikzpicture}[nodes = {font=\sffamily}]
+\foreach \percent/\name in {
+	51.25/Sold to the public,
+	16.75/Development,
+	10.0/Marketing \& Ecosystem,
+	10.0/Reserve,
+	10.0/Team,
+	2.0/Advisors \& Key Backers
+} {
+	\ifx\percent\empty\else               % If \percent is empty, do nothing
+	\global\advance\cyclecount by 1     % Advance cyclecount
+	\global\advance\ind by 1            % Advance list index
+	\ifnum6<\cyclecount                 % If cyclecount is larger than list
+	\global\cyclecount=0              %   reset cyclecount and
+	\global\ind=0                     %   reset list index
+	\fi
+	\pgfmathparse{\cyclelist[\the\ind]} % Get color from cycle list
+	\edef\color{\pgfmathresult}         %   and store as \color
+	% Draw angle and set labels
+	\draw[fill={\color!50},draw={\color}] (0,0) -- (\angle:\radius)
+	arc (\angle:\angle+\percent*3.6:\radius) -- cycle;
+	\node at (\angle+0.5*\percent*3.6:0.7*\radius) {\percent\,\%};
+	\node[pin=\angle+0.5*\percent*3.6:\name]
+	at (\angle+0.5*\percent*3.6:\radius) {};
+	\pgfmathparse{\angle+\percent*3.6}  % Advance angle
+	\xdef\angle{\pgfmathresult}         %   and store in \angle
+	\fi
 };
 \end{tikzpicture}
 }%
