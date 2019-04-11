@@ -72,7 +72,7 @@
 	{\sffamily\color{white}\fontsize{14}{18}\selectfont
 	\@author\\
 	\@date}
-	\end{flushleft}\egroup
+\end{flushleft}\egroup
 }
 \makeatother
 
@@ -95,7 +95,6 @@
 
 \begingroup
 \thispagestyle{empty}
-
 \AddToShipoutPicture*{\put(0,0){\includegraphics[width=\paperwidth,height=\paperheight]{images/front.pdf}}}
 \maketitle
 \endgroup
@@ -451,32 +450,32 @@ After verifying and signing a new block, the \textit{leader} broadcasts it to th
 A node must perform the following pruning algorithm for every regular block:
 
 \begin{algorithm}
-	\begin{algorithmic}
-		\State $block \gets <This Block>$
-		\State $tree \gets \Call{Get-TXIN-Merkle-Tree}{block}$
-		\State $leaves \gets \Call{Merkle-Tree-Leaves}{tree}$
-		\For{$leaf \gets leaves$}
-		\State $id \gets \Call{UTXO-ID}{leaf}$
-		\State $block’ \gets \Call{Find-Block-With}{id}$
-		\State $tree’ \gets \Call{Get-TXOUT-Merkle-Tree}{block’}$
-		\State $leaf’ \gets \Call{Find-Leaf}{tree’, id}$
-		\State \Call{Mark-As-Spent}{$leaf’$} \Comment{Does not touch the hash of the leaf}
-		\For {$sibling \gets \Call{Get-Sibling}{leaf’}, \Call{Is-Spent}{sibling$}}
+\begin{algorithmic}
+	\State $block \gets <This Block>$
+	\State $tree \gets \Call{Get-TXIN-Merkle-Tree}{block}$
+	\State $leaves \gets \Call{Merkle-Tree-Leaves}{tree}$
+	\For{$leaf \gets leaves$}
+	\State $id \gets \Call{UTXO-ID}{leaf}$
+	\State $block’ \gets \Call{Find-Block-With}{id}$
+	\State $tree’ \gets \Call{Get-TXOUT-Merkle-Tree}{block’}$
+	\State $leaf’ \gets \Call{Find-Leaf}{tree’, id}$
+	\State \Call{Mark-As-Spent}{$leaf’$} \Comment{Does not touch the hash of the leaf}
+	\For {$sibling \gets \Call{Get-Sibling}{leaf’}, \Call{Is-Spent}{sibling$}}
 		\State $parent \gets \Call{Get-Parent}{leaf’}$
 		\State \Call{Mark-As-Spent}{$parent$}
 		\State \Call{Delete-Node}{$leaf’$} \Comment{Removes the hash}
 		\State \Call{Delete-Node}{$sibling$}
 		\State $leaf’ \gets parent$
-		\EndFor
-		\EndFor
+	\EndFor
+\EndFor
+	
+\If {$\Call{Is-Empty}{tree}$}
+	\State $\Call{Delete-Tree}{block, tree}$ \Comment{Leaves just the hash in the block header}
+\EndIf
 		
-		\If {$\Call{Is-Empty}{tree}$}
-		\State $\Call{Delete-Tree}{block, tree}$ \Comment{Leaves just the hash in the block header}
-		\EndIf
-		
-	\end{algorithmic}
-	\caption{Pruning algorithm}
-	\label{code:pruning}
+\end{algorithmic}
+\caption{Pruning algorithm}
+\label{code:pruning}
 \end{algorithm}
 
 \section{FastData}\label{sec:fastdata}
@@ -510,23 +509,23 @@ Unfortunately, anything which links transactions together is a potential privacy
 \section{Roadmap}\label{sec:roadmap}
 
 \begin{table}[ht]
-	\centering
+\centering
 	\begin{tabular}{@{\extracolsep{4pt}}lll}
-		\toprule[2pt] 
-		Year & Target date & Deliverable \\
-		\midrule[2pt]
-		2019 & 31.05 & Mainnet and native token\\
-		{} & Q3 & Exchange token sale \\
-		{} & Q4 & Sharding \\
-		{} & Q4 & Mobile staking \\
-		2020 & Q1 & App Store \\
-		{} & {} & Private marketplaces \\
-		{} & {} & Dandelion \\
-		{} & Q2 & Pruning with no bootstrap nodes \\
-		{} & {} & zk-STARKs \\
-		\bottomrule[2pt]
+	\toprule[2pt] 
+	Year & Target date & Deliverable \\
+	\midrule[2pt]
+	2019 & 31.05 & Mainnet and native token\\
+	{} & Q3 & Exchange token sale \\
+	{} & Q4 & Sharding \\
+	{} & Q4 & Mobile staking \\
+	2020 & Q1 & App Store \\
+	{} & {} & Private marketplaces \\
+	{} & {} & Dandelion \\
+	{} & Q2 & Pruning with no bootstrap nodes \\
+	{} & {} & zk-STARKs \\
+	\bottomrule[2pt]
 	\end{tabular}
-	\caption{Roadmap} 
+\caption{Roadmap} 
 \end{table}
 
 \section{Conclusion}
@@ -585,8 +584,8 @@ Find out more about David on his \href{https://www.linkedin.com/in/david-mcclain
 \section{Roman Tsisyk, Core Blockchain Team Lead}
 
 {
-	\setlength\intextsep{0pt}
-	\begin{wrapfigure}{l}{0pt}
+\setlength\intextsep{0pt}
+\begin{wrapfigure}{l}{0pt}
 	\includegraphics{images/team/team-4.png}
 \end{wrapfigure}
 
@@ -636,11 +635,11 @@ Find out more about Volodymyr on his \href{https://linkedin.com/in/vldm}{LinkedI
 	\includegraphics[scale=\imgscale]{images/partners/partners-4.png}
 	\columnbreak
 	\includegraphics[scale=\imgscale]{images/partners/partners-5.png}
-		\columnbreak
-		\includegraphics[scale=\imgscale]{images/partners/partners-6.png}
-		\columnbreak
-		\includegraphics[scale=\imgscale]{images/partners/partners-7.png}
-	\end{multicols}
+	\columnbreak
+	\includegraphics[scale=\imgscale]{images/partners/partners-6.png}
+	\columnbreak
+	\includegraphics[scale=\imgscale]{images/partners/partners-7.png}
+\end{multicols}
 }
 
 \section{Fundraising goals}
@@ -660,70 +659,70 @@ The Stegos vision is ambitious, with equally ambitious goals!
 \section{Token allocation}
 
 \begin{figure}[h!]
-	\centering
-			
-	\resizebox{.8\textwidth}{!}{%
+\centering
 		
-		\def\angle{0}
-		\def\radius{3}
-		
-		\definecolor{aqua}{rgb}{0.0, 1.0, 1.0}
-		\definecolor{applegreen}{rgb}{0.55, 0.71, 0.0}
-		\definecolor{ao(english)}{rgb}{0.0, 0.5, 0.0}
-		
-		\def\cyclelist{{"green","blue","red","yellow","aqua","orange"}}
-		\newcount\cyclecount \cyclecount=-1
-		\newcount\ind \ind=-1
-		\begin{tikzpicture}[nodes = {font=\sffamily}]
-		\foreach \percent/\name in {
-			51.25/Sold to the public,
-			16.75/Development,
-			10.0/Marketing \& Ecosystem,
-			10.0/Reserve,
-			10.0/Team,
-			2.0/Advisors \& Key Backers
-		} {
-			\ifx\percent\empty\else               % If \percent is empty, do nothing
-			\global\advance\cyclecount by 1     % Advance cyclecount
-			\global\advance\ind by 1            % Advance list index
-			\ifnum6<\cyclecount                 % If cyclecount is larger than list
-			\global\cyclecount=0              %   reset cyclecount and
-			\global\ind=0                     %   reset list index
-			\fi
-			\pgfmathparse{\cyclelist[\the\ind]} % Get color from cycle list
-			\edef\color{\pgfmathresult}         %   and store as \color
-			% Draw angle and set labels
-			\draw[fill={\color!50},draw={\color}] (0,0) -- (\angle:\radius)
-			arc (\angle:\angle+\percent*3.6:\radius) -- cycle;
-			\node at (\angle+0.5*\percent*3.6:0.7*\radius) {\percent\,\%};
-			\node[pin=\angle+0.5*\percent*3.6:\name]
-			at (\angle+0.5*\percent*3.6:\radius) {};
-			\pgfmathparse{\angle+\percent*3.6}  % Advance angle
-			\xdef\angle{\pgfmathresult}         %   and store in \angle
-			\fi
-		};
-		\end{tikzpicture}
-	}%
+\resizebox{.8\textwidth}{!}{%
+	
+	\def\angle{0}
+	\def\radius{3}
+	
+	\definecolor{aqua}{rgb}{0.0, 1.0, 1.0}
+	\definecolor{applegreen}{rgb}{0.55, 0.71, 0.0}
+	\definecolor{ao(english)}{rgb}{0.0, 0.5, 0.0}
+	
+	\def\cyclelist{{"green","blue","red","yellow","aqua","orange"}}
+	\newcount\cyclecount \cyclecount=-1
+	\newcount\ind \ind=-1
+	\begin{tikzpicture}[nodes = {font=\sffamily}]
+	\foreach \percent/\name in {
+		51.25/Sold to the public,
+		16.75/Development,
+		10.0/Marketing \& Ecosystem,
+		10.0/Reserve,
+		10.0/Team,
+		2.0/Advisors \& Key Backers
+	} {
+		\ifx\percent\empty\else               % If \percent is empty, do nothing
+		\global\advance\cyclecount by 1     % Advance cyclecount
+		\global\advance\ind by 1            % Advance list index
+		\ifnum6<\cyclecount                 % If cyclecount is larger than list
+		\global\cyclecount=0              %   reset cyclecount and
+		\global\ind=0                     %   reset list index
+		\fi
+		\pgfmathparse{\cyclelist[\the\ind]} % Get color from cycle list
+		\edef\color{\pgfmathresult}         %   and store as \color
+		% Draw angle and set labels
+		\draw[fill={\color!50},draw={\color}] (0,0) -- (\angle:\radius)
+		arc (\angle:\angle+\percent*3.6:\radius) -- cycle;
+		\node at (\angle+0.5*\percent*3.6:0.7*\radius) {\percent\,\%};
+		\node[pin=\angle+0.5*\percent*3.6:\name]
+		at (\angle+0.5*\percent*3.6:\radius) {};
+		\pgfmathparse{\angle+\percent*3.6}  % Advance angle
+		\xdef\angle{\pgfmathresult}         %   and store in \angle
+		\fi
+};
+\end{tikzpicture}
+}%
 \bigskip
 
-	% \caption{Token allocation}
-	\label{fig:token-allocation}
+% \caption{Token allocation}
+\label{fig:token-allocation}
 \end{figure}
 
 \begin{table}[ht!]
-	\centering
-	\begin{tabular}{@{\extracolsep{4pt}}ll}
-		\toprule[2pt] Proportion & Purpose \\ 
-		\midrule[2pt]
-		51.25\% & Sold to the public \\
-		16.75\% & Development \\
-		10\% & Marketing \& ecosystem \\
-		10\% & Reserve \\
-		10\% & Team \\
-		2\% & Advisors and key backers \\
-		\bottomrule[2pt]
-	\end{tabular}
-	\caption{Token allocation} 
+\centering
+\begin{tabular}{@{\extracolsep{4pt}}ll}
+	\toprule[2pt] Proportion & Purpose \\ 
+	\midrule[2pt]
+	51.25\% & Sold to the public \\
+	16.75\% & Development \\
+	10\% & Marketing \& ecosystem \\
+	10\% & Reserve \\
+	10\% & Team \\
+	2\% & Advisors and key backers \\
+	\bottomrule[2pt]
+\end{tabular}
+\caption{Token allocation} 
 \end{table}
 
 \section{Emission}
@@ -739,8 +738,8 @@ STG token emission will start at 14\% of the initial supply during the first 4 y
 \newcommand{\setvar}[2] {
 	\edef#1{0}
 	\FPeval#1{#2}
-	%	\pgfmathparse{#2}
-	%	\edef#1{\pgfmathresult}
+%	\pgfmathparse{#2}
+%	\edef#1{\pgfmathresult}
 }
 
 \def\InitialSupply{1000000000} % 1 billion 
@@ -788,7 +787,7 @@ STG token emission will start at 14\% of the initial supply during the first 4 y
 % Total percentage for sale
 \setvar\TotalPctSold{\SeedPctSold + \ROnePctSold + \RTwoPctSold}
 
-	%% Future sales %%% 
+%%% Future sales %%% 
 
 \def\ExchOnePrice{0.023}
 \def\ExchTwoPrice{0.033}
@@ -889,38 +888,38 @@ STG token emission will start at 14\% of the initial supply during the first 4 y
 Previous and future token sales:
 
 \begin{table}[htp!]
-	\centering
-	\begin{tabular}{@{\extracolsep{4pt}}lllllll}
-		\toprule[1pt] 
-		{} & \multicolumn{6}{c}{Completed token sales} \\
-		\cmidrule{2-7}
-		Round & Tokens & Price & \% Tokens & \% for Sale & Amount & \% Raise \\
-		\midrule[1pt]
-		Seed & \pAmt{\SeedTokens} & \pPrice{\SeedPrice} & \pPct{\SeedAlloc} & \pPct{\SeedPctSold} & \$\pAmt{\SeedAmt} & \pPct{\SeedPctRaise} \\
-		Round 1 & \pAmt{\ROneTokens} & \pPrice{\ROnePrice} & \pPct{\ROneAlloc} & \pPct{\ROnePctSold} & \$\pAmt{\ROneAmt} & \pPct{\ROnePctRaise} \\
-		Round 2 & \pAmt{\RTwoTokens} & \pPrice{\RTwoPrice} & \pPct{\RTwoAlloc} & \pPct{\RTwoPctSold} & \$\pAmt{\RTwoAmt} & \pPct{\RTwoPctRaise} \\
-		\bottomrule[1pt]
-		Total & \pAmt{\SoldTokens} & {} & \pPct{\SoldAlloc} & \pPct{\TotalPctSold} & \$\pAmt{\SoldAmt} & \pPct{\TotalPctRaise} \\
-		\toprule[1pt] 
-		{} & \multicolumn{6}{c}{Planned exchange token sales} \\
-		\cmidrule{2-7}
-		Round & Tokens & Price & \% Tokens & \% for Sale & Amount & \% Raise \\
-		\midrule[1pt]
-		Stage 1 & \pAmt{\ExchOneTokens} & \pPrice{\ExchOnePrice} & \pPct{\ExchOneAlloc} & \pPct{\ExchOnePctSale} & \$\pAmt{\ExchOneAmt} & \pPct{\ExchOnePctRaise} \\
-		Stage 2 & \pAmt{\ExchTwoTokens} & \pPrice{\ExchTwoPrice} & \pPct{\ExchTwoAlloc} & \pPct{\ExchTwoPctSale} & \$\pAmt{\ExchTwoAmt} & \pPct{\ExchTwoPctRaise} \\
-		\bottomrule[1pt]
-		Total & \pAmt{\ExchTokens} & {} & \pPct{\ExchAlloc} & \pPct{\ExchPctSale} & \$\pAmt{\ExchAmt} & \pPct{\ExchPctRaise} \\
-		\addlinespace
-		\toprule[2pt] 
-		\midrule[0pt]
-		Global Total & \bm{\mathbf{\pAmt{\TotalTokens}}} & {} & \bm{\mathbf{\pPct{\TotalAlloc}}} & \bm{\mathbf{\pPct{\TotalPctSale}}} & \bm{\mathbf{\$\pAmt{\TotalAmt}}} & \bm{\mathbf{\pPct{\PctRaise}}} \\
-		\bottomrule[2pt]
-		
-	\end{tabular}
-	\caption{Token sales} 
+\centering
+\begin{tabular}{@{\extracolsep{4pt}}lllllll}
+	\toprule[1pt] 
+	{} & \multicolumn{6}{c}{Completed token sales} \\
+	\cmidrule{2-7}
+	Round & Tokens & Price & \% Tokens & \% for Sale & Amount & \% Raise \\
+	\midrule[1pt]
+	Seed & \pAmt{\SeedTokens} & \pPrice{\SeedPrice} & \pPct{\SeedAlloc} & \pPct{\SeedPctSold} & \$\pAmt{\SeedAmt} & \pPct{\SeedPctRaise} \\
+	Round 1 & \pAmt{\ROneTokens} & \pPrice{\ROnePrice} & \pPct{\ROneAlloc} & \pPct{\ROnePctSold} & \$\pAmt{\ROneAmt} & \pPct{\ROnePctRaise} \\
+	Round 2 & \pAmt{\RTwoTokens} & \pPrice{\RTwoPrice} & \pPct{\RTwoAlloc} & \pPct{\RTwoPctSold} & \$\pAmt{\RTwoAmt} & \pPct{\RTwoPctRaise} \\
+	\bottomrule[1pt]
+	Total & \pAmt{\SoldTokens} & {} & \pPct{\SoldAlloc} & \pPct{\TotalPctSold} & \$\pAmt{\SoldAmt} & \pPct{\TotalPctRaise} \\
+	\toprule[1pt] 
+	{} & \multicolumn{6}{c}{Planned exchange token sales} \\
+	\cmidrule{2-7}
+	Round & Tokens & Price & \% Tokens & \% for Sale & Amount & \% Raise \\
+	\midrule[1pt]
+	Stage 1 & \pAmt{\ExchOneTokens} & \pPrice{\ExchOnePrice} & \pPct{\ExchOneAlloc} & \pPct{\ExchOnePctSale} & \$\pAmt{\ExchOneAmt} & \pPct{\ExchOnePctRaise} \\
+	Stage 2 & \pAmt{\ExchTwoTokens} & \pPrice{\ExchTwoPrice} & \pPct{\ExchTwoAlloc} & \pPct{\ExchTwoPctSale} & \$\pAmt{\ExchTwoAmt} & \pPct{\ExchTwoPctRaise} \\
+	\bottomrule[1pt]
+	Total & \pAmt{\ExchTokens} & {} & \pPct{\ExchAlloc} & \pPct{\ExchPctSale} & \$\pAmt{\ExchAmt} & \pPct{\ExchPctRaise} \\
+	\addlinespace
+	\toprule[2pt] 
+	\midrule[0pt]
+	Global Total & \bm{\mathbf{\pAmt{\TotalTokens}}} & {} & \bm{\mathbf{\pPct{\TotalAlloc}}} & \bm{\mathbf{\pPct{\TotalPctSale}}} & \bm{\mathbf{\$\pAmt{\TotalAmt}}} & \bm{\mathbf{\pPct{\PctRaise}}} \\
+	\bottomrule[2pt]
 	
-	\begin{tabular}{@{\extracolsep{4pt}}lllllll}
-	\end{tabular}
+\end{tabular}
+\caption{Token sales} 
+
+\begin{tabular}{@{\extracolsep{4pt}}lllllll}
+\end{tabular}
 \end{table}
 
 \newpage
@@ -929,19 +928,19 @@ Previous and future token sales:
 A vesting schedule will apply to tokens purchased during the private sale. These tokens will be gradually released after mainnet launch according to the following schedule:
 
 \begin{table}[ht]
-	\centering
-	\begin{tabular}{@{\extracolsep{4pt}}lccccccccccc}
-		\toprule[2pt] 
-		{} & \multicolumn{11}{c}{Months after Mainnet Launch} \\
-		\cmidrule{2-12}
-		{} & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 \\
-		\midrule[2pt]
-		Seed & {} & {} & {} & 12.5\% & 12.5\% & 12.5\% & 12.5\% & 12.5\% & 12.5\% & 12.5\% & 12.5\% \\
-		Round 1 & 50\% & 10\% & 10\% & 10\% & 10\% & 10\% & {} & {} & {} & {} & {} \\
-		Round 2 & 70\% & 10\% & 10\% & 10\% & {} & {} & {} & {} & {} & {} & {} \\
-		\bottomrule[2pt]
-	\end{tabular}
-	\caption{Vesting schedule} 
+\centering
+\begin{tabular}{@{\extracolsep{4pt}}lccccccccccc}
+	\toprule[2pt] 
+	{} & \multicolumn{11}{c}{Months after Mainnet Launch} \\
+	\cmidrule{2-12}
+	{} & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 \\
+	\midrule[2pt]
+	Seed & {} & {} & {} & 12.5\% & 12.5\% & 12.5\% & 12.5\% & 12.5\% & 12.5\% & 12.5\% & 12.5\% \\
+	Round 1 & 50\% & 10\% & 10\% & 10\% & 10\% & 10\% & {} & {} & {} & {} & {} \\
+	Round 2 & 70\% & 10\% & 10\% & 10\% & {} & {} & {} & {} & {} & {} & {} \\
+	\bottomrule[2pt]
+\end{tabular}
+\caption{Vesting schedule} 
 \end{table}
 
 50\% of team tokens will be locked for 12 months from mainnet launch. The rest may be sold in small regular batches, according to the financing needs of the company.
@@ -949,28 +948,28 @@ A vesting schedule will apply to tokens purchased during the private sale. These
 Locked tokens cannot be transferred, but they can be used for staking.
 
 \comment{
-	\chapter{Partners}
-	
-	\newcommand{\pic}[1]{
-		\framebox{
-			\includegraphics[clip]{images/partners/#1.png}
-		}
+\chapter{Partners}
+
+\newcommand{\pic}[1]{
+	\framebox{
+		\includegraphics[clip]{images/partners/#1.png}
 	}
-	
-	\newcolumntype{i}{
-		@{\hspace{1ex}}
-		>{\collectcell\pic}
-		c<{\endcollectcell}
-	}
-	
-	\begin{table}[ht] 
-		\centering	
-		\begin{tabular}{iii}
-			partners-1 & partners-2 & partners-3 \\
-			partners-4 & partners-5 & partners-6 \\
-			empty & partners-7 & empty \\
-		\end{tabular}
-	\end{table}
+}
+
+\newcolumntype{i}{
+	@{\hspace{1ex}}
+	>{\collectcell\pic}
+	c<{\endcollectcell}
+}
+
+\begin{table}[ht] 
+	\centering	
+	\begin{tabular}{iii}
+		partners-1 & partners-2 & partners-3 \\
+		partners-4 & partners-5 & partners-6 \\
+		empty & partners-7 & empty \\
+	\end{tabular}
+\end{table}
 }
 
 \chapter{Legal Disclaimer}
@@ -983,21 +982,21 @@ By accessing this white paper or any part thereof, you represent and warrant to 
 
 \begin{enumerate}[label=(\alph*)]
 	\item the STG tokens (the “Tokens”) described herein may have no value, there is no guarantee or representation of future value or liquidity for the Tokens, and the Tokens are not intended for speculative investment; 
-	
+
 	\item Stegos, its affiliates, and the Stegos team members shall not be responsible for or liable for the value of the Tokens, the transferability and/or liquidity of the Tokens, and/or the availability of any market for the Tokens through third parties or otherwise; 
-	
+
 	\item in any decision to acquire Tokens, you have not relied on any statement set out in this white paper; 
-	
+
 	\item you will and shall at your own expense ensure compliance with all laws, regulatory requirements and restrictions applicable to you; 
-	
+
 	\item the information contained herein shall be subject solely to Swiss law, and the place of jurisdiction shall be Zug, Switzerland; 
-	
+
 	\item Stegos, its affiliates, and the Stegos team, as a result of future applicable law, decree, regulation, treaty, or administrative act, may be restricted or limited to hold a token generation event (“TGE”) or any similar event as currently planned, and may elect, at their discretion, to issue Tokens through or by a legal entity other than Stegos; 
-	
+
 	\item Stegos, its affiliates, and the Stegos team may be prohibited from offering any Tokens at either the TGE or in a secondary market to certain jurisdictions and their subjects, and may have to restrict trading of the Tokens on certain trading platforms as a result of applicable law, decree, regulation, treaty, or administrative act; and 
-	
+
 	\item you may not be eligible to acquire any Tokens if you are a citizen, national, resident (tax or otherwise), domiciliary and/or green card holder of a geographic area or country where it is likely that the sale or distribution of the Tokens would be construed as the sale of a security (howsoever named) or investment product, and/or in which access to or participation in any token distribution event or the Stegos platform is prohibited by applicable law, decree, regulation, treaty, or administrative act. 
-	
+
 \end{enumerate}
 
 This white paper shall not be construed to be an invitation or solicitation to enter into an investment or participate in the sale of a security (howsoever named) or investment product in any jurisdiction. The information in this white paper is given for general illustrative and discussion purposes only, and Stegos does not provide any warranty as to the accuracy and completeness of this information. Stegos reserves the right to change the information contained herein at its sole discretion. The information set out in this white paper is not legally binding upon Stegos, its affiliates, and the Stegos team members. The agreement for any issuance or distribution of the Tokens shall be governed by a separate agreement setting out the terms and conditions thereof. In the event of any inconsistencies between such an agreement and this whitepaper, the terms and conditions of the agreement shall prevail. 
@@ -1238,20 +1237,20 @@ In this chapter we give a brief overview of most prominent privacy coins and ana
 \section{Comparison of privacy coins}
 
 \begin{table}[ht!]
-	\centering
-	\begin{tabular}{llllllllll}
-		\toprule[2pt] 
-		{} & Unlink\textsuperscript{1}
-		& Untrac\textsuperscript{2} & Conf \textsuperscript{3} & Prun\textsuperscript{4} & Shard\textsuperscript{5} & Inter \textsuperscript{6} & Cons\textsuperscript{7} & Trust\textsuperscript{8} & Apps \textsuperscript{9} \\
-		\midrule[2pt]
-		Monero & Yes & Yes & Yes & No & No & No & PoW & No & No \\
-		Zcash  & Yes & Yes & Yes & No  & No & No & PoW & Yes & No \\
-		Dash   & No  & Yes & No  & No  & No & No & PoW/PoS & No & No \\
-		Grin   & Yes & No  & Yes & Yes & No & Yes & PoW & No & No \\
-		Stegos & Yes & Yes & Yes & Yes & Yes & No & PoS & No  & Yes \\
-		\bottomrule[2pt]
-	\end{tabular}
-	\caption{Features of privacy coins} 
+\centering
+\begin{tabular}{llllllllll}
+	\toprule[2pt] 
+	{} & Unlink\textsuperscript{1}
+	& Untrac\textsuperscript{2} & Conf \textsuperscript{3} & Prun\textsuperscript{4} & Shard\textsuperscript{5} & Inter \textsuperscript{6} & Cons\textsuperscript{7} & Trust\textsuperscript{8} & Apps \textsuperscript{9} \\
+	\midrule[2pt]
+	Monero & Yes & Yes & Yes & No & No & No & PoW & No & No \\
+	Zcash  & Yes & Yes & Yes & No  & No & No & PoW & Yes & No \\
+	Dash   & No  & Yes & No  & No  & No & No & PoW/PoS & No & No \\
+	Grin   & Yes & No  & Yes & Yes & No & Yes & PoW & No & No \\
+	Stegos & Yes & Yes & Yes & Yes & Yes & No & PoS & No  & Yes \\
+	\bottomrule[2pt]
+\end{tabular}
+\caption{Features of privacy coins} 
 \end{table}
 
 \begin{enumerate}
