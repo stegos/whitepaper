@@ -1136,16 +1136,16 @@ Each node intending to submit a transaction should broadcast a \textit{Transacti
 
 \textit{Facilitators} should listen to transaction intent messages from the nodes and pool public keys from those messages into collections of $K$ keys each. $K$ defines a cardinality of the anonymity set by defining how many participants should form a transaction mixing pool. This is a tunable parameter which can be set for an each epoch of the blockchain. 
 
-Upon collection of $K$ keys or on the timeout of $T$ seconds, \textit{the facilitator} broadcasts \textit{Transactions Pool} message (signed with its private key), containing all collected ephemeral public keys and corresponding signatures.
+Upon collection of $K$ keys or on the timeout of $T$ seconds, \textit{the facilitator} broadcasts a \textit{Transactions Pool} message (signed with its private key), containing all collected ephemeral public keys and corresponding signatures.
 
 Each node that recognizes its key in \textit{Transactions Pool} messages should sort the collection of keys from it in ascending numerical order, form the hash of the collection, and use that hash as a random seed for the \textit{Pooled Transactions Session}.
 
 \textit{A pool leader} is elected by participating nodes by forming the XOR of the hash value defined above with the public key of the each pool participant and, if the resulting value is the minimum in the list, then that node should be chosen as a \textit{pool leader}.
 
-\textit{A pool leader} is responsible for publication of a final pooled transaction, that we call a \textit{super-transaction}.
+\textit{A pool leader} is responsible for publication of a final pooled transaction, which we call a \textit{super-transaction}.
 
 \section{Establishing the pooled transaction session}
-All communications, including broadcasting, within the pooled transactions session should be contained within the group of the pool participants. All nodes of the pool will broadcast their lists of TXINs along with signatures validating ownership of their TXINs. Every participant can validate the lists from other participants by verifying the signature attesting to TXIN ownership. Participants should check that the public key referenced by the TXIN $ID$ is from one of the group members.
+All communications, including broadcasting, within the pooled transactions session should be contained within the group of the pool participants. All nodes in the pool will broadcast their lists of TXINs along with signatures validating ownership of their TXINs. Every participant can validate the lists from other participants by verifying the signature attesting to TXIN ownership. Participants should check that the public key referenced by the TXIN $ID$ is from one of the group members.
 
 \subsection{Collecting inputs} 
 A valid signature on the TXINs from one participant is formed by creating a Schnorr signature on the sum of the cloaked public keys shown in the UTXOs referenced in the TXINs:
@@ -1159,20 +1159,20 @@ P_{cmp} &= N P + (\sum_i{\delta_i})\, G = s_{cmp} \, G\\
 u &= k + H_r(K, P_{cmp}, H(ID_1, ID_2, ..., ID_N)) \, s_{cmp},
 \end{align*}
 
-where the sum is over the list of TXINs, $s$ is the owner’s secret key, $P = s \, G$ is the corresponding public key, and the $\delta_i$ are the cloaking factors used on the public key of the owner. $N$ refers to how many TXINs there are in the list. Value $k$ is chosen randomly from the field, $Z_r$. 
+where the sum is over the list of TXINs, $s$ is the owner’s secret key, $P = s \, G$ is the corresponding public key, and the $\delta_i$ are the cloaking factors used on the public key of the owner. $N$ is the number of TXINs in the list. The value $k$ is chosen randomly from the field, $Z_r$. 
 
-Verification of a signature is done by seeing that:
+Signature verification is accomplished by seeing that:
 $$u \, G = K + H_r(K, \sum_i{P_i}, H(ID_1, ID_2, ..., ID_N)) \, \sum_i{P_i}$$
-where the $P_i$ are the cloaked public keys shown in the UTXOs corresponding to each $ID_i$. This signature proves ownership of the stated UTXOs referenced in TXINs.
+where $P_i$ are the cloaked public keys shown in the UTXOs corresponding to each $ID_i$. This signature proves ownership of the stated UTXOs referenced in TXINs.
 
 Nothing in this broadcast identifies the sender, but one cannot count on that to hold. In the event of misbehavior, a blame cycle will require each node to submit all their shared secret keys, which effectively reveals their full transactions. A restart will compute new TXOUTs, so that a successful run ensures anonymity of participants. But if a blame cycle is performed, there is no way to cloak the associations to TXINs again.
 
-Once contributions have been received from each participant, or a timeout occurs, the resulting pool of TXINs is known to all participants. Since these are merely UTXO $ID$s pointing into the immutable blockchain, no further changes can occur to this list except for removal of individual TXIN references as some participants are found to go offline during the protocol, or else when a cheater is detected and then excluded for a restart of the protocol.
+Once contributions have been received from each participant, or a timeout occurs, the resulting pool of TXINs is known to all participants. Since these are merely UTXO $ID$s pointing into the immutable blockchain, no further changes can occur to this list except for removal of individual TXIN references as some participants are found to go offline during the protocol, or else when a cheater is detected and subsequently excluded for a restart of the protocol.
 
 \subsection{Establishing pair-wise shared keys} 
-All participants will establish pair-wise shared secret keys between themselves and every other participant of the pooled transactions session. These shared keys are used to form cloaking factors in the anonymizing protocol, such that, only after pooling results from all participants will the collection of data shared among them become apparent. Until that time, all information remains cloaked. After that time, the data will be known, but no associations can be inferred regarding who supplied which portions of the data. 
+All participants will establish pair-wise shared secret keys between themselves and every other participant of the pooled transactions session. These shared keys are used to form cloaking factors in the anonymizing protocol, such that, only after pooling results from all participants will the collection of data shared among them become apparent. Until that time, all information remains cloaked. After that time the data will be known, but no associations can be inferred regarding who supplied which portions of the data. 
 
-It is important to the protocol, that between any two users both of them are using the same shared secret cloaking key. Only then will the sum of all cloaking factors, from all participants, cancel out in the DiceMix arrays. But users are prevented from seeing each other’s secrets since the total cloaking factor also sums contributions related to all other participants, and those keys are unknown to the other party.
+For the protocol to work, pairs of users must always use the same shared secret cloaking key when interacting. Only then will the sum of all cloaking factors, from all participants, cancel out in the DiceMix arrays. But users are prevented from seeing each other’s secrets since the total cloaking factor also sums contributions related to all other participants, and those keys are unknown to the other party.
 
 Shared keys can be securely established between every pair of participants using a Diffie-Hellman secure key exchange\cite{c21}. With two participants, $A$ and $B$, this can be established by having $A$ send to $B$
 $$A \rightarrow B: (\alpha \, P_B, Sig(P_A))$$
@@ -1192,19 +1192,19 @@ $$\alpha \, G = (\alpha \, P_B) / s_B$$
 Then each side can multiply their result by their chosen randomness to reveal $(\alpha \beta \, G)$. Nobody watching the exchange can deduce the shared secret key.
 
 \subsection{Producing DiceMix arrays for outputs} 
-Next, each participant computes their TXOUTs with \textit{fresh randomness}, chooses random $k$-factors for an eventual collective Schnorr signature, and produces both a DiceMix array containing the fragmented TXOUTs, and cloaked running sums of their $\gamma_{adj}$ and $K$-signature values. The hash commitment of this information is signed and broadcast to all participants. This commitment will be used to verify information during the following passes to verify that information was properly transmitted.
+Next, each participant computes their TXOUTs with \textit{fresh randomness}, chooses random $k$-factors for an eventual collective Schnorr signature, and produces both a DiceMix array containing the fragmented TXOUTs and cloaked running sums of their $\gamma_{adj}$ and $K$-signature values. The hash commitment of this information is signed and broadcast to all participants. This commitment will be used to verify information during the following passes to verify that information was properly transmitted.
 
-The DiceMix array contains successive powers of TXOUTs fragments, cloaked with self-canceling seeds that zero-out after all participants pool their results from the next pass. After forming the DiceMix array and running sums, this information is signed and broadcast to all participants. Anonymity is assured because of the DiceMix cryptographic mixing process. Even though all participants can see, from the accompanying signature, who delivered a DiceMix array, they cannot see which components of the collection were contributed by any participant. The entire collection is revealed only after summing the DiceMix arrays from all participants.
+The DiceMix array contains successive powers of TXOUTs fragments, cloaked with self-canceling seeds that zero-out after all participants pool their results from the next pass. After forming the DiceMix array and running sums, this information is signed and broadcast to all participants. Anonymity is assured because of the DiceMix cryptographic mixing process. Even though all participants can see, from the accompanying signature, who delivered a DiceMix array, they cannot see which components of the collection were contributed by any given participant. The entire collection is revealed only after summing the DiceMix arrays from all participants.
 
 The individual $K$-signature terms from each participant are summed in a blind sum. We do this to prevent combinatorial exploration, once signature $u$-values are disclosed, which could lead to associations between TXINs and TXOUTs.
 
 \subsection{Forming the super-transaction} 
 On receipt of all DiceMix arrays and the running sums, each participant can form the polynomial, using Newton’s Identities, whose roots are the individual contributions. Solving that polynomial for its roots reveals each component of participants’ TXOUTs. These TXOUTs are reassembled, and a \textit{super-transaction} is formed containing all TXINs, TXOUT’s, the $\gamma_{adj}$ sum needed to show zero balance, and the $K$-signature sum needed for a collective Schnorr signature.
 
-Each participant validates the entire transaction for correctness by examining the $\gamma$ sums for zero balance, and verifying the TXOUTs Bulletproofs. They must also find their own contributions in the lists of TXINs and TXOUTs. If the super-transaction does not properly validate, then someone has cheated, and we enter a \textit{blame discovery cycle}. Otherwise we proceed to the formation of the collective signature. 
+Each participant validates the entire transaction for correctness by examining the $\gamma$ sums for zero balance, and verifying the TXOUTs Bulletproofs. They must also find their own contributions in the lists of TXINs and TXOUTs. If the super-transaction does not properly validate then someone has cheated, and we enter a \textit{blame discovery cycle}. Otherwise we proceed to the formation of the collective signature. 
 
 \subsection{Forming the collective Schnorr signature} 
-Knowing the super-transaction, and the collective $K_{sum}$ signature term, each participant broadcasts their $u$-signature component to be summed with those of other participants, yielding a collective Schnorr signature on the whole super-transaction.
+Knowing the super-transaction and the collective $K_{sum}$ signature term, each participant broadcasts their $u$-signature component to be summed with those of other participants, yielding a collective Schnorr signature on the whole super-transaction.
 
 Signature formation on the super-transaction for each participant is done as follows:
 
@@ -1252,9 +1252,10 @@ In this chapter we give a brief overview of most prominent privacy coins and ana
 \end{table}
 
 \begin{enumerate}
-	\item Unlinkability. For any two outgoing transactions it is impossible to prove they were sent to the same person\cite{c2}.
-	\item Untraceability. For each incoming transaction all possible senders are equiprobable\cite{c2}.
-	\item Confidentiality. Protection from analyzing blockchain data (e.g. transaction details, including   	\item Pruning. Spent coins can be pruned from the blockchain and the blockchain can be compacted.
+	\item Unlinkability. For any two outgoing transactions, it is impossible to prove they were sent to the same person\cite{c2}.
+	\item Untraceability. For each incoming transaction, all possible senders are equiprobable\cite{c2}.
+	\item Confidentiality. Protection from analyzing blockchain data (e.g., transaction details, including   	
+	\item Pruning. Spent coins can be pruned from the blockchain and the blockchain can be compacted.
 	\item Sharding. A transaction verification and block-sealing process that can be partitioned between participants or groups of participants.
 	\item Interactivity. Senders and recipients of transactions must interact with each other \textit{off-chain} before posting a transaction to the blockchain.
 	\item Trusted Setup. Blockchain participants need to trust someone to generate some initial parameters and then destroy those parameters.
@@ -1268,44 +1269,44 @@ In this chapter we give a brief overview of most prominent privacy coins and ana
 
 \section{Description of privacy coins}
 
-\subsection{Monero} originated as a Bytecoin fork in 2014 under the name Bitmonero. The cryptocurrency is using a UTXO model and PoW consensus, and based on the CryptoNote protocol\cite{c2}, employing the ring signatures method. In 2017, Monero implemented RingCT\cite{c3}, an improved version of the ring signatures. RingCT enables confidentiality of amounts and untraceability of transactions. In combination with the stealth addresses (also introduced in the original CryptoNote paper), which provide unlinkability of recipients, this provides full privacy and confidentiality.
+\subsection{Monero} Monero originated as a Bytecoin fork in 2014 under the name Bitmonero. Monero uses a UTXO model and PoW consensus, and employs the ring signatures method based on the CryptoNote protocol\cite{c2}. In 2017, Monero implemented RingCT\cite{c3}, an improved version of ring signatures. RingCT enables confidentiality of amounts and untraceability of transactions. In combination with the stealth addresses (also introduced in the original CryptoNote paper), which provide unlinkability of recipients, this provides full privacy and confidentiality.
 
-Monero’s blockchain cannot be compacted because spent UTXOs cannot be pruned from it. Keeping all UTXOs forever is one of the requirements of RingCT protocol, which obfuscates the fact that particular UTXOs mentioned in transaction inputs were actually spent. 
-Despite the recent introduction of Bulletproofs\cite{c4} which replaced Monero’s original zero-knowledge range proofs and reduced a simple transaction size from 13KB down to 2.5KB, the problem with ever-growing blockchains cannot be solved. 
+Monero’s blockchain cannot be compacted because spent UTXOs cannot be pruned from it. Keeping all UTXOs forever is one of the requirements of the RingCT protocol, which obfuscates the fact that particular UTXOs mentioned in transaction inputs were actually spent. 
+Despite the recent introduction of Bulletproofs\cite{c4}, which replaced Monero’s original zero-knowledge range proofs and reduced a simple transaction size from 13KB down to 2.5KB, the problem of their ever-growing blockchain cannot be solved. 
 
-\subsection{ZCash} originated in 2016 as a Bitcoin fork and obviously is using a UTXO model and PoW consensus. The goal of the project is to improve on the flaws of Bitcoin, with a focus on privacy. The project is building on work done on Zerocoin\cite{c5}, addressing some of its faults, like the size of the proofs, which ZCash decreases to 1KB and speeds up the verification.
+\subsection{ZCash} ZCash originated in 2016 as a Bitcoin fork and thus uses a UTXO model and PoW consensus. ZCash aims to fix Bitcoin's flaws via a focus on privacy. The project builds on work done on Zerocoin\cite{c5} and addresses some of its faults, such as the size of the proofs, which ZCash decreases to 1KB and speeds up the verification.
 
-For establishing confidentiality and untraceability, ZCash implements ``Zero-Knowledge Succinct Non-Interactive Argument of Knowledge’’ (zk-SNARKS)\cite{c6}. For providing unlinkability of recipients, ZCash employs stealth addresses.
+To establish confidentiality and untraceability, ZCash implements zk-SNARKS \cite{c6}. To provide unlinkability of recipients, ZCash employs stealth addresses.
 
-zk-SNARKS enable a large anonymity set of all minted coins\footnote{The \textit{anonymity set} here defined as the set of participants who could be a sender in ZCash transaction, as seen by a global observer who has also compromised a set of nodes.}, providing a high degree of privacy. However, the size of up to 2KB for an average transaction and ever-growing accumulator, holding serial numbers of all spent coins, that cannot be pruned, makes ZCash much less scalable. The issue of scalability is the main reason why privacy is currently optional, not by default. At the time of writing, less than 25\% of all transactions were shielded.
+zk-SNARKS enable a large anonymity set of all minted coins\footnote{The \textit{anonymity set} is the set of participants who could be a sender in ZCash transaction, as seen by a global observer who has compromised a set of nodes.}, providing a high degree of privacy. However, the size of up to 2KB for an average transaction, combined with an ever-growing accumulator which must hold the serial numbers of all spent coins and thus cannot be pruned, makes ZCash much less scalable. The issue of scalability is the main reason why privacy is currently optional, not default. At the time of writing, less than 25\% of all transactions were shielded.
 
-The questionable part of the zk-SNARKS protocol is the initial trusted setup. ZCash utilizes a multi-party ceremony involving a several trusted people. This is controversial, as you have to trust any of these people that they destroyed the initial parameters and also trust that the ceremony was carried out correctly. 
+A further questionable part of the zk-SNARKS protocol is the initial trusted setup. ZCash utilizes a multi-party ceremony involving several trusted people. This is controversial, as users must trust that all of these people destroyed their initial parameters and also trust that the ceremony was carried out correctly. 
 
-\subsection{Dash} originally a codebase fork from Litecoin (which is in turn a codebase fork of Bitcoin), Dash were launched as XCoin in January 2014. Dash is using the UTXO model and PoW consensus. 
+\subsection{Dash} Dash was originally a codebase fork from Litecoin (which is in turn a codebase fork of Bitcoin) and launched as XCoin in January 2014. Dash uses the UTXO model and PoW consensus. 
 
-Besides standard nodes and miners, Dash has \textit{masternodes}, the nodes that must have static IP address and fulfill particular requirements for CPU, RAM, and disk space. Each masternode must have at least 1000DASH in its ownership. A Proof-of-Service protocol ensures that masternodes have the most current blockchain protocol and are online. 
+In addition to standard nodes and miners, Dash has \textit{masternodes}, which must have static IP address and meet particular requirements for CPU, RAM, and disk space. Each masternode must own at least 1000DASH. A Proof-of-service protocol ensures that masternodes have the most current blockchain protocol and are online. 
 
-It is important to note that privacy is optional in Dash and the high volume of transactions is driven mainly by fast public transactions called \textit{InstantSend} which are provided by masternodes.
+It is important to note that privacy is optional in Dash and the high volume of transactions is driven mainly by fast public transactions called \textit{InstantSend}, which are provided by masternodes.
 
-\textit{PrivateSend} is an implementation of CoinJoin, the untraceability solution first proposed for Bitcoin by Bitcoin Core developer Gregory Maxwell\footnote{https://bitcointalk.org/index.php?topic=279249.0}. In PrivateSend, three users add their coins together in one big transaction, that sends the coins to freshly generated addresses belonging to the same three users. As such, the coins are effectively mixed between the three participants, breaking the blockchain trail of ownership between them. This process can be automatically repeated up to eight times, with (hopefully) different mixing participants, for extra privacy.
+\textit{PrivateSend} is an implementation of CoinJoin, the untraceability solution first proposed for Bitcoin by Bitcoin Core developer Gregory Maxwell\footnote{https://bitcointalk.org/index.php?topic=279249.0}. In PrivateSend, three users add their coins together in one big transaction which sends the coins to freshly generated addresses belonging to the same three users. As such, the coins are effectively mixed between the three participants, breaking the blockchain trail of ownership between them. This process can be automatically repeated up to eight times, with (hopefully) different mixing participants, for extra privacy.
 
-Dash is not providing confidentiality of amounts either in InstantSend, or in PrivateSend. Moreover, it is an essential requirement of CoinJoin protocol that inputs of users involved in the round of the mixing protocol must have exactly the same denomination (amount of coins). This requirement is impossible to fulfill in case of amounts that are cloaked. 
+Dash does not provide confidentiality of amounts in either InstantSend or PrivateSend. In addition, the CoinJoin protocol requires the inputs of users involved in each round of the mixing protocol to have identical denominations. This requirement is impossible to fulfill while cloaking amounts. 
 
-Users of Dash have to trust masternodes that they will keep users’ IP addresses undisclosed and unlinked to users’ UTXOs when sending transactions in Dash. This adds another privacy vulnerability to Dash.
+As a further privacy vulnerability, users of Dash have to trust that masternodes will keep users’ IP addresses undisclosed and unlinked to users’ UTXOs when sending transactions.
 
-\subsection{Mimblewimble} is a protocol that was proposed by an anonymous user in a Bitcoin developers chat room by the name of Tom Elvis Jedusor, that left a link to a paper\footnote{https://download.wpsoftware.net/bitcoin/wizardry/mimblewimble.txt} in which he outlines that by using the Mimblewimble protocol, the scalability, as well as the privacy of the Bitcoin network, could significantly be enhanced.
+\subsection{MimbleWimble} MimbleWimble is a protocol proposed by an anonymous user in a Bitcoin developers chat room by the name of Tom Elvis Jedusor, who left a link to a paper\footnote{https://download.wpsoftware.net/bitcoin/wizardry/mimblewimble.txt} outlining a protocol to significantly enhance the scalability and privacy of the Bitcoin network.
 
-Mimblewimble is based on the ideas of Greg Maxwell’s design for Confidential Transactions\footnote{https://people.xiph.org/\texttt{\~}greg/confidential\_values.txt}, except, it is the recipient that generates a random blinding factor used to cloak the amount of the transaction. This blinding factor is then used as proof of ownership by the recipient, therefore working simultaneously as the recipient’s public key. Therefore, Mimblewimble provides confidentiality of amounts and unlinkability of recipients in its transactions.
+Mimblewimble is based on the ideas of Greg Maxwell’s design for Confidential Transactions\footnote{https://people.xiph.org/\texttt{\~}greg/confidential\_values.txt}, except in MimbleWimble it is the recipient who generates the random blinding factor used to cloak the amount of the transaction. This blinding factor is then used as proof of ownership by the recipient, therefore functioning simultaneously as the recipient’s public key. Therefore, MimbleWimble provides confidentiality of amounts and unlinkability of recipients in its transactions.
 
-Untraceability of transactions in Mimblewimble is building on the ideas of CoinJoin and is implemented by breaking transaction boundaries and storing only inputs and outputs of all transactions verified by miner in a newly mined block.
+Untraceability of transactions in MimbleWimble builds on ideas from CoinJoin and is implemented by breaking transaction boundaries and storing only inputs and outputs of all transactions verified by miner in a newly mined block.
 
 MimbleWimble implementations use the UTXO model and PoW consensus. Spent UTXOs can be pruned by recursively applying a simple pruning algorithm for each UTXO referenced in inputs of the new minted block.
 
-There are several drawbacks in the design of Mimblewimble:
+However, there are several drawbacks in the design of Mimblewimble:
 
 \begin{itemize}
-  \item {The first drawback is related to the transaction creation mechanism of MimbleWimble — in order to create a transaction, senders and recipients must interact with each other. The sender cannot post a transaction to the blockchain without first contacting the recipient with half-baked transaction data and receiving that data updated by applying a blinding factor back from the recipient.}
-  \item {The second is very similar to the problem from Dash where users must trust Dash masternodes. Users of MimbleWimble implementations must trust miners that they will not trace the history of inputs and outputs in transactions, and discard this data completely after mining a block. Therefore, there is a threat to the coins’ fungibility and the privacy of users.}
+  \item {In order to create a transaction, senders and recipients must first interact with each other. The sender cannot post a transaction to the blockchain without first contacting the recipient with incomplete transaction data and waiting for a blinding factor in response.}
+  \item {Users must trust that miners will not trace the history of inputs and outputs in transactions, and will instead discard this data completely after mining a block. Since there is no guarantee of this, there is a threat to the coins’ fungibility and the privacy of users.}
 \end{itemize}
 
 
