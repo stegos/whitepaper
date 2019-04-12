@@ -1031,7 +1031,7 @@ Alice encrypts her payload with AES-128 using the $H(k \, G)$ key and places the
 
 When Bob receives the UTXO later on, he will extract $\mathit{Key}_{\alpha}$ from it, multiply the second element of the tuple by his secret key $s_B$, getting $s_B \, \alpha \, G = \alpha \, P_B$, then subtract that from the first element to find $k \, G$. He then produces $H(k \, G)$, thus computing the symmetric key, and decrypts the payload that Alice sent to him.
 
-\subsection{TTL and Data Size} Alice sets TTL (time-to-live) and $Size_{data}$ slots of the UTXO to zero, indicating that this is a \textit{monetary UTXO}. 
+\subsection{TTL and Data Size} Alice sets the TTL (time-to-live) and $Size_{data}$ slots of the UTXO to zero, indicating that this is a \textit{monetary UTXO}. 
 
 \subsection{UTXO ID} Alice forms a UTXO $\mathit{ID}$ by hashing the the whole UTXO object sans the ID slot, which contains the cloaked version of Bob’s public key, $P_{B, \delta}$, the Pedersen commitment and Bulletproof, TTL, $Size_{data}$, and the encrypted payload.
 
@@ -1064,9 +1064,9 @@ Key_{\alpha} &= (\alpha \, P_{B} + k \, G, \alpha \, G ) \\
 E_B(x, \gamma, \delta) &= \textit{AES-128 encrypted payload}
 \end{align*}
 
-Nowhere is either of Alice’s or Bob’s public key shown. We only present a cloaked version of Bob’s key. And since $\delta$ is a secret value, nobody can recover the actual public key underlying the cloaked version. 
+Neither Alice's nor Bob's public key is shown anywhere. We only present a cloaked version of Bob’s key. And since $\delta$ is a secret value, nobody can recover the actual public key underlying the cloaked version. 
 
-Therefore Bob may publish his public key openly, i.e. on his website or in an invoice, and need not worry that his identity will be linked to the recipient of the payment on Stegos blockchain, because his public key will appear in Stegos UTXOs always in a cloaked from — every time as a completely new and random number.
+Therefore Bob may publish his public key openly, e.g., on his website or in an invoice, without worrying that his identity will be linked to the recipient of the payment on the Stegos blockchain, because his public key will always appear in Stegos UTXOs in cloaked from — as a completely new and random number.
 
 \section{Transaction Structure}
 When Bob wants to spend his new tokens, he must form a transaction containing a list of inputs (TXINs) and outputs (TXOUTs). TXINs are nothing more than the $\mathit{ID}$s referring to other UTXOs. TXOUTs are a list of new UTXOs. He must also offer a valid signature on the entire transaction, which simultaneously proves his ownership of all TXIN’s, proves that the transaction carries zero net balance of funds between TXINs, TXOUTs and fees, and protects the contents of his transaction against mutation by MITM attackers.
@@ -1090,16 +1090,16 @@ where $T$ represents the entire transaction record, sans signature. The function
 Let’s examine the commitment terms. Pedersen commitments are additively homomorphic:
 $$C(x_1, \gamma_1) + C(x_2, \gamma_2) = C(x_1 + x_2, \gamma_1 + \gamma_2)$$
 
-Hence, if Bob’s transaction is valid, the amount terms in the effective public key show a zero balance on the $A$ curve, after subtracting off the $\mathit{Fee}$. What remains is entirely on the $G$ curve. The validator sum becomes another public key on the $G$ curve, exactly matching his own computed effective secret key, $s_{\mathit{eff}}$. Only Bob could form a valid signature since it relies on his secret key. It is unforgeable. Both Alice and Bob know all the other secret items, $\gamma$’s and $\delta$’s. Nobody else knows any of the secret values.
+Hence, if Bob’s transaction is valid, the amount terms in the effective public key show a zero balance on the $A$ curve, after the $\mathit{Fee}$. What remains is entirely on the $G$ curve. The validator sum becomes another public key on the $G$ curve, exactly matching his own computed effective secret key, $s_{\mathit{eff}}$. Only Bob can have formed a valid signature since it relies on his secret key. It is unforgeable. Both Alice and Bob know all the other secret terms, $\gamma$s and $\delta$s. Nobody else knows any of the secret values.
 
-Suppose Bob now just wants to send the coins he received from Alice on to Charlie, after deducting fees. In that case, Bob forms a UTXO that uses a different blinding factor, $\gamma_2$, and different key cloaking value, $\delta_2$, and which contains amount, $(x - \mathit{Fee})$. Bob must form a new Bulletproof on the amount, and encrypt these values into a payload that only Charlie can read:
+Suppose Bob now wants to send the coins he received from Alice on to Charlie, after deducting fees. To do so, Bob forms a UTXO that uses a different blinding factor, $\gamma_2$, and different key cloaking value, $\delta_2$, and which contains amount, $(x - \mathit{Fee})$. Bob must form a new Bulletproof on the amount, and encrypt these values into a payload that only Charlie can read:
 
 \begin{multline*}
 ID’ = H(P_{S, \delta_2}, Bp’, TTL, Size_{data}, \\
           Key_{\alpha_2}, E_S(x - Fee, \gamma_2, \delta_2))
 \end{multline*}
 
-where $P_{C, \delta_2}$ is Charile’s cloaked public key for this transaction, $TTL$ and $Size_{data}$ are zero, and $Key_{\alpha_2}$ is a cloaked symmetric key. 
+where $P_{C, \delta_2}$ is Charlie’s cloaked public key for this transaction, $TTL$ and $Size_{data}$ are zero, and $Key_{\alpha_2}$ is a cloaked symmetric key. 
 
 Charlie can spend this UTXO by providing a valid transaction signature against the UTXO \textit{ID’}, just like Bob did for his own input. 
 
@@ -1121,11 +1121,11 @@ To wrap up, Bob publishes the transaction:
  &\text{SIG} : \mathit{Sig}(s_B, T)\}
 \end{align*}
 
-The first line is Bob’s TXIN referencing the UTXO produced for him by Alice. The second line is the TXOUT - a new UTXO aimed at Charlie. The third line shows the fees paid for this transaction, in clear text form. 
+The first line is Bob’s TXIN referencing the UTXO produced for him by Alice. The second line is the TXOUT - a new UTXO aimed at Charlie. The third line shows the fees paid for this transaction, in plaintext form. 
 
-The fourth line shows what value of $\gamma$ adjustment, on the $G$ curve, is needed to see that the sum of input commitments equals the sum of output commitments, proving a zero net balance between TXINs and TXOUTs and Fee. And this term will be added to a block sum when the transaction is absorbed into the blockchain, to show that entire blocks, which may contain many UTXOs, continue to show a zero balance.
+The fourth line shows what value of $\gamma$ adjustment, on the $G$ curve, is needed to see that the sum of input commitments equals the sum of output commitments, proving a zero net balance between TXINs and TXOUTs and $Fee$. And this term will be added to a block sum when the transaction is absorbed into the blockchain, to show that entire blocks, which may contain many UTXOs, continue to show a zero balance.
 
-The final line is Bob’s signature asserting ownership of the entire transaction which is based on the hash of all the stated TXINs, TXOUTs, $Fee$, and $\gamma_{adj}$ term. This final signature also serves as a checksum against mutation of the contents of this transaction. If anything becomes changed in this record, the signature won’t check. Hence our transactions are non-malleable.
+The final line is Bob’s signature asserting ownership of the entire transaction which is based on the hash of all the stated TXINs, TXOUTs, $Fee$, and $\gamma_{adj}$ term. This final signature also serves as a checksum against mutation of the contents of this transaction. If anything becomes changed in this record, the signature won’t check. Hence Stegos transactions are non-malleable.
 
 \chapter{Snowball}\label{app:snowball}
 
