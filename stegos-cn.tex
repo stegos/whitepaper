@@ -1,5 +1,6 @@
 \documentclass[8pt,fleqn,openany]{book}
 \usepackage[utf8]{inputenc}
+\usepackage{CJKutf8}
 \usepackage[top=3cm,bottom=3cm,left=3.2cm,right=3.2cm,headsep=16pt,letterpaper]{geometry}
 \usepackage{xcolor}
 \definecolor{defaultcolor}{RGB}{25, 29, 42}
@@ -86,6 +87,7 @@
 \input{structure}
 
 \begin{document}
+\begin{CJK*}{UTF8}{gbsn}
 
 \raggedbottom
 \widowpenalty10000
@@ -114,341 +116,341 @@ and brands does not imply endorsement.}
 
 \tableofcontents\newpage
 
-\section{Abstract}
-翻译Multipurpose mobile apps and social media platforms have allowed millions of previously unconnected people to access online services and communities. However, they do so at unacceptable costs to user privacy. Conversely, blockchain and cryptocurrency platforms offer unprecedented privacy benefits, but are currently unsustainably slow and resource-intensive, making them inaccessible to the average user. We need a way to marry privacy and accessibility in a single platform.
+\section{摘要}
+多功能移动app和社交媒体平台可以让从前无法连接起来的几百万人都能够使用在线的服务和社区。但是，他们却付出了用户隐私作为代价。相反地是，区块链和数字货币平台可以为用户带来前所未有的隐私保护，但是目前区块链技术还相对较慢，而且属于资源密集型，这就使得区块链还无法为普通用户提供服务。我们需要这种方式可以把隐私和可用性结合在单个的平台。
 
-The Stegos Privacy Platform (Stegos) combines a unique blockchain and token design to implement the first cryptocurrency that’s completely private, secure, efficient, and environmentally sustainable. Stegos is fully scalable and prunable, ensuring the chain always remains compact without compromising trust. This makes Stegos the world’s first public blockchain to offer secure and confidential data storage and transmission in addition to payment transactions. 
+Stegos隐私平台（Stegos）将特殊的区块链和通证设计结合起来，并且发行了首个隐私、安全、高效以及环保的数字货币。Stegos是完全可扩展化以及不可篡改的，这就保证了区块链始终保持紧凑，而且不会损害信任。这让Stegos成为了全球首个能够提供除了支付转账之外，还有安全且隐私的数据存储和转移的公链。
 
-Stegos extends this blockchain foundation to provide a platform for building privacy applications that communicate via messages sent with minimal latency. Our trusted application container (TAC) and privacy app store simplify the process of building and distributing privacy applications while providing additional security for users. Last but not least, Stegos marketplaces, chat, and red packets replicate the most popular features of modern multipurpose apps in a decentralized way, allowing users to transact and communicate in complete privacy.
+Stegos将区块链底层扩展，从而提供了能够打造隐私应用的平台，并且这些应用可以为社交聊天带来最小的延迟效果。我们提出的可信应用存储（TAC）以及隐私应用商城可以让搭建和分发隐私应用的过程变得很简单，同时也能够提供更高的用户安全性。最后不能不提地是，Stegos市场、聊天、以及红包功能是去中心化应用中最流行的功能，这些可以让用户能在完全隐私地情况下进行转账和聊天。
 
-Stegos is secured by the gamified Proof-of-stake (gPoS) consensus mechanism based on verifiably unbiased distributed randomness. gPoS allows anyone to run the Stegos blockchain from their pocket and earn tokens for maintaining the network, even without a high stake. This encourages an extremely wide user base by ensuring that mobile users are properly incentivized to validate the network.
-\section{Feedback}
+Stegos的共识机制是赌注权益证明（gPoS）共识机制，它是基于可验证的无偏分布随机性。gPoS机制可以让任何人随身运行Stegos区块链，并且通过维护网络可以赚取收益，甚至无需很高的抵押。这可以鼓励更多的人参与，从而保证移动用户有足够的激励来验证网络。
+\section{反馈}
 
-Please address comments and suggestions on this paper to \href{mailto:paper@stegos.com}{paper@stegos.com}.
+如果对于此白皮书有任何建议，请发送邮件至\href{mailto:paper@stegos.com}{paper@stegos.com}.
 
-\chapter{Introduction}\label{chap:intro}
+\chapter{介绍}\label{chap:intro}
 
-\section{We All Deserve Privacy}
-Everyone deserves privacy. They also deserve access to all the services and benefits of our modern digital world. But current technologies and business models are unable, or perhaps unwilling, to provide both simultaneously.
+\section{我们都应该掌握隐私}
+每个人都应该掌握自己的隐私，同时也应该获得现代社会所有的服务和福利。但是现在的技术和商业模式并不能实现这点，或者说压根不愿意，同时提供这两个服务。
 
-The past decade has seen the rise of global social media platforms and multipurpose apps with integrated payments such as WeChat and Facebook. This, combined with rapid advances in mobile internet and hardware, has allowed almost a billion people to get online and communicate, trade, and collaborate. But these platforms are a privacy nightmare: your every action can be tracked and linked to provide a full history of everyone you've ever communicated or transacted with, whether you want to share this information or not. In addition, user data is often harvested indiscriminately into enormous data silos, making them a target for unscrupulous advertisers, state actors, and hackers. Current efforts to curb this abuse are ineffectual and heavy-handed, often because governments and regulators are unwilling to cede control and let users take responsibility for their own online actions.
+过去10年，我们看到的全球社交媒体平台和多功能应用的崛起，其中都会带有支付功能，例如微信和Facebook。随着移动互联网技术的快速发展，这可以让大约10亿人能够在线上进行沟通、交易以及合作。但是这些平台的隐私功能是个噩梦：你任何的行为都可以被追踪，并且拿出你和别人的聊天或者转账记录，不论你是否想要分享这些信息。同时，用户数据会被随意地盗用，从而变成了广告商和黑客的目标。目前为制止这种滥用所作的努力是徒劳无功的，而且并没有什么意义，通常是因为政府和监管机构不希望放弃控制，让用户对自己的网络行为负责。
 
-On the hardware side, solid-state technology, smartphones, and the Internet of Things let us carry our lives in our pockets, on our phones and on our laptops. But under the guise of protecting us — from terrorism, from hackers, from our own alleged lack of responsibility — our privacy has been decimated. In airports, online, even on the street, we are forced to reveal our private data with alarming frequency.
+从硬件角度来看，固态技术、智能手机以及物联网技术把生活装进了我们的口袋、手机和电脑。但是在保护我们隐私的表面下，从恐怖主义，从黑客，从我们自己所谓的缺乏责任角度来看，我们的隐私早就被严重破坏。在机场，甚至在街上，我们被迫以惊人的频率泄露我们的私人数据。
 
-This intrusion leaves many of us feeling exposed and powerless. Many face even more chilling consequences, such as the loss of their jobs, liberty, or even lives. 
+这种入侵让我们感到隐私暴露在空气中，并且十分无助。很多人都面临着更加令人毛骨悚然的结果，例如失去工作、自由甚至生命。
 
-We live in an era of unprecedented state surveillance and crackdowns on freedom of the press and even thought. It’s nobody’s business what you do with your money, whether paper or digital, and it’s nobody's business who you transact with on the blockchain.
+我们生活在一个史无前例的国家监视和镇压新闻自由甚至思想自由的时代。但是，其实你如何对待自己的资金，无论是现金还是数字货币，又或者是如何通过区块链去进行交易，这都和别人无关。
 
-These trends have not gone unnoticed. Across the world, people are voicing their displeasure at how their privacy and data are being exploited for profit. There is a groundswell of demand for more secure and private alternatives, and this is only going to grow over the coming months and years.
+这个趋势并没有被忽视。纵观世界上各个国家，人们对他们的隐私和数据是如何被利用以牟利表示不满。因此，我们需要更加安全和隐私的选择，而且这只会在未来几个月以及几年里持续增长。
 
-\section{Blockchain and Privacy}
-At the other end of the spectrum, blockchain and decentralized technologies have facilitated massive leaps forward in digital privacy and security. While traditional data sharing and storage technologies (online cloud storage, email, laptops, etc.) have built-in security, these technologies can easily be compromised. Once someone obtains and enters your password, your data is permanently exposed.
+\section{区块链和隐私}
+从另一个角度来看，区块链和去中心化技术促进了数字隐私和安全领域的巨大飞跃。虽然传统的数据分享和存储技术（在线云存储，邮件，笔记本电脑等等）已经有了内置的安全性，但是这些技术很容易被攻破。一旦有人获得你的密码，并且进入你的系统，那么你的数据就会永久暴露。
 
-A private decentralized solution based on blockchain is a far better way to keep your private information safe and share it with people you trust.
+基于区块链的私有的去中心化解决方案会更好地保护你的私人信息，并且可以和你信任的人进行共享。
 
-However, adoption levels have been disappointing. Current blockchains are slow, unwieldy, and environmentally disastrous, and no privacy coin is as private as it claims to be. The reliance on resource-hungry static hardware and unfriendly interfaces puts this technology beyond the reach of regular users, without whom blockchain platforms are doomed to wither and recentralize. As users in all walks of online life increasingly migrate from desktop to mobile, crypto is failing to keep pace. 
+但是，大众对于这种解决方案的接受程度却不是很乐观。目前的区块链运行速度很慢，运转不够流畅，而且对环境也有影响，而且没有任何隐私币真正地拥有它所说的隐私性能。对于资源匮乏的静态硬件以及不友好接口的依赖，最终会让这项技术远离普通用户，但是如果没有用户的参与，区块链平台注定会萎缩和重新变得中心化。随着用户的使用习惯从桌面端到移动端，加密货币其实很难跟得上这个潮流。
 
-The solution is clear: In order to thrive, blockchain platforms must emulate the mass appeal and usability of platforms such as WeChat and Facebook while maintaining strong privacy, anonymity, and decentralization.
+解决方案很清晰：为了跟上这个潮流，区块链平台必须学习例如微信和Facebook这些平台的吸引力和可用性，同时还要保持很强的隐私性、匿名性以及去中心化。
 
-Stegos is the first blockchain to combine these worlds. Stegos is the best mechanism for secure transactions, data transmission, and communications because, unlike traditional email and online messaging services, it’s completely decentralized, cryptographically secure, and leaves no telltale clues to user identity. It’s impossible to see who sends or receives information or establish how anyone is connecting to Stegos. No-one but the intended recipient of a communication or transaction can see what or how much was sent, and there’s nothing to link data or transactions to anyone’s real-life identities.
+Stegos是首个将这些领域结合起来的区块链。Stegos是为安全转账、数据转移以及通信的最好机制，因为和传统的邮件和在线通信服务于不同，它是完全去中心化的、加密安全的、同时也不会留下用户身份的蛛丝马迹。因此，不会有人能看到你给谁发送信息或者接收了谁的信息，又或者确定任何人和Stegos建立联系。只有信息或者交易的接受者会知道发送的具体金额，而且没有任何东西可以将数据或交易与任何人的真实身份联系起来。
 
-Stegos is also the first blockchain that's truly mobile compatible: smartphone nodes have full validation capabilities and there's no hardware-intensive Proof-of-work, meaning anyone can earn coins for supporting the network. By giving data transmission and messaging the same priority as regular transactions, Stegos is a platform that people will actually want to use. And the focus on smartphones means people will actually be able to use it.
+Stegos同时也是首个适配于移动设备的区块链：智能手机节点可以有完全的验证能力，并且无需基于硬件的工作量证明，这意味着任何人都可以通过支持Stegos网络获得代币收益。通过把数据转移和信息通信作为和转账相同的优先级，Stegos会是所有人都想使用的区块链。而且，专注于移动手机意味着所有人都可以使用。
 
-In our modern connected world, everyone should have access to secure and private transactions and communications. Stegos is the first and only blockchain platform that can provide this.  
+在我们现代社会，每个人都应该有安全和隐私的交易和通信。Stegos是首个并且仅有的区块链平台，能够提供这些功能。
 
-\chapter{What is Stegos?}\label{chap:what-is-stegos}
+\chapter{Stegos是什么?}\label{chap:what-is-stegos}
 
-\section{Summary}
-The Stegos Privacy Platform (Stegos) combines a unique blockchain and token design to implement the first cryptocurrency that’s absolutely private, secure, efficient and environmentally sustainable. Stegos uses the \textit{UTXO} (coin) model and \textit{gPoS} (gamified Proof-of-stake) consensus, combining existing privacy coin ideas and the latest cryptographic research to create a fully scalable and prunable privacy blockchain and application platform. 
+\section{简介}
+Stegos隐私平台（Stegos）将独特的区块链和通证设计结合，并且发行了首个完全隐私、安全、高效以及可持续环保的加密货币。Stegos使用了\textit{UTXO} （代币）模型以及\textit{gPoS} (赌注权益证明)共识机制，将现有的隐私代币和最新的加密研究结合，从而创建完全的可拓展（scalable）以及可修剪（prunable）的隐私区块链和应用平台。
 
-\subsection{Absolute privacy}
-Payment and data transactions in Stegos are unlinkable, untraceable, and completely confidential thanks to Stegos' Snowball protocol (see Appendix \ref{app:snowball}). Every Stegos transaction is directed to a new and unique stealth address, making it impossible to identify the recipients. Snowball also makes it impossible to trace Stegos transaction history, since individual transactions are first joined together to form a supertransaction before being submitted to blockchain validators. This is all done in a secure and privacy-preserving way, while ensuring that Stegos coins remain fully fungible.
+\subsection{绝对的隐私}
+由于Stegos中的雪球协议（Snowball protocol）（请见附件\ref{app:snowball}），Stegos中的支付和数据转账是不可链接的、不可追踪的、并且完全隐私的。每个Stegos中的交易是跳转到全新的、独特的秘密地址，从而无法发现接受者。雪球同时也让追踪Stegos交易历史变为不可能，因为单个交易首先会集合起来，才能在提交给区块验证者之前，形成超级转账（supertransaction）。所有这些都会通过安全、隐私保护的方式进行，同时确保Stegos代币是完全可替代。
 
-\subsection{Payments and messaging}
-Other privacy tokens — such as Monero, Dash, ZCash, and Grin — can only be used for payments, and all display weaknesses in terms of scalability, privacy, security, or usability. Stegos builds and improves upon these and other privacy coins and can be used to send both payments and data with complete confidentiality. The Stegos trusted application container (TAC) allows developers to easily build applications that communicate anonymously, privately, and efficiently.
+\subsection{支付和信息传递}
+其他隐私类代币 - 例如Monero, Dash, ZCash和Grin - 只可以用于支付，而且对于可扩展性、隐私性、安全性或者可用性来说，都存在缺陷。Stegos就这些和其他隐私币的问题进行了提升和优化，同时可以用于支付和数据的发送，并且是完全隐私的。Stegos可信的应用存储器（TAC）可以让开发者很容易地搭建应用，并且能够匿名、隐私并且高效地进行沟通。
 
-\subsection{Scalability and data compaction}
-Stegos is a fast and highly scalable blockchain and, unlike other blockchains, it's kept small without compromising trust. Details of spent coins and consumed data are safely removed from the blockchain using secure cryptographic pruning. It's also highly scalable thanks to transactional sharding. This makes Stegos the world's first public blockchain that can offer secure and confidential data storage and transmission in addition to payment transactions. It also ensures that Stegos is compact enough to run on smartphones.
+\subsection{可扩容性和数据压缩}
+Stegos是一个快速并且高度扩容的区块链，而且和其他区块链不同，它在不损失信任的前提下，整体保持较小。花费代币和数据消耗的细节都可以通过安全加密修剪的方式，从区块链上安全移除。由于交易分片机制，Stegos区块链具有很高的扩容性，这就让其成为世界上首个能够提供除了交易转账以外，还有安全以及隐私数据存储和传输的公链，这也让Stegos可以在智能手机上运行。
 
-\subsection{Proof-of-stake (PoS)}
-Stegos is environmentally friendly and does not waste megawatts of electricity mining blocks. Instead, Stegos uses a bespoke gamified Proof-of-stake (gPoS) consensus, building on advancements in distributed systems theory and cryptography. Each new Stegos block must be verified and confirmed by a group of validators, all of whom must post tokens as bonds. The value of the tokens staked in this way directly affects the probability that a validator will win a block and earn the associated transaction fees.
+\subsection{权益证明(PoS)}
+Stegos是环保的，并且不会浪费电能去挖矿的区块链。相反，Stegos使用了定制化的赌注权益证明（gPoS）机制，这是基于分布式系统理论和加密学的进步。每个Stegos区块必须由一群验证者（validators）进行验证和确认，所有的验证者必须要将代币作为抵押。通过这种方式，抵押代币的价值直接影响了验证者挖出区块，并且获得相关转账费用的可能性。
 
-\subsection{Mobile app}
-To showcase the power of the platform, Stegos is developing its own native multi-purpose mobile application that integrates a wallet, one-one-one and group chat, the TAC, the Privacy App Store and the Stegos red packets \ref{sec:red-packets}. This app will be the gateway for users onto the Stegos Privacy Platform.
+\subsection{移动应用}
+为了体现平台的实力，Stegos正在开发自己的原生多功能移动应用软件，并且将钱包、点对点以及群聊、应用存储器（TAC）、隐私应用商城以及Stegos红包功能整合。这个应用将会是用户使用Stegos隐私平台的网关。
 	
 %% Overview
 
-\section{Private by Default}
-The original Bitcoin paper only included a very small section on privacy\cite{c1}. It assumed that even though transaction amounts are public, it would be impossible to link those transactions to anyone’s real identities. This assumption has repeatedly been proven wrong by researchers, blockchain analysis companies, and hackers. Software like ChainAnalysis has made transaction analysis trivial, allowing anyone to quickly de-anonymize users of Bitcoin and other cryptocurrencies.
+\section{默认隐私保护}
+最初的比特币白皮书只包含了很少部分的隐私相关内容，它假设尽管交易数量是公开的，但是也不可能将这些交易和任何真实的身份链接起来。这个假设已经被研究者、区块链研究公司以及黑客多次证明是错误的。例如ChainAnalysis这类软件已经进行了交易分析，可以让任何人很快地发现比特币和其他加密货币使用者的身份。
 
-Most blockchains have followed in Bitcoin’s footsteps with a totally transparent design that includes visible addresses and amounts, including the balance of any wallet, how much money has been sent and received, and the addresses of every sender and recipient. But all this readily available information paints a large and highly visible target for hackers and Big Brother. With the rise of privacy technologies like Bulletproofs and zk-SNARKs, there’s no excuse to perpetuate Bitcoin’s mistake. Blockchain should be private by default.
+大多数区块链项目都跟随了比特币的脚步，进行了完全透明的设计，并且包含了可见的地址和交易数量，其中也包含了任何钱包的余额、发送和收到了多少资金、以及每个接受和发送者的地址。但是所有这些信息都成为了黑客可见的目标。随着类似防弹(Bulletproofs)协议和零知识证明（zk-SNARKs）技术的发展，我们再也没有理由去延续比特币的错误。区块链默认就应该是具有隐私功能。
 	
-To this end, transactions in Stegos are \textit{unlinkable}, \textit{untraceable}, and \textit{confidential}:
+为了达到这个目标，Stegos中的交易所是\textit{非链接的}, \textit{不可追踪的}, and \textit{保密的}:
 
 \begin{itemize}
-	\item Stegos uses one-time payment addresses which make it impossible to identify recipients of a transaction. Our technique for one-time addresses is very similar to the stealth addresses used in Monero and ZCash.
-	\item Stegos pools individual transactions to form super-transactions, making it impossible to trace transaction histories. For this purpose, we have developed an improved version of the ValueShuffle protocol\cite{c7}, the first coin mixing protocol compatible with confidential transactions.
-	\item All amounts in Stegos are hidden using Pedersen commitments\cite{c8} and Bulletproofs (range proofs)\cite{c4}. Validator stakes and transaction fees are the only exception, since these must be visible for blockchain validation.\end{itemize}
+	\item Stegos使用一次性支付地址，从而无法去认证交易的接收方。我们的一次性地址和Monero和ZCash的隐藏地址很相似。
+	\item Stegos将个人的交易整合形成超级转账，从而无法追踪交易记录。为了这个目的，我们已经开发了增强版的ValueShuffle协议\cite{c7}，这是首个与保密交易兼容的代币混合协议。
+	\item Stegos中的转账金额都是通过佩德森承诺\cite{c8}以及Bulletproofs范围证明(range proofs)\cite{c4}进行保密。验证者的抵押和交易费用除外，因为对于区块验证而言，这是必须要可见的。\end{itemize}
 
-We call the combination of these privacy features Snowball (for more detailed information, see Appendix \ref{app:snowball}). %Is this right?
+我们称这种隐私功能的组合为雪球（如果想了解更多细节信息，请查看附件\ref{app:snowball}）。
 
-\section{Gamified Proof-of-stake (gPoS) consensus}
+\section{赌注权益证明(gPoS) 共识机制}
 
-Standard Proof-of-stake consensus can leave many users with smaller stakes unincentivized. To address this, Stegos employs \textit{gamified Proof-of-stake} (gPoS), so-called because every validator which has been running for a certain amount of time has the chance to receive a random \textit{Validator service award}, regardless of the size of their stake\footnotemark.
+标准的权益证明共识让很多持有小额抵押代币的用户感受不到激励。为了解决这个问题，Stegos使用了\textit{赌注权益证明} (gPoS)，其中每个验证者在运行了一段时间后都有几率获得随机的\textit{验证者服务奖励}，并且这无论他们抵押代币的数量。
 
-\footnotetext{A nominal minimum threshold will apply to prevent users from gaming the system, but since every eligible node must provide validation services to qualify, it is impossible to spam the system, as one goal of the \textit{Validator service award} is to maximize the number of different nodes.}
+\footnotetext{名义上的最小阈值将让用户无法使用系统，但是因为每个可用节点必须要提供验证服务来进行认证，从而不可能去对系统进行欺诈，因为\textit{验证节点服务奖励}的目标之一，就是能够最大化不同节点的数量。}
 
-To fund this, a portion of the reward from each block is added to the service award pool, which continues to grow until a winner is selected in an ongoing \textit{cryptographic lottery} based on verifiable distributed randomness. 
+为了提供资金，每个区块奖励的一部分会加入到服务奖励池，这个资金池会逐渐增加，直到有人赢得基于可验证分布随机性的\textit{加密彩票}。
 
-Because smartphone nodes can have full validation capabilities, anyone can earn tokens from their pocket.
+因为智能手机节点可以有完全的验证功能，任何人都能随身赢得代币奖励。
 
-\section{Sharding for scalability}
-Stegos uses transactional \textit{sharding} to scale. Separate groups of Stegos validators keep the whole blockchain state but verify only a subset of incoming transactions, using cross-shard atomic commits to eliminate double-spending. This scalability approach allows Stegos to process thousands of transactions per second across millions of mobile devices, making Stegos the first and only blockchain that can run entirely in your pocket. 
+\section{分片获得扩容性}
+Stegos使用交易型\textit{分片}来进行扩容。不同的Stegos验证者会保持整体区块链的状态，但是只会验证即将进行的交易，并且使用跨分片的原子提交（atomic commits），从而消除了双花的可能性。这种扩容的方式可以让Stegos能够每秒在数百万个移动设备中处理几千笔交易，让Stegos成为首个，并且是仅有能够整体在移动端运行的区块链系统。
 
-\section{Pruning and data compaction}
-Many projects claim to be able to process hundred of thousands or even millions of transactions per second (tps), but few explain how they plan to maintain all the accumulated data. Even at its paltry 7--10 tps, the Bitcoin blockchain is now larger than 200 gigabytes. Assuming Bitcoin could suddenly support 16,000 tps, the Bitcoin blockchain would grow by 350 gigabytes every day\footnote{https://hackernoon.com/if-we-lived-in-a-bitcoin-future-how-big-would-the-blockchain-have-to-be-bd07b282416f}, or 127 terabytes every year. This amount of data is completely unsustainable without the blockchain being centralized on a few supercomputers, which runs contrary to the decentralization ethos of blockchain.
+\section{修剪和数据压缩}
+很多项目自称可以达到成百上千或者甚至几百万的每秒转账数额（tps），但是很多有项目解释它们计划如何去维护这些累积的数据。比特币区块链虽然只有7-10的tps，但是现在数据已经大于200千兆字节。假设比特币突然可以支持16,000tps，那么比特币区块链的数据会每天增长350千兆字节\footnote{https://hackernoon.com/if-we-lived-in-a-bitcoin-future-how-big-would-the-blockchain-have-to-be-bd07b282416f}，也就是说每年增长127百万兆字节。如果不通过几个超级计算机，这个量级的数据是完全不可持续的，但是这和区块链的去中心化理念是相反的。
 
-Stegos is a \textit{compact} blockchain. Spent coins and expired data are safely removed from the blockchain using secure cryptographic pruning. To keep our blockchain free of spent coins, we use the technique proposed by Satoshi Nakamoto in the original Bitcoin paper\cite{c1}. Data is removed quickly and automatically.
+Stegos是\textit{可压缩}的区块链。通过安全的加密修剪（pruning）功能，消费的代币和过期的数据可以安全地从区块链上移除。为了让消费过的代币信息可以从区块链上移除，我们使用了中本聪在最初比特币白皮书\cite{c1}上提到的技术。数据可以自动和快速地被移除。
 
-\section{Fast data messaging}
-Unlike other blockchains, Stegos does not restrict users to sending just payments. Stegos supports data messaging, allowing users to exchange data messages with the same privacy guarantees afforded to payments. Data is a first-class citizen on the Stegos blockchain, which is only logical as the average user is expected to send many more data messages than standard payments.
+\section{快速数据传输}
+和其他区块链不同，Stegos不会限制用户只可以进行支付。Stegos支持数据传输，可以让用户的数据传输获得和支付同样的安全性。数据是Stegos区块链中的头等公民，这是合乎逻辑的，因为一般来说，用户发送数据消息的频率比支付要多的多。
 
-\section{Stegos mobile app}
-The Stegos mobile app is the portal into the Stegos ecosystem and a showcase of the potential of our platform. The app integrates a wallet with a secure environment for running privacy-focused applications. In this way, Stegos can provide all the functionality of existing centralized multipurpose apps such as WeChat, but in a fully private and decentralized manner. 
+\section{Stegos移动应用}
+Stegos移动应用是Stegos生态系统中的一部分，并且是我们平台潜力的展现。这个应用会整合在钱包中，并且这个钱包拥有安全的环境可以运行隐私应用。通过这种方式，Stegos能够提供现在中心化多功能应用的所有功能，例如微信等等，但是却是通过完全隐私和去中心化的方式。
 
-Features include one-on-one and group chat facilitated by the Stegos fast message bus, integrated payments and red packets, an extremely popular WeChat feature that allows anyone to send a hongbao-style surprise payment to a specific user or group of users or to create a custom token airdrop that anyone can claim by scanning a QR code.
+Stegos快速信息传输功能包含点对点聊天和群聊，同时还有支付和红包功能。在微信中，红包功能非常著名，它可以让任何人给个人或者群聊中发红包，或者创建定制化的代币空投，从而任何人都可以扫描二维码去领取。
 
-The Stegos app also gives users simple and direct control of their staking, making it easy for everyone to participate in maintaining the network. 
+Stegos应用同时也可以让用户简单且直接地控制自己的抵押代币，让所有人都可以简单地参与到网络维护中来。
 
-Everyone deserves privacy. And everyone should be rewarded for contributing to a more private world. Stegos doesn't just keep your money and secrets safe. It rewards you for maintaining the network, even on your phone.
+每个人都应该有隐私，而且每个人都应该因为贡献了更加隐私的世界而获得奖励。Stegos不仅只让你的财产和隐私安全，而且会因为你支持网络建设而给你奖励，甚至你可以使用手机来进行参与。
 
-\section{Privacy applications}
-Stegos is committed to meeting the growing demand for privacy and data security without sacrificing usability or accessibility. Research shows that millions of users are dissatisfied with platforms such as Facebook and WeChat, but without a functionally equivalent alternative they feel locked in and unable to switch. To meet this need, Stegos is designed to encourage a blooming ecosystem of privacy applications, with Stegos messaging acting as a secure and private message bus between them.      
+\section{隐私应用}
+Stegos致力于满足人们逐渐增长的隐私需求，而且不会牺牲可用性或者可访问性。研究显示数百万用户都对现有的例如Facebook和微信平台不满意，但是却没有很好的替代方案可以让用户去选择。为了满足这个需求，Stegos的设计可以满足隐私应用的爆发，通过Stegos聊天，用户的聊天内容会很安全且隐私。      
 
-\subsection{Trusted application container (TAC)}
-Accessibility and usability are not solely user requirements. Developers also need to be catered to if they are going to switch to developing to a new platform. Developing native mobile applications is hard and error-prone. Developing secure mobile applications is harder still, and blockchain only adds an extra level of difficulty. Stegos aims to make developing mobile privacy applications simple and painless while protecting users from malicious or badly written applications. 
+\subsection{可信应用容器(TAC)}
+可用性和可访问性不仅是用户的需求。开发者如果想要去新平台进行开发，也很关注这方面。开发原生的移动应用很困难，并且很容易出错，而且开发安全移动应用也很难，区块链的介入会让整体更加困难。Stegos的目标使开发移动隐私应用程序变得简单和低门槛，同时保护用户免受恶意或写得不好的应用程序的侵害。
 
-The Stegos \textit{trusted application container} (TAC) is a native mobile application and a container for deploying privacy applications. Applications can be built using familiar technologies like Javascript, HTML, and CSS and run as plugins in a \textit{sandbox}, with tightly controlled access to the user’s wallet and the outside world.
+Stegos \textit{可信应用容器} (TAC)是一个原生的移动应用和一个部署隐私应用的容器。这些应用可以通过类似Javascript、HTML以及CSS这样的技术来完成，并且可以按照类似\textit{沙盒}中的插件这样运行，拥有对用户钱包和外部环境的严格控制。
 
-\subsection{App Store}
-Users need a way to easily discover and install applications. The Stegos Privacy App Store will provide an on-chain mechanism to search and install privacy applications, developed to run in the TAC, as well as rate their usefulness.  
+\subsection{应用商城} 
+用户需要能够简单寻找和安装应用的方式。Stegos隐私应用商城会提供链上寻找和安装隐私应用的机制，并且在TAC中开发和运行，同时也可以评估它们的可用性。
 
-\section{Private marketplaces}
-Private transactions aren't just limited to token payments. While transferring tokens is an extremely important use case for many users (e.g., remittances), most transactions involve payment for some kind of tangible goods or services. By combining private payments, fast messages, chat, and the TAC, Stegos can deliver private marketplaces where items can be sold anonymously and privately. 
+\section{私人市场}
+私人转账不仅是限于代币支付。虽然代币转账对于很多用户来说是非常重要的（例如汇款），大多数交易包含了对某几种商品或者服务的支付。通过将私人支付、快速信息传输、聊天以及TAC进行整合，Stegos会开发私人交易市场，其中很多东西都能够匿名和隐私地进行售卖。
 
-Stegos will release a separate mobile app as the marketplaces interface.  
+Stegos会发布一个单独的移动软件作为这个市场的界面。
 
-\section{Incentives to drive adoption}
-Decentralized networks draw strength from the breadth and engagement of their user base. To encourage widespread adoption, Stegos includes various incentives aimed at a variety of different user groups. 
+\section{提高应用的激励方式}
+去中心化网络可以从用户中获得巨大的力量。因此，为了激励大规模应用，Stegos会包含各种激励措施，旨在吸引各类不同的用户群体。
 
-In addition to standard staking payouts which reward validators in proportion to their stake, the \textit{Validator service award} is a unique Stegos feature that rewards validators simply for being online and helping support the network. A third of the tokens from each block reward are added to the service award pool,\footnote{Along with any tokens from expired red packets.} which is then distributed every few thousand blocks. Validators run a \textit{cryptographic lottery} based on verifiable distributed randomness to select a single validator to receive the award. The current size of the service award pool is visible to all users via the Stegos app.
+除了标准的抵押支付会按他们的抵押比例奖励验证者，\textit{验证者服务奖励}是独特的Stegos功能，会因为验证者保持在线并且支持网络就给予他们奖励。每个区块奖励的1/3会加入到服务奖励池中，\footnote{以及那些红包过期未使用的代币.}然后会每几千个区块就进行分发。验证者会运行基于可验证分布随机性的\textit{加密彩票} ，从而选择单个验证者来获得奖励。所有用户通过Stegos应用都可以看到当前的服务奖池数量。
 
-\textit{Red packets}\footnote{https://en.m.wikipedia.org/wiki/Red\_envelope\#Digital\_red\_envelopes} are based on a wildly popular WeChat feature which is in turn based on the Chinese tradition of hongbao. The introduction of the Red Packet feature encouraged millions more users to sign up to WeChat, including revealing their personal banking details. Stegos intends to replicate the popularity of this feature without invading user privacy.
+\textit{红包}\footnote{https://en.m.wikipedia.org/wiki/Red\_envelope\#Digital\_red\_envelopes} 是非常有名的微信功能，这也是基于中文“红包”。红包功能的引入会让几百万用户加入微信，同时他们还需要交出自己的银行卡信息。Stegos想要在不侵犯用户隐私的前提下，复制这个非常著名的功能。
 
-Like their centralized equivalent, Stegos red packets come in various flavours: they can be public or private, and the amounts inside can be fixed or randomized. In the simplest form, a red packet can be used to send a fixed amount of tokens to another user or group of users via Stegos chat. The amount is a surprise, and will not be revealed until the user opens the packet.
+正如微信中红包功能那样，Stegos红包会有不同的选项：可以是公开的，也可以是私下的，而且红包数额可以是固定或者随机的。最简单的方式，红包可以通过Stegos聊天功能，发送固定数量的代币给别人，或者是给群聊，其中的代币数量是未知的，只有你打开红包才会知道。
 
-Red packets in private group chat can also be randomized, with every group member receiving a random prize. 
+私聊群的红包同样可以是随机的，群里每个人都会获得随机的数额。
 
-Stegos also allows user to create public red packets, a feature designed to disseminate tokens and promote awareness, both for Stegos itself and for individual privacy apps and private marketplaces within the Stegos Privacy Platform. Public red packets are similar to airdrops, but encourage more active participation among a wider pool of users. 
+Stegos同时也会让用户在Stegos隐私平台内的Stegos本身、单个的隐私应用和私人市场中创建公开的红包，这个功能可以让用户传播代币，并且提高知名度。公开红包和空投类似，但是可以鼓励更多用户积极参与。
 
-Anyone can create a public red packet and fill it with a number of tokens of their choice. They should then distribute the corresponding QR code or URL to the target audience. Each attempt to open a red packet may result in randomly determined token prize. Prizes are awarded until the packet is empty or a day has passed, at which point any unclaimed tokens will be added to the validator service award pool.
+任何人可以创建公开红包，并且放入一定数量的代币。然后，他们需要将相应的二维码或者URL链接发送给目标人群，每次打开红包都会获得一定数量的代币奖励，直到红包被领完或者经过一天后，这时候所有没有领取的代币会添加到验证者服务奖励池。
 
-More information about the implementation of Stegos red packets can be found in Section \ref{sec:red-packets}.
+关于使用Stegos红包的部署信息，请查看\ref{sec:red-packets}部分。
 
-\chapter{Privacy applications platform}\label{chap:privacy-app-platform}
-The Stegos Privacy Platform builds on top of our fast message bus (Section \ref{sec:fastdata}) and makes developing mobile privacy apps a breeze. The Stegos mobile app is the primary window to the platform. It integrates the trusted application container (TAC) with one-on-one and group chat as well as the Privacy App Store and red packet feature. 
+\chapter{隐私应用平台}\label{chap:privacy-app-platform}
+Stegos隐私平台会基于我们的快速信息传输功能(Section \ref{sec:fastdata})，并且使得开发移动隐私拥有变得非常容易。Stegos移动应用是整个平台的窗口，它会将可信应用存储器（TAC）和点对点以及群聊，还有隐私应用商城和红包功能整合起来。
 
-\section{Trusted Application Container}\label{sec:tac}
-The Trusted Application Container (TAC) is a sandbox and virtual machine (VM) for running plug-in apps written using HTML, CSS and JavaScript. The architecture is very similar to that of WeChat mini-programs \footnote{https://walkthechat.com/wechat-mini-programs-simple-introduction/}.
+\section{可信应用容器}\label{sec:tac}
+可信应用容器（TAC）是一个沙盒和虚拟机（VM),并且可以运行通过HTML, CSS和JavaScript语言编写的内置应用。这个技术底层和微信小程序很类似 \footnote{https://walkthechat.com/wechat-mini-programs-simple-introduction/}。
 
-The TAC prevents apps from wreaking havoc on the host phone. It also completely abstracts the blockchain from running applications, instead providing an interface (API) to send messages and access the wallet. The TAC tightly controls access to the outside world and ensures that spending tokens requires confirmation from the user. 
+TAC会防止应用程序对主机造成破坏，同时也让区块链从运行应用中完全抽象出来，而不是提供接口（API）来发送信息并且进入钱包。TAC严格控制对外部世界的访问，并确保消费代币需要用户确认。
 
-Stegos will provide a software development kit (SDK) and documentation for building privacy apps. 
+Stegos会提供搭建隐私应用的软件开发包（SDK）以及相关文件。
 
-\section{Identity}\label{sec:identity}
-Every Stegos wallet has a public key (address) associated with it. Stegos uses \textit{stealth addresses}, and payments to a public key are cloaked with two random values. This makes it impossible to link payments to someone by analyzing the blockchain. Only the sender and the receiver are privy to any exchange of information. This means users do not have to be overly protective of their public key: it’s completely safe to post a Stegos public key on a website or even plaster it on a street billboard. 
+\section{身份信息}\label{sec:identity}
+每个Stegos钱包都带有公钥（地址）。Stegos使用\textit{隐藏地址}，从而对公钥的支付被两个随机值掩盖，这样就无法通过分析区块链去发现转账人的身份。只有发送方和接收方才有权进行任何信息交换。这意味着用户不必太过保护自己的公钥：将Stegos公钥发布在网站或者甚至把它贴在街上的广告牌上，这都是完全安全的。
 
-Stegos uses the unspent transaction (UTXO) model, where each UTXO is best understood as a coin. There’s no separate notion of identity in Stegos, although wallet addresses can be used as an identifier or avatar for the purposes of messaging or building a reputation or social score on Stegos private marketplaces or other privacy applications. 
+Stegos使用了未花费交易（UTXO）模型，其中每个UTXO都可以理解为一个代币。在Stegos中，没有任何单独的身份概念，尽管钱包地址可以用作标识符或化身，用于发送信息或在Stegos私人市场或其他隐私应用程序上建立声誉或社会评分。
 
-Stegos users can export their wallet address as a QR code.
+Stegos用户能够将钱包地址导出作为二维码。
 
-\section{Privacy App Store}\label{sec:appstore}
-Users have different privacy needs, and sometimes even knowing that a user has a particular app can risk a privacy breach. Users need a way to privately browse and access apps, while being confident that the apps they install are private and secure. To achieve this, Stegos implements an on-chain privacy app store, where details of the apps are stored on the Stegos blockchain itself.
+\section{隐私应用商城}\label{sec:appstore}
+用户有着不同的隐私需求，有时候甚至用户下载的app都会面临隐私泄露风险。用户需要有隐私地浏览和进入app应用的方式，虽然他们认为自己下载和安装的app是隐私和安全的。为了达成这个目标，Stegos部署了链上隐私app商场，其中这些应用的细节都存储在Stegos区块链上。
 
-The apps themselves should be stored off chain to avoid bloating the Stegos chain, but to be listed on the Stegos privacy app store, each privacy app must create a manifest which includes a description of the app, the URL used to download it, and a hash of the app bundle. This manifest is stored on the Stegos blockchain. App bundles are signed with the developers' public key, which allows users to leave on-chain app reviews to rank individual apps and developers. Manifests also contain tags to allow users to search the app store by category.
+这些app本身应该是链下存储，并且不会影响到Stegos区块链，而且需要上线Stegos隐私应用商城，每个隐私应用都必须创建声明，其中包括app的描述，下载URL链接，以及应用程序包的哈希，这个声明会存储在Stegos区块链上。App中包含了标签，可以让用户通过类别在app商城里面搜索。
 
-Apps are downloaded via the Stegos app. Once downloaded, the TAC verifies that the signature of the app bundle and the hash match the information in the manifest. The TAC installs the app bundle locally and makes the app available in the Stegos mobile app. Users can delete apps at any time.
+App会通过Stegos商城下载，一旦下载成功，TAC会验证应用程序包的签名，以及哈希是否符合声明中的信息。TAC会在本地安装应用程序包，并且让这个应用在Stegos移动应用中可用。用户随时都可以删除这些应用。
 
-\section{Chat}\label{sec:chat}
-No matter how well a blockchain obscures user information in its transactions, users still need a way to find each other, which risks exposing their personal information. This affects some coins more than others. MimbleWimble, for example, requires users to communicate in advance to share the blinding factors needed to obfuscate identifying details about their transaction. But every transaction requires some initial communication between parties in order to define the parameters of the trade. If this communication can be intercepted, malicious third parties can begin deanonymizing a coin’s transaction history. 
+\section{聊天}\label{sec:chat}
+无论在这些转账中区块链是如何模糊用户信息，用户仍然需要找到对方，这就有暴露个人信息的风险，这些造成比代币更大的影响。例如，MimbleWimble需要用户提前进行通信，从而可以分享在交易过程中确定身份信息所需要的因素。但是每个交易都需要用户间的一些初始通信，从而确定交易的参数。如果这个通信能被截获，那么恶意的第三方都会开始对交易记录去匿名化。
 
-Existing platforms generally leave this problem to users to solve, drastically reducing their appeal and effectiveness. While information leaks can never be fully plugged, at Stegos we believe it is the responsibility of the platform to provide users with as many tools as possible to protect their privacy. Every transaction which can be protected in this way increases the privacy of all users across the platform.
+现在的平台都会把这个问题留给用户去解决，大大降低了它们的吸引力和有效性。虽然这些信息泄露无法完全满足，但是在Stegos平台，我们相信这是我们的责任去给用户尽可能多的工具去保护他们的隐私。每个能通过这种方式保护的平台都会提高平台用户的隐私性能。
 
-To this end, Stegos implements fully private communication and integrates it within the Stegos app. It functions like a standard messaging app which all users will be familiar with. Users use their public keys as an identifier (Section \ref{sec:identity}), safe in the knowledge that this can be exposed without revealing any links to other users or transactions. Messages are transmitted via the fast message bus (Section \ref{sec:fastdata}), ensuring that messages are received almost instantly.
+最终，Stegos会部署完全私人的通信，并且将其和Stegos应用整合，它会包含类似标准通信应用，其中所有用户都对它很熟悉。用户使用公钥作为身份认证(Section \ref{sec:identity})，在不泄露任何与其他用户交易信息的情况下展示出来。信息会通过快速信息总线(Section \ref{sec:fastdata})进行传递，从而确保信息是几乎即时收到。
 
-Users can send a QR code via private chat to initiate an STG transaction. It is also possible to create chat groups and invite people to chats via QR codes. 
+用户可以通过私聊发送二维码，从而启动STG转账，同时也可能创建聊天群，并且通过二维码邀请用户进群。
 
-In the following chapters we explain the Stegos features in more detail.
+接下来的章节，我会更详细地介绍Stegos功能。
 
-\chapter{Stegos in depth}\label{chap:stegos-in-depth}
+\chapter{Stegos详细解读}\label{chap:stegos-in-depth}
 
-\section{Consensus}
-The Stegos consensus protocol is based on \textit{Albatross}\cite{c23}, a novel blockchain consensus algorithm inspired by speculative BFT\cite{c9} algorithms, and has strong consistency while often achieving instant transaction confirmation. The Stegos consensus protocol is secure and has a performance close to the theoretical maximum for a single-chain PoS consensus algorithm.
+\section{共识机制}
+Stegos共识协议是基于\textit{Albatross}\cite{c23}，这是通过拜占庭机制BFT\cite{c9}的全新区块链共识算法，而且在获得及时交易确认的同时，还有很强的一致性。Stegos共识协议是安全的，并且和理论上获得单链PoS共识机制的最大值。
 
-\subsection{Speculative BFT}
-Speculative BFT algorithms that have two modes for consensus: 
+\subsection{投机拜占庭容错}
+投机拜占庭容错（SBFT）算法有两种共识模式：
 
 \begin{enumerate}
-	\item the \textit{optimistic mode}, where speed is preferred and few security measures are applied, under the assumption that the nodes are well-behaved, and
-	\item the \textit{pessimistic mode}, where the only goal is to make progress even in the presence of malicious nodes.
+	\item the \textit{乐观模式}, 转账速度很完美，但是只有很少的安全错输，假设所有的节点都运行良好。 
+	\item the \textit{悲观模式}, 唯一的目标是在有欺诈节点的情况下，系统也能顺利运行。 
 \end{enumerate}
 
-The optimistic mode allows the Stegos consensus protocol to compete for speed with centralized systems. Nodes verify each update and when an invalid updated is detected, consensus switches to pessimistic mode. The invalid update is discarded and then consensus reverts to optimistic mode.
+乐观模式可以让Stegos共识协议能够和中心化系统类似的速度。节点会验证每次状态更新，当有无效更新检测出来的时候，共识就会切换到悲观模式。无效的更新就会被丢弃，然后共识回到乐观模式。
 
-\subsection{Validators}
-Stegos is a public ledger, so anyone can join the network, become a validator, and earn rewards for maintaining the blockchain. Stegos uses gamified Proof-of-stake (gPoS) consensus to better incentivize smaller stakers compared to standard Proof-of-stake. Nodes need to post a performance bond (stake) to be eligible to provide validation services. Requiring a performance bond protects against Sybil attacks by requiring a financial commitment from validators. Locked tokens can be staked just like regular ones.
+\subsection{验证节点}
+Stegos是公开账本，因此每个人都可以加入网络，成为验证节点，同时通过维护区块链获得奖励。和标准的PoS共识相比，Stegos使用赌注权益证明（gPoS）共识来更好地激励散户参与。节点需要进行绩效绑定（抵押），从而可以进行验证服务。通过给出经济方面的抵押，要求验证节点都提供绩效绑定，从而防止女巫攻击。锁定的代币可以像普通代币那样进行权益抵押。
 
-Validators who have posted a performance bond are eligible to be randomly selected to participate in a consensus round as an active validator. Individual active validators are selected to create blocks using verifiable distributed randomess and are rewarded with the block reward and transaction fees from the blocks they sign. The other active validators witness and cosign the created blocks, making them eligible for the validator service award (Section \ref{sec:service-award}).  
+给出绩效绑定的验证节点能够被随机选择，去作为活跃验证节点参与确定共识。每个活跃的验证节点都会通过可验证的分布式随机方法去创建区块，同时还会从交易手续费中获得奖励。其他活跃验证节点会见证并且同时签署创建的区块，从而可以获得验证节点服务奖励(Section \ref{sec:service-award})。
 
-\subsection{Blocks}\label{sec:blocks}
-Stegos has two types of blocks:
+\subsection{区块}\label{sec:blocks}
+Stegos有两种类似的区块：
 
 \begin{itemize}
-	\item {\em Key blocks} Key blocks are used to change the validator list and act as checkpoints in the Stegos chain. Key blocks only contain the identities of the new subset of active validators and the random seed used to select them. Key blocks are produced with pBFT and cannot be forked.
-	\item {\em Regular blocks} Each regular block is produced by a verifiably randomly chosen active validator and contains not only the user transactions to be included, but also the current state and a random seed produced by the validator. These blocks are produced optimistically and only need to be signed by the corresponding validator.
+	\item {\em 核心区块} 核心区块是用来改变验证节点列表，并且作为Stegos区块链上的检查点。核心区块只包含了活跃验证节点的身份信息，以及用来选择它们的随机助记词。核心区块是通过实用性拜占庭证明（pBFT）产出，并且不会分叉。
+	\item {\em 普通区块} 每个普通区块都是通过可验证的随机方式选择出的活跃验证节点产出，并且不仅包含了用户转账信息，还有目前的状态以及验证节点的随机助记词。这些区块是通过乐观方式产出，并且只需要相应的验证节点签名。
 \end{itemize}
 
-One key block is always followed by a fixed number of regular blocks. An \textit{epoch} is composed of a key block and the regular blocks that precede it. Every epoch, the list of validators is updated and a new list of active validators is randomly selected.
+一个核心区块总是带有固定数量的普通区块。一个\textit{epoch}是由一个核心区块和相应的普通区块组成。每个epoch中，验证者列表会更新，并且全新的活跃验证节点会随机选出。
 
-\subsubsection{Block frequency}
-Under test conditions and assuming a $16$-node network, we observed a block propagation time of $500ms$ - $700ms$. We expect this number to be higher in practice, but still within $5s$ for a regular block. 
+\subsubsection{区块生产频率}
+在测试环境下，假设$16$-节点的网络，我们观察区块传播的时间为$500ms$ - $700ms$。实际运行中，时间可能会更长，但是对于普通区块来说，速度也会在$5s$之内。
 
-Key blocks involve pBFT consensus and thus take longer to create. In testing, we observed times of around $5s$ for $16$ validators. The number of validators will be much larger in practice, but we still expect a key block frequency in the range of $30s$ to $60s$.
+核心区块包含了实用性拜占庭共识（pBFT），因此会需要更长时间来进行创建。测试过程中，我们观察到对于$16$ 验证节点来说，其时间大约为$5s$。验证节点的数量在实际过程中会更多，但是我们认为区块生产频率会在$30s$到$60s$。
 
-A key block frequency of $2min$ should ensure that the ratio between the number of key blocks and regular blocks is sufficient to capitalize on the optimistic mode without compromising security.
+核心区块生产时间$2min$应该可以保证核心和普通节点的比例足够，从而在不损失安全性的情况下，可以去应用乐观模型。
 
-\subsection{Validator Selection}
-Validators are selected from the active validator pool using a stake-weighted lottery. The larger the validator’s stake, the greater their chance of becoming the pBFT leader (when creating a key block) or being selected as slot owner (when creating a regular block).
+\subsection{验证节点选择}
+验证节点通过权益加权彩票的方式从验证者池中选出。随着验证节点抵押的金额越大，在创建核心区块的时候，它们就有更高的概率可以成为实用性拜占庭证明（pBFT）的领导者，或者被选择成为创建普通区块的所有者。
 
-\subsection{Fork resolution}
-Validators will choose the longest chain, i.e., the chain with the most blocks, as the main chain. Because key blocks require pBFT consensus, forks can only occur between two key blocks. Therefore, nodes only need to consider chains that include the latest key block.
+\subsection{消除分叉}
+验证节点只会选择最长的区块链，也就是说有着最多区块的链，称为主链。因为核心区块需要pBFT共识，分叉只可能在两个核心区块之间进行。因此，节点只需要专注于考虑包含最新核心节点的区块链。
 
-We apply the following heuristics from top to bottom to resolve a fork:
-
-\begin{enumerate}
-	\item The chain with the most key blocks.
-	\item The chain with the blocks with the highest pBFT view change number.
-	\item The chain with the most blocks.
-\end{enumerate}
-
-In case of a tie on all three conditions, the next validator can build on top of either chain.
-
-\subsection{Punishing misbehaving validators}
-There are three ways a validator can misbehave in our consensus implementation: producing an invalid block, creating a fork, and delaying a block. These nead to be dealt with and disincentivized where appropriate.
-
-We deal with the three types of misbehaviour as follows:
+我们通过从上到下的启发式算法来解决分叉：
 
 \begin{enumerate}
-	\item {\em Invalid blocks} - When a validator produces an invalid block, the other validators will ignore that block. Validators will also ignore any more blocks from that validator during the current slot, which helps prevent DoS attacks.
-	\item {\em Forks} - Forks are not possible during a key block, because pBFT is a forkless protocol. But a fork can be created if a validator produces more than one regular block in the same slot. In this case, both forks are ignored and a new active validator is selected using the pBFT view change protocol. 
-	\item {\em Delays} - Validators can too long to produce a block, or can go offline entirely. In both cases, we change the slot owner using the pBFT view change protocol. 
+	\item 有着最多核心区块的区块链。
+	\item 有着最高pBFT视图更换区块的区块链。
+	\item 有着最多区块的区块链。
 \end{enumerate}
 
-To disenctivize these behaviours, we introduce \textit{slashing} to punish misbehaving validators. Slashing confiscates the stake of the validator who produced an invalid block or fork. The only proof needed for a fork is two block headers at the same slot signed by the same validator. The slashed stake is evenly distributed between the rest of the validators in the current epoch. Delays are not punished by slashing, because it is impossible to tell whether the delay was malicious or not, and we do not want to discourage mobile nodes, who are likely to have less stable connections.
+在所有这三个条件下都发生的情况下，下个验证节点可以基于其他链继续搭建。
 
-\subsection{Collective Signing}
-We adopt \textit{CoSi}\cite{c10,c11}, a scalable witness co-signing protocol ensuring that every authoritative statement is validated and publicly logged by a diverse group of witnesses before any client will accept it. A statement, $S$, collectively signed by $W$ witnesses assures clients that $S$ has been seen, and not immediately found erroneous, by those $W$ observers. 
+\subsection{惩罚恶意节点}
+在我们的共识机制下，恶意节点有三种方式：产生无效区块、创建分叉以及延迟区块。这些需要将在适当的情况下予以处理和抑制。
 
-Even if $S$ is compromised in a fashion not readily detectable by the witnesses, CoSi still guarantees $S$’s exposure to public scrutiny, forcing secrecy-minded attackers to risk that the compromise will soon be detected by one of the $W$ witnesses. 
+我们通过以下方法处理这些恶意行为：
 
-CoSi builds on existing cryptographic multi-signature methods, scaling them to support thousands of witnesses via signature aggregation over efficient communications. The default implementation of CoSi uses Schnorr signatures which we replace with BLS signatures for performance reasons.
+\begin{enumerate}
+	\item {\em 无效区块} - 当验证节点产生了无效区块，其他验证节点会无视这个区块。验证节点同时会忽视从这个验证节点中输出的其他区块，这样可以防止DoS攻击。
+	\item {\em 分叉} - 在核心区块中，分叉是不可能的，因为pBFT共识是无法分叉的协议。但是如果验证节点同时产生了超过一个普通区块，那么分叉就会产生。这种情况下，分叉会被忽视，并且一个新的活跃验证节点会通过pBFT视觉转换协议选出新的活跃验证节点。 
+	\item {\em 延迟} - 验证节点可能导致产生区块的时间过长，或者完全掉线。这两种情况下，我们会通过pBFT视觉转换协议改变这个位置的拥有者。 
+\end{enumerate}
 
-Active validators who participate in CoSi become eligible for the validator service award (Section \ref{sec:service-award})
+为了抑制这些行为，我们引入了\textit{削减}来惩罚那些恶意的验证节点。削减（slashing）方式会没收那些验证节点的抵押代币，如果他们产生了无效的区块或者分叉。证明分叉的唯一证据是两个区块头部由相同的验证节点签名，而被没收的抵押代币会平均分发到目前epoch中剩余的验证节点。区块延迟不会通过削减方式进行惩罚，因为无法知道这个延时是否是恶意欺诈，而且我们不想去影响移动节点的积极性，他们更可能有不稳定的网络连接。
 
-\section{Networking}
-The Stegos network is composed of three types of nodes: \textit{bootstrap nodes}, \textit{compact nodes}, and \textit{light wallets}. Bootstrap and compact nodes maintain a copy of the blockchain and associated data structures. After posting a performance bond (stake) to become \textit{validators}, these nodes participate in the consensus protocol and can earn block rewards and transaction fees. These nodes also respond to requests from light wallet nodes.
+\subsection{集体签名}
+我们使用了\textit{CoSi}\cite{c10,c11}，这是可扩展的可见证共同签名协议，从而确保每个授权的状态是有效的，并且在客户端接受结果之前，由不同群体验证者公开记录。状态$S$是由$W$个见证者集体签名，从而确保$S$被$W$ 见证，并且不会立刻发现错误。
 
-Bootstrap nodes carry the unpruned version of the blockchain and respond to bootstrap requests from new compact and bootstrap nodes. Compact nodes carry the pruned version of the blockchain, i.e., the current UTXO set. Light nodes only keep blockchain headers and know how to talk to validators. 
+如果$S$没有被见证者检测出来，CoSi也会保证$S$接受公众监督，从而让攻击者冒着很快就被$W$见证者发现的风险。
 
-Stegos will initially maintain the core of the network by running a number of core bootstrap nodes to ensure network continuity and performance. The addresses of these core nodes will be hard-coded into each release of the Stegos blockchain software.
+Cosi基于现在的加密多重签名方式，并且将它们通过高效通信进行签名聚合，从而能支撑数千个见证者。Cosi的默认部署是Schorr签名，但是因为效率原因，我们替换为BLS签名。
 
-Nodes keep a list of addresses of the nodes they know about (peers) and add new peers to the list as they become aware of them. New nodes will connect to one of the core nodes to fetch a list of bootstrap nodes and download a copy of the blockchain. 
+参与Cosi的活跃见证节点可以获得验证解决服务奖励(Section \ref{sec:service-award})。
 
-After a few light checks, each full node quickly rebroadcasts received transactions to a subset of its peers. This ensures that a node cannot be DDoS-ed with transactions to validate and that it does not rebroadcast junk transactions. To discourage bad actors here, we employ a mechanism to throttle peers and punish them for bad transactions, e.g., by blocking them from further participation in the network.
+\section{网络}
+Stegos网络是由三个类型的节点组成：\textit{引导节点}、\textit{压缩节点}以及\textit{轻钱包}。引导和压缩节点会维护区块链以及相关数据结构的复制版本。在发布绩效绑定（抵押）从而成为\textit{验证节点}后，这些节点会参与到共识协议中，并且能够获得区块奖励以及转账费用。这些节点也会回应轻钱包节点的需求。
 
-The Stegos blockchain uses a gossip protocol to spread information without depending on a fixed network topology. This protocol does not require every node to be reliable or always up and running, and does not require every node to know about every other node. Each node knows about just a few peers, and information can safely propagate through the network as long as most nodes know of at least two peers.
+引导节点会承载未修剪的区块链版本，并且从全新的压缩和引导节点中回应引导需求。压缩节点会承载修剪完成的区块链版本，也就是说，目前的UTXO设置。轻节点只会保留区块头部，以及了解如何和验证节点进行交互。
 
-\section{Incentives}
-Stegos is powered by the STG token, available once the mainnet is launched. When posted as a performance bond by nodes wishing to support the Stegos platform, the STG token gives validators the right to earn fees and block rewards when they are elected as the leader of the consensus round. The probability of a validator being elected the leader is proportional to the size of their stake.
+Stegos初始会通过运行几个核心引导节点去维护核心网络，从而保证网络的可持续性和性能。这些核心节点的地址会硬编码到Stegos区块链软件的每个发布版本。
 
-\subsection{Validator service award}\label{sec:service-award}
-Ledgers based on Proof-of-stake (PoS) can have difficulty maintaining a broad user base since most users have a vanishingly small chance of earning significant rewards. To mitigate this failing, gPoS includes a \textit{Validator service award} in addition to the standard block rewards and transaction fees. The award is meant to incentivize validators with small stakes to maintain the network. Instead of only allocating rewards to block creators, any node which has provided active validation services is eligible to win an award. This has an added effect of incentivizing witnessing of normal blocks and participation in the pBFT process for key blocks.
+节点会保留地址列表，并且将其他客户端添加到地址上，从而让他们直接互相知晓。新节点会和其中一个核心节点连接，从而获得引导节点列表，然后下载区块链副本。
 
-One third (1/3) of every block reward will be added to the service award pool, along with tokens from expired red packets. The validator service award is awarded to a single user, chosen from all users who have provided active validation since the last validator service award payout. The odds of the award being paid out starts small and increases with every block. Thus the precise time of the drawing cannot be predicted, but on average the validator service award will be distributed every 5-10 days. This frequency is chosen to ensure that most users who have posted a stake stand a good chance of becoming eligible, and that the reward should always grow large enough to be an appealing incentive to participate. 
+经过一些轻检验，每个全节点都会很快地重新播放获得的转账给其他客户端。这就保证了节点不会因为有大量垃圾交易而受到DDoS攻击。为了抑制不良行为，我们引用了一种机制去防止客户端作恶，并且会对恶意转账进行惩罚，例如，让他们后续无法参与网络。
 
-\subsection{Red packets}\label{sec:red-packets}
-Giveaways are one of the most popular and effective ways to increase participation and awareness of a platform. Since the launch of WeChat’s digital red packet function in 2014, millions of people have signed up to WeChat and voluntarily shared their bank details. The red packet app was responsible for more than 2 billion transactions on January 1st 2016 alone.
+Stegos区块链使用了Gossip协议来传播信息，而且不用依赖于固定的网络结构。这个协议无需每个节点都可靠，或者总是在线以及运行，而且无需每个节点都互相知晓。每个节点都仅知道几个客户端，而且信息也可以安全地通过网络进行传播，主要大多数节点知道至少2个客户端。
 
-For cryptocurrency platforms, the most common form of giveaway is an airdrop. These are often a wasteful way to disseminate tokens, as the passive nature of airdrops does little to encourage participation, and their long-term effectiveness is unclear. While airdrops do seem to be an effective way to onboard community members, few of these make the jump to running nodes or actively using a platform.
+\section{激励措施}
+Stegos是由STG代币赋能的,在主网上线的时候,STG代币就会可用.当节点进行抵押并且希望支持Stegos平台的时候,当他们被选为共识阶段的领导者,则会获得STG代币作为手续费以及区块奖励.验证节点选为领导者的可能性是和他们持有的代币成正比.
 
-To address these issues, Stegos implements a red packet feature similar to that seen on WeChat, but without the requirement for users to disclose personally identifying information. Red packets come in two forms: private and public. Private red packets can be used to send fixed amounts of tokens to a particular user or group of users. Public red packets are a gamified airdrop mechanism where the token payout is randomized.
+\subsection{验证节点服务奖励}\label{sec:service-award}
+基于权益证明(PoS)的账本很难去维护一个很广的用户基数,因为大多数用户都只有很小的几率去赢得很大的奖励。为了弥补这点，gPoS协议除了标准的区块奖励和交易手续费，还包含了\textit{验证节点服务奖励}。这些奖励是为了那些抵押金额较小的验证节点，去维护网络安全。除了只把奖励分发给区块创建者，任何有活跃验证服务的节点都可以赢得奖励。这可以增加对普通区块激励见证以及核心区块参与到pBFT过程的效果。
 
-Anyone with the Stegos app can create a red packet and load it with STG tokens. In addition to the number of tokens in the packet, users also choose the number of prizes which will be awarded (for a fixed surprise payment to a specific user, the number of prizes can be set at 1). The tokens are then randomly divided between different denomination coins (UTXOs) within the packet, with the number of coins equalling the number of chosen prizes. 
+每个区块奖励的1/3都添加到服务奖励池中，同时还有过期的红包奖励。验证节点服务奖励是奖励给单个用户的，这样用户是所有从上个验证节点奖励服务支付给出后，已经提供验证服务的用户选择。奖励一开始比较少，但是会随着区块而增加。因此无法预测精确时间，但是平均来说，验证服务奖励会在每5-10天进行分发。选择频率是为了保证提供抵押的最多用户可以有机会成为节点，而且奖励应该总是足够多，才能成为吸引更多人参与的激励。
 
-The app then generates a QR code or URL which can be used to access the red packet. On accessing the red packet, validators will randomly determine whether the user has won a prize or not. If they have, one of the remaining predetermined coin denominations will be transferred from the packet to the user’s STG wallet. This process continues until the red packet is empty or the expiry deadline passes.
+\subsection{红包}\label{sec:red-packets}
+捐赠是最受欢迎和有效的方式，去提高参与度和平台的知名度。因为微信电子红包2014年兴起，数以百万的人都注册了微信，并且共享了他们的银行信息。仅2016年，红包应用已经有超过20亿笔交易。
 
-Users can keep accessing a red packet until it is empty, although the network will enforce a small delay between attempts to prevent DDoS attacks. Accessing a red packet is free, and does not require users to buy tokens or pay transaction fees. However, a portion of all prizes will be awarded to validators as a processing fee.
+对于加密货币平台来说，最常见的形式是空投。但是这种方式的效果很差，因为空投其实很难去激励参与度，并且他们的长期效果是不清晰的。虽然空投看似对于社区成员有效，但是很少有人去运行节点或者有效地运用这个平台。
 
-Red packets expire after a day.  Because of the private nature of Stegos transactions, it is impossible to return unclaimed tokens to the user who originally set up the red packet. Therefore, any unclaimed tokens will be added to the validator service award pool.
+为了解决这个问题，Stegos实施了类似微信的红包功能，但是无需用户去披露身份认证。红包会以两种方式出现：私人的和公开的。私人红包可以用来发送固定数量的代币，给予特定的个人或者群聊。公开红包是随机的红包空投机制。
 
-Users must install the Stegos app and set up a STG wallet before they can open a red packet. With this barrier to entry crossed, users will be able to start running their own mobile validator node with minimal effort.
+Stegos应用的任何人可以创建红包，并且放入STG代币。除了红包里面的代币数量，用户也会选择奖品的数量（如果是给特定用户，那么红包数量就是1）。那么，这些代币就会随机分配在红包中的不同UTXO中，并且代币的数量和选择奖品的数量相等。
 
-\section{Snowball}
-\subsection{A problem of establishing untraceability}
-Even though user identities are cloaked in the blockchain, the spending history of every UTXO can be established by tracing blockchain transactions backwards, up to the genesis block.
+然后，这个应用会产生二维码或者URL链接，这可以用于进入红包。进入红包后，验证节点会随机决定用户是否会获得奖励。如果他们有奖励，其中的代币就会从钱包转移到用户的STG钱包。这个过程会一直持续直到红包空了或者过期。
 
-Despite having a serious hurdle for such tracing — we don’t store transactions in the blocks of out blockchain, but rather Merkle trees of inputs and outputs — a malicious node which joined the Stegos network immediately after mainnet release could theoretically collect all transaction histories in order to analyze and trace UTXOs.
+用户可以一直抢红包直到空掉，但是网络会有微弱的延迟从而防止DDoS攻击。抢红包是免费的，而且无需用户购买代币或者支付交易费用。但是，所有奖励中的一部分将会作为手续费奖励给验证节点
 
-To counteract this, Stegos will implement a protocol that completely hides the relationship between inputs and outputs of each transaction. This is difficult because UTXOs must have a unique $ID$, without which there would be no way to validate transactions or prove ownership of a UTXO. Unique UTXO IDs establish a trail which we want to obscure by only showing that UTXO output could have come from one of many different and unrelated inputs. We want to hide the source of each UTXO but in a manner that allows public validation.
+红包会在一天后过期。由于Stegos交易的隐私属性，因此是无法退回没有领取的红包。因此，这部分红包会加入到验证者服务池。
 
-\subsection{Possible solutions}
-Currently there are four kinds of approaches to solving the problem of establishing untraceability: coin mixers, Ring Signatures, zk-SNARKs, and the CoinJoin family of protocols.
+用户必须要安装Stegos应用，并且设置STG钱包，才能打开红包。通过这种设置，用户才能通过最少的成本去运行移动验证节点。
 
-\subsubsection{Mixers} Mixers require users to trust the third party which provides mixing services, something that’s unacceptable in a truly private and confidential blockchain.
+\section{雪球}
+\subsection{建立不可追踪的问题}
+尽管用户身份是存储在区块链，每个UTXO交易的历史都会通过追踪区块链交易奖励获得，一直追溯到创世区块。
 
-\subsubsection{Ring Signatures} Ring signatures collect a large but random number of existing UTXOs and add those into the list of inputs actually being spent. A signature is formed on all of the inputs, enabling proof that the inputs are properly spent as a group, without revealing the exact inputs being spent. 
+尽管对于这种追踪有比较严重的阻碍 - 我们不会在区块链的区块中存储交易，而是输入和输出的Merkle树- 主网发布后，立刻加入Stegos网络的欺诈节点理论上会获得所有交易记录，从而去分析并且追踪UTXO。
 
-Unfortunately, ring signatures prevent blockchain compaction since it’s impossible to know when a UTXO has been spent and prune it from the blockchain. All UTXOs \textit{that ever existed} must be retained, which is impossible to adequately scale.
+为了解决这个问题，Stegos会部署一个完全隐藏每个交易输入和输出关系的协议。这是很困难的，因为UTXO必须有$ID$，如果没有则无法去验证节点或者说验证UTXO的身份。特定UTXO的ID会建立一条线索，我们会可以通过展示UTXO的输出.
 
-\subsubsection{zk-SNARKs} zk-SNARK stands for ``zero-knowledge succinct non-interactive argument of knowledge.’’ Currently, the only known way to produce non-interactive zero-knowledge proofs that are short enough to publish to a blockchain is with an initial setup phase that generates a common reference string shared between prover and verifier. Anyone with access to the secret randomness used to generate this string can create false proofs that will appear valid to the verifier. For a cryptocurrency that uses zk-SNARKs, e.g., Zcash, this means the ability to create counterfeit coins. 
+\subsection{可能的解决方案}
+现在，可能有四种方式来解决无法追踪的问题：代币混合器、环形签名、零知识证明以及CoinJoin协议系列。
 
-To prevent double-spending in a zk-SNARK-based cryptocurrency, nodes must maintain a cryptographic accumulator containing the serial numbers of all spent coins. This accumulator always grows and cannot be trimmed, which prevents adequate scaling.
+\subsubsection{混合器} 代币混合器需要用户信任提供混合服务的第三方机构，这对于完全私有化和隐秘的区块链来说，是不可接受的。
 
-\subsubsection{CoinJoin} is a protocol for joining several Bitcoin transactions together before submitting them to miners to include in the block. The protocol was originally proposed by Greg Maxwell in 2013 and is based on the following idea: ``When you want to make a payment, find someone else who also wants to make a payment and make a joint payment together.’’\footnote{https://en.wikipedia.org/wiki/CoinJoin} CoinJoin implementations are based on the use of trusted servers that mix multiple transactions together, which introduces an unacceptable level of trust to the system.
+\subsubsection{环形签名} 环形签名需要收集大量随机的UTXO，然后将它们添加到实际发出的输入列表。所有这些输入会形成签名，从而让这些值通过集群的方式发出，而无需揭露真实发出的输入数据。 
 
-Each of these existing approaches introduces unacceptable processing costs or required trust. Most of these are unresolvable. However, the CoinJoin approach can be improved to resolve its trust issues. In 2014, CoinJoin inspired researchers from Saarland University to develop a completely decentralized protocol they called \textit{CoinShuffle}\cite{c17}. It also allows users to mix their coins with those of other interested users and uses the accountable anonymous group communication protocol \textit{Dissent} to ensure anonymity and robustness against DoS attacks. 
+不幸地是，环形签名阻碍了区块链压缩，因为不可能知道UTXO发送的时间，并且从区块链中进行修剪。所有UTXO\textit{曾经出现过的}必须保留，这就导致无法进行扩容。
 
-The same researchers presented an enhanced version of the protocol in 2016, which they called \textit{CoinShuffle++}\cite{c18}. The key innovation of CoinShuffle++ is to replace mix-nets with Dining Cryptographers Networks (DC-nets)\cite{c20}, a more efficient anonymity mechanism. 
+\subsubsection{零知识证明} 零知识证明是“零知识简洁的非交互知识论证”的缩写。目前，产生足够短且可以发布在区块链中的零知识证明是通过初始设置去获得证明者和验证者共同分享的字符串来实现。任何能够获得用来产生这个字符串的秘密随机数的人可以创建虚假的证明，而且验证者还会认可它。对于使用零知识证明的加密货币来说，例如Zcash，这意味着能够制造假币的能力。
 
-A mix-net requires sequential processing so the number of communication rounds in the original CoinShuffle protocol grows linearly with the number of users. By using DC-nets, CoinShuffle++ allows for mixing to proceed in parallel, requiring a constant number of communication rounds regardless of the number of users.
+为了防止基于零智商证明加密货币的双花现象，节点必须持有包含很多已消费代币系列号的加密累加器。这个累加器会一直增长，并且无法修剪，这样就导致无法扩容。
 
-Stegos adopts the CoinShuffle++ approach but improves it still further.
+\subsubsection{CoinJoin} 协议可以在提交比特币交易数给矿工之前混合几个不同的数据。这个协议最初是Greg Maxwell在2013年最先提出的，并且它的原理如下：“当你进行支付的时候，会找到其他也想进行这个支付 的人，并且同时进行支付。”\footnote{https://en.wikipedia.org/wiki/CoinJoin} CoinJoin是基于可信服务器，从而可以将多个交易数据混合，从而为系统带来相对的安全性。
+
+每种方式都会有不可接受的手续费用后者需要相当的信任条件，而且大多数要求是无法解决的。但是，CoinJoin的方法能够解决信任问题。2014年，CoinJoin让德国萨尔州大学的研究人员开发了完全的去中心化协议，并且称为\textit{CoinShuffle}\cite{c17}。 它也让用户去互相混合自己的代币，并且使用匿名沟通协议 \textit{Dissent} 来保证匿名性，同时也能防止DoS攻击。
+
+2016年，相同的研究人员发表了增强版的协议，他们称为\textit{CoinShuffle++}\cite{c18}。CoinShuffle++的核心创新是将混合网络替换为Dining Cryptographers Networks (DC-nets)\cite{c20}，这是更为有效的匿名机制。
+
+混合网络需要连续的运行，因此初始CoinShuffle协议的通信次数和用户数量成正比。通过使用DC-nets网络，CoinShuffle++可以让混合器同步运行，从而无论有多少用户都可以获得稳定数量的通信次数。
+
+Stegos采用了CoinShuffle++ 功能，但是进一步提高了这项技术。
 
 \subsection{ValueShuffle}
-\textit{ValueShuffle}\cite{c19} is an extension of CoinShuffle++ that is compatible with confidential transactions. ValueShuffle ensures the anonymity of mixing participants as well as the confidentiality of their payment values, even against malicious mixing participants. Stegos adopts this approach, while improving and completing it in several key areas. First, the ValueShuffle paper is missing some key details: For example, the paper provides no details on how to form a pool of senders who wish to mix their transactions, nor how to form a signature on the resulting pooled transaction. 
+\textit{ValueShuffle}\cite{c19} 是CoinShuffle++的扩展，并且可以和隐私交易功能兼容。ValueShuffle确保了多个成员混合的匿名性，同时也有支付数额的隐私性，甚至还可以防止欺诈成员。Stegos应用了这个方式，同时也在几个核心区域提升和完成了这项技术。首先，ValueShuffle白皮书丢失了几个核心的细节：例如，白皮书没有提供任何关于如何形成这样系统的细节，也没有如何在交易数据进行签名的方式。
 
-We implement a protocol where a \textit{facilitator} elected among the validators provides the services of the \textit{Bulletin Board} (as defined in the ValueShuffle protocol). We also implement collective Schnorr signatures\cite{c22} on the resulting transaction. Details of these protocols, as well as a brief explanation of our implementation of ValueShuffle, are given in Appendix \ref{app:snowball}.
+我们使用了这个协议，其中\textit{facilitator}是从验证者中选出，并且提供\textit{Bulletin Board} (根据ValueShuffle协议中的定义)服务。我们也会在结果交易数据中部署集体Schnorr签名\cite{c22}。这些协议的细节，以及ValueShuffle的细节都在附录\ref{app:snowball}中体现。
 
 \section{BlockCrunch}\label{sec:pruning}
-BlockCrunch is the Stegos algorithm for pruning the blockchain and keeping it compact. As described in Section \ref{sec:blocks}, a regular Stegos block is composed of a header and a body, where the header contains root hashes of the two Merkle trees that comprise the body of the block. These two trees are a tree of all inputs (\textit{TXIN} Merkle tree) and a tree of all outputs (\textit{TXOUT} Merkle tree). 
+BlockCrunch是进行修剪区块链的Stegos算法，并且保持区块链压缩。通过在\ref{sec:blocks}章节的描述，普通Stegos区块链是由区块头部和区块主体组成，其中头部带有两个Merkle树的头部哈希，并且和区块主体兼容。这两个树是所有输入数据组成的树 (\textit{TXIN} Merkle tree)，而且所有输出数据组成的树 (\textit{TXOUT} Merkle tree)。
 
-When a new block is verified and signed, the signature is computed over the block header alone. The body of the block does not need to be signed because it is secured against modification by the nature of the Merkle tree. That is, it will be impossible to modify the body of the block without invalidating the root hashes contained in the signed header.
+当全新的区块进行验证和签名的时候，这个签名就会根据区块头部进行计算。区块主体无需签名，因为通过了Merkle树的天然属性造成。那也就是说，没人可以修改区块主体的内容。
 
-Stegos blockchain compaction is a continuous process where each incoming and properly signed block triggers the pruning. As a result of this continuous pruning, the Stegos blockchain becomes a database of unspent coins (UTXO), with no transaction history kept.
+Stegos区块链的压缩是个连续的过程，其中每个签名的区块都会触发修剪功能。最后，Stegos区块链就会成为UTXO数据库，并且没有存储任何交易历史数据。
 
-After verifying and signing a new block, the \textit{leader} broadcasts it to the network. All nodes must validate the collective block signature and process the new block using the following steps:
+完成验证和签名新区块后，\textit{leader} 会将这个记过播放到网络。所有节点必须验证整合的区块签名，并且通过以下步骤处理新区块：
 
-A node must perform the following pruning algorithm for every regular block:
+节点必须为任何普通区块进行下面的修剪算法：
 
 \begin{algorithm}
 \begin{algorithmic}
@@ -479,77 +481,77 @@ A node must perform the following pruning algorithm for every regular block:
 \label{code:pruning}
 \end{algorithm}
 
-\section{FastData}\label{sec:fastdata}
-Stegos introduces data transactions in addition to regular payment transactions. Both types of transactions enjoy the same encryption and privacy protection. In fact, because data is sent using zero-value coins, there’s no way to tell payments apart from data messages. 
+\section{快速发送数据}\label{sec:fastdata}
+Stegos在普通支付交易之外，还增加了数据传输功能。这两者都有相同的加密性和隐私保护。其实，由于这些数据是通过无价值代币发送，无法将支付和数据信息分开。
 
-Data messages are meant to be handled at the application layer and the payload is expected to include a sequence number. Unlike payments, data cannot be double-spent, so there’s no need to wait for data messages to become irreversible. The message sequence number should help applications order messages and check for messages that are missing. 
+数据信息会在不同的应用层，并且有效负载应包括序列号。和支付不同，数据不会有双花，因此无需等待数据信息变为不可逆。信息序列号应该帮助应用获得信息，并且可以检查丢失的信息。
 
-Stegos data messaging is a lot like UDP/IP and serves as a message bus that all kinds of applications can use to communicate securely and privately.
+Stegos数据信息非常像UDP/IP，并且可以作为任何应用能够安全和隐私地进行沟通的信息通道。
 
-Data messages are automatically recycled and removed from the blockchain using BlockCrunch (Appendix \ref{sec:pruning}).
+数据信息会自动循环，并且通过BlockCrunch (Appendix \ref{sec:pruning})从区块链移除。
 
-\chapter{Future work}\label{chap:future-work}
+\chapter{未来的工作}\label{chap:future-work}
 
-\section{Mobile staking}\label{sec:mobile-staking}
-Mobile staking will not be available on the launch of the mainnet. However, we are making it a priority to implement mobile staking as soon as possible. Mobile staking will drastically increases the number of validator nodes, increasing the resilience and throughput of the network. Combined with ePoS, this will help prevent the stagnation and centralization witnessed by many blockchain projects.
+\section{移动端抵押}\label{sec:mobile-staking}
+主网上线的时候，移动端抵押不会开通。但是，我们会尽快启动，移动端代币抵押会大幅增加验证节点的数量，提高网络的稳定性和吞吐量。和ePoS相比，这会防止很多区块链项目都面临的拥堵和中心化问题。
 
-\section{Marketplaces}\label{sec:marketplaces}
-Fully private token transactions are extremely useful, but on their own they only provide a part of the necessary functionality for private transactions, most of which involve an exchange of goods and services. Being able to transfer tokens privately is only of limited use if the rest of the business of the transaction cannot be obfuscated. Currently, most privacy platforms leave this problem up to the user to solve, drastically reducing their usability.
+\section{交易市场}\label{sec:marketplaces}
+完全的隐私代币转账是非常有用的，但它们本身只为私人交易提供必要功能的一部分，其中大部分涉及商品和服务的交换。只有在交易的其余业务不能被混淆的情况下，才能私下转让代币。目前，大多数隐私平台都将这个问题留给用户来解决，从而大大降低了它们的可用性。
 
-By building on the features described so far, Stegos private marketplaces provide all the necessary tools to sell goods and services and even operate entire stores in complete privacy.
+通过搭建这些功能，Stegos隐私交易市场可以提供售卖产品和服务的必要工具，甚至可以将整个市场都进行完全的隐私。
 
-Vendors set up storefronts as mini-apps in the TAC, using their wallet public key as an identifies. An API will allow vendors to update their inventory. Using the same manifest system described for privacy apps (Section \ref{sec:appstore}), users can browse for particular stores and verify the storefront via the vendor’s public key signature. Users will access Stegos marketplaces via a separate marketplace app. Buyers and sellers can message each other using the Stegos chat service (Section \ref{sec:chat}). 
+商户可以在TAC中设置微店，并且使用钱包公钥作为身份认证。API可以让商户更新库存，通过隐私应用(Section \ref{sec:appstore})，用户可以浏览特定的商店，并且通过商户的公钥签名来进行认证。用户可以通过特定的市场应用进入Stegos市场，买卖者可以通过Stegos聊天服务进行沟通(Section \ref{sec:chat}).。
 
-Private marketplaces use a form of hashlock (TBD) to atomically swap a payment for the item’s description key. The swap will only occur once both parties are satisfied with the terms of the transaction.
+私有市场使用了hashlock(TBD)的方式来自动完成支付，并且只有交易双方都满意条款，支付才能完成。
 
-\subsection{Reputation}
-Online marketplaces often rely on a ranking and reputation system to allow buyers to determine which vendors are trustworthy (and vice versa). Stegos supports this feature by allowing users to upload reviews and ratings to the blockchain, signed with their public key. When searching for a vendor via the marketplace app, reviews and ratings will be parsed from the chain and aggregated, allowing buyers to see a verified overall ranking for each vendor.
+\subsection{信誉系统}
+线上市场通常会依赖于排名和信誉系统，从而让购买者可以通过将评价和评级上传至区块链而完成这个功能，同时会用公钥进行签名。当通过市场应用去搜索商户的时候，评价和评级会记录在链上，从而让买家能看到每个商户认证后的整体评级。
 
-Unfortunately, anything which links transactions together is a potential privacy risk, so users must weigh the benefits against the risks depending on their own privacy requirements. As such, participation in the reputation system is entirely optional for vendors.
+不幸地是，任何将这些交易连接起来的东西都会存在潜在的隐私风险，因此用户必须根据自己的隐私需求去权衡。因此，是否加入评级系统是商户可以自由选择的。
 
-\section{Roadmap}\label{sec:roadmap}
+\section{路线图}\label{sec:roadmap}
 
 \begin{table}[ht]
 \centering
 	\begin{tabular}{@{\extracolsep{4pt}}lll}
 	\toprule[2pt] 
-	Year & Target date & Deliverable \\
+	年份 & 目标日期 & 可交付产品 \\
 	\midrule[2pt]
-	2019 & 31.05 & Mainnet and native token\\
-	{} & {} & Cross-platform node UI \& wallet \\
-	{} & Q3 & Exchange token sale \\
-	{} & {} & Mobile app \\
-	{} & {} & Dandelion \\
-	{} & Q4 & Sharding \\
-	{} & {} & Mobile (compact) node \\
-	{} & {} & Mobile staking \\
-	2020 & Q1 & App Store \\
-	{} & {} & Private marketplaces \\
-	{} & Q2 & Pruning with no bootstrap nodes \\
-	{} & {} & zk-STARKs \\
+	2019 & 31.05 & 主网以及原生代币\\
+	{} & {} & 跨平台节点 UI \& 钱包 \\
+	{} & Q3 & 交易所代币销售 \\
+	{} & {} & 移动端 app \\
+	{} & {} & 蒲公英协议 \\
+	{} & Q4 & 分片 \\
+	{} & {} & 移动 (压缩) 节点 \\
+	{} & {} & 移动端抵押 \\
+	2020 & Q1 & 应用商城 \\
+	{} & {} & 私人交易市场 \\
+	{} & Q2 & 无引导节点的区块修剪功能 \\
+	{} & {} & 零知识证明 \\
 	\bottomrule[2pt]
 	\end{tabular}
 \caption{Roadmap} 
 \end{table}
 
-The Stegos team is currently working on implementing the blockchain. The development progress can be tracked on \href{https://github.com/orgs/stegos/projects/1}{GitHub}. Our platform source code is and always be 100\% open.
+Stegos团队目前正在部署区块链技术，并且开发进程可以通过\href{https://github.com/orgs/stegos/projects/1}{GitHub}进行追踪，我们平台的代码是100\%开源。
 
-\section{Conclusion}
-This paper laid out a design for Stegos \textemdash a private, confidential, and scalable blockchain which is environmentally sustainable and optimized for storing and transmitting both data and payments.
+\section{结论}
+此白皮书解释了Stegos\textemdash 是如何设计一个隐私的、保密的以及稳定的区块链体系，并且它对环境也友好，能够优化数据和支付存储以及转移功能。
 
-Other privacy projects view privacy as a trade-off: requiring users to accept a slower, bloated, more resource-intensive blockchain in exchange for (questionable) privacy improvements. They also give little thought to the context surrounding transactions, leaving users to work out how to privately communicate and coordinate the terms of their trade. 
+其他隐私项目都会对隐私做妥协：需要用户接受速度更慢，并且更加消耗能源的区块链，从而获得可能的隐私提升。他们对于信息转移也没有很深入的思考，让用户学会如何私下沟通和协调他们的交易条款。
 
-Stegos is different. Stegos combines the best developments in privacy technology with mechanisms for a faster and more scalable blockchain \textemdash along with plenty of innovations of our own \textemdash to create a blockchain where the privacy features make the blockchain more efficient, not less.        
+Stegos是不同的，它结合了最先进的隐私技术以及更快更具扩展性的区块链 \textemdash ，同时还有足够的创新 \textemdash 从而创建让带有隐私性能的区块链更加高效，而不是变得低效。
 
-By aggressively pruning the blockchain, Stegos is able to support a wide variety of on-chain features beyond simple token transfers. By combining chat, an on-chain app store and a trusted application container (TAC), Stegos facilitates every part of a fully private exchange of goods and services, not just the final payment step.
+通过对区块链进行修剪，Stegos能够支持很多不同的链上功能，而不只是代币转账。通过将聊天、在线应用商城以及可信区块链容器（TAC）等结合，Stegos推动了产品和服务的完全隐私化交易，而不仅是最后的支付功能。
 
-Stegos uses verifiably unbiased distributed randomness and a gamified Proof-of-stake consensus mechanism to create the first truly mobile blockchain. By embracing smartphones and providing an integrated app as a gateway to the platform, Stegos intends to be the first truly accessible blockchain, giving everyone easy access to the privacy they deserve.     
+Stegos使用了可验证的随机数，以及赌注权益证明机制去创建首个可信任的移动区块链体系。通过整合手机，并且提供整合app应用作为平台的网关，Stegos旨在成为首个可应用的区块链平台，让任何人都可以获得他们所应得的隐私性。   
 
-\chapter{Team}\label{app:team}
+\chapter{团队成员}\label{app:team}
 
-The Stegos team doesn’t just bring blockchain experience to the table (although we have plenty of that, too). With backgrounds in finance, aerospace, and cryptography, the team has a breadth of experience in applying technology to some of the most sensitive challenges facing society.
+Stegos团队不只是有区块链经验（虽然我们的技术实力也很强）。我们团队有着金融、飞机以及加密学方面的经验，该团队在将技术应用于社会面临的一些最敏感的挑战方面拥有广泛的经验。
 
-\section{Joel Reymont CEO, The Buck Stops With Me!}
+\section{Joel Reymont CEO, 一切我负责!}
 
 {
 \setlength\intextsep{0pt}
@@ -557,12 +559,12 @@ The Stegos team doesn’t just bring blockchain experience to the table (althoug
 	\includegraphics{images/team/team-1.png}
 \end{wrapfigure}
 
-Joel is a seasoned hacker and blockchain pioneer. He started his career on Wall Street and brings twenty-five years of diverse software engineering and management experience to Stegos. Joel was previously Chief Technology Officer at a Top 100 cryptocurrency and blockchain company, where he earned a reputation within the community for his formidable ability to get things done. Joel has acted as Director of Prime Brokerage Technology at Deutsche Bank, has run offshore development teams, and has built many scalable and fault-tolerant systems over the years. He now smashes technological boundaries and ventures deep into the unexplored frontiers of crypto to bring unique opportunities to Stegos contributors. 
+Joel是经验丰富的黑客和区块链先驱。他在华尔街开始了自己的事业，并且将25年的软件工程和管理的经验带入了Stegos项目。Joel之前是市值前100加密货币和区块链公司的首席技术官，而且他在社区也获得了很好的声誉。Joel是德意志银行首席经济技术总监，管理了离岸开发团队，并且打造了很多可扩容的容错系统。现在，他打破了技术界限，深入到未开发的加密领域，为Stegos贡献者带来独特的机会。
 
-Joel does not use social networks but has a very active \href{http://twitter.com/joelreymont}{Twitter account}.
+Joel不怎么使用社交网络，但是他有非常活跃的推特账户 \href{http://twitter.com/joelreymont}{Twitter account}.
 }
 
-\section{Vladimir Lebedev, VP of Engineering}
+\section{Vladimir Lebedev, 技术副总裁}
 
 {
 \setlength\intextsep{0pt}
@@ -570,12 +572,12 @@ Joel does not use social networks but has a very active \href{http://twitter.com
 	\includegraphics{images/team/team-2.png}
 \end{wrapfigure}
 
-Vladimir has over twenty-five years of experience in managing technology in fintech, telecom, and media companies. His pioneering credits include creating the first FidoNet node in Soviet Union, the first remote banking application using asymmetric keys cryptography in Russia, and the first ISP in Western Siberia. Vladimir was CTO of the Russian stock exchange, where he created its trading system and network infrastructure. Vladimir has held executive roles at VEON (a telecom company with over two hundred millions subscribers), Sberbank (the biggest bank in Eastern Europe), Moscow City Telephone Network, Orange Business Services, Lucent Technologies, and Mail.Ru Group (the biggest Internet-media company in Russia). Over his career, he has led and successfully delivered many cutting-edge projects, in addition to launching his own companies, CPM and Cybertonica. 
+Vladimir在科技金融、通信和媒体公司有着超过25年的经验，他创建了Soviet Union的首个FidoNet的节点，这是俄罗斯首个非对称秘钥加密的远程银行应用，并且这是西西伯利亚的首个ISP。Vladimir是俄罗斯股票交易所的首席技术官，他创建了首个交易系统和网络基础设施。Vladimir在VEON公司（拥有超过2亿用户的电信公司），Sberbank（东欧最大的银行），莫斯科城市电信网络，Orange商业服务，Lucent科技以及Mail.Ru集团（俄罗斯最大的互联网媒体公司）都是管理岗位。通过他的工作经历，他成功领导并且完成了很多科技前沿的项目，同时也创立了自己的公司，CPM和Cybertonica。
 
-Find out more about Vladimir on his \href{https://linkedin.com/in/vlebedev}{LinkedIn profile}.
+通过Vladimir的社交网络，可以找到更多信息。 \href{https://linkedin.com/in/vlebedev}{LinkedIn profile}.
 }
 
-\section{David McClain, PhD Chief Rocket Scientist}
+\section{David McClain, PhD 首席火箭科学家}
 
 {
 \setlength\intextsep{0pt}
@@ -583,11 +585,11 @@ Find out more about Vladimir on his \href{https://linkedin.com/in/vlebedev}{Link
 	\includegraphics{images/team/team-3.png}
 \end{wrapfigure}
 
-David is literally a rocket scientist. Trained in theoretical and observational astrophysics, in addition to computer science, he brings an incomparable and extraordinary five decades of unique programming expertise to the table. David has served as a Principal Scientist in the aerospace industry where he built airborne LIDAR systems for underwater mine detection, and was a Senior Scientist on the Raytheon ExoAtmospheric Kill Vehicle (EKV) program. He is a true expert in numerous computer languages, including Lisp, and an authority on signal processing, image processing, guidance and navigation, radio-frequency and infrared target detection systems, and target tracking. He has twice addressed the European Common Lisp Meeting. 
+David是个火箭科学家。除了计算机科学外，他还有丰富的航天航空理论和实践知识，他有着50年的编程经验。David在航天航空领域是首席科学家，并且为水下挖矿检测打造了LIDAR系统，同时也是Raytheon ExoAtmospheric Kill Vehicle (EKV)项目的高级科学家。他在计算机语言方面是真正的专家，包括Lisp，以及信号处理，图形处理，信号处理、图像处理、制导导航、射频和红外目标探测系统以及目标跟踪。他两次参与了欧洲Common Lisap会议。
 
-Find out more about David on his \href{https://www.linkedin.com/in/david-mcclain-685669155/}{LinkedIn profile}.
+通过Vladimir的社交网络，可以找到更多信息。 \href{https://www.linkedin.com/in/david-mcclain-685669155/}{LinkedIn profile}.
 
-\section{Roman Tsisyk, Core Blockchain Team Lead}
+\section{Roman Tsisyk, 核心区块链团队领导}
 
 {
 \setlength\intextsep{0pt}
@@ -595,12 +597,12 @@ Find out more about David on his \href{https://www.linkedin.com/in/david-mcclain
 	\includegraphics{images/team/team-4.png}
 \end{wrapfigure}
 
-Roman is a database and distributed systems expert who enjoys working on the cutting edge of technology. Over his fifteen-years career in Telecom and Internet industries, he gained broad expertise in software engineering as well as team and product management skills. Roman was a Team Lead and Core Developer of Tarantool, an open-source database and application server. He designed and implemented numerous technologies to store mission-critical data in a highly-available and fault-tolerant manner. During his career at Mail.Ru Group, one of the largest Internet companies in Europe, Roman used his deep expertise in data processing and distributed systems to create and launch Russian’s first Database-as-a-Service and BigData-as-a-Service products for the public cloud. 
+Roman是数据库和分布式系统专家，并且很喜欢研究前沿科技。他在通信和互联网行业有超过15年的经验，并且在软件工程领域以及团队管理和产品管理方面有着丰富的经验。Roman是开源数据库和应用服务器Tarantool的团队领导和核心开发者。他设计并且落实了很多技术去通过容错方式存储重要的数据。Mail.Ru集团是欧洲最大的互联网公司之一，Roman通过数据处理和分布式系统的经验，创建并且启动了俄罗斯的首个Database-as-a-Service 以及 BigData-as-a-Service产品。
 
-Find out more about Roman on his \href{https://linkedin.com/in/roman.tsisyk}{LinkedIn profile}.
+通过Roman的社交网络，可以找到更多信息。 \href{https://linkedin.com/in/roman.tsisyk}{LinkedIn profile}.
 }
 
-\section{Eugene Chupriyanov, Site Reliability Engineer}
+\section{Eugene Chupriyanov, 网站可靠性工程师}
 
 {
 \setlength\intextsep{0pt}
@@ -608,12 +610,12 @@ Find out more about Roman on his \href{https://linkedin.com/in/roman.tsisyk}{Lin
 	\includegraphics{images/team/team-5.png}
 \end{wrapfigure}
 
-Eugene is the Site Reliability Engineer at Stegos, taking care of our development and production infrastructure. Eugene has more than thirty years of experience in DevOps/SRE, beginning at the Siberian Branch of the prestigious Russian Academy of Sciences in the early days of the Internet. He has helped build and manage networking and operational infrastructure in industries as diverse as science, telecom, media, and finance, and has held Senior DevOps/SRE positions with companies including The Russian Trading System, RosBusinessConsulting, Lucent Technologies, and Vimpelcom/VEON. He brings a deep passion for information technology and is dedicated to continuously learning the latest techniques and tricks to ensure that the systems he manages operate at the peak of security and efficiency. 
+Eugene是Stegos网站可靠性工程师，负责我们的开发和生产架构。Eugene在DevOps/SRE有超过30年的经验，从著名的俄罗斯科学院西伯利亚分院在互联网的早期就开始了。他协助搭建并且管理和不同行业的网络和运营架构，包括科学、电信、媒体和金融等。他在很多知名公司都是高级DevOps/SRE职位，并且将这些技术带入了Stegos，确保了整体网络最高的安全性和高效性。
 
-Find out more about Eugene on his \href{https://www.linkedin.com/in/eugenechupriyanov/}{LinkedIn profile}.
+通过Eugene的社交网络，可以找到更多信息。 \href{https://www.linkedin.com/in/eugenechupriyanov/}{LinkedIn profile}.
 }
 
-\section{Volodymyr Motylenko, Software Engineer}
+\section{Volodymyr Motylenko, 软件工程师}
 
 {
 \setlength\intextsep{0pt}
@@ -621,12 +623,12 @@ Find out more about Eugene on his \href{https://www.linkedin.com/in/eugenechupri
 	\includegraphics{images/team/team-6.png}
 \end{wrapfigure}
 
-Volodymyr is a young but eager specialist in distributed systems, reverse engineering, cryptography and blockchains. His master`s thesis was focused on the design and implementation of a trusted platform module (TPM) for key and password management. Volodymyr was a member of a core team of one of the leading private blockchains, where he contributed to the input/output layer and inter-node networking protocols. He brings to Stegos a focus on high performance and a deep passion for algorithms, as well as advanced practical knowledge of the Rust programming language.
+Volodymyr很年轻但却是分布式系统、加密学和区块链方面的专家。他的硕士论文专注于设计和部署秘钥和密码管理的可信平台模块（TPM）。Volodymyr是领先私有区块链项目的核心团队成员，他贡献了输入/输出层和内部节点网络协议。他加入Stegos，并且会专注于高效算法，同时也有Rust程序语言的实际经验。
 
-Find out more about Volodymyr on his \href{https://linkedin.com/in/vldm}{LinkedIn profile}.
+通过Volodymyr的社交网络，可以找到更多信息。 \href{https://linkedin.com/in/vldm}{LinkedIn profile}.
 }
 
-\chapter{Token Economics}\label{app:token-economics}
+\chapter{通证经济学}\label{app:token-economics}
 
 \todo[inline]{Fix the partner images}
 \comment{
@@ -648,21 +650,21 @@ Find out more about Volodymyr on his \href{https://linkedin.com/in/vldm}{LinkedI
 \end{multicols}
 }
 
-\section{Fundraising goals}
-Stegos will generate 1,000,000,000 (1 billion) STG tokens as the initial supply. Of these, up to 51.25\% will be sold publicly to raise \$20M (million). The remaining 48.75\% will be used to pay for costs and compensate team members, backers and advisors, as shown in the next section. These values have been carefully selected to enable us to reach our development milestones and jumpstart the Stegos ecosystem.
+\section{融资目标}
+Stegos将要共发行10亿STG代币，其中51.25\%将进行公开售卖，从而融资2000万美金，剩余的48.75\% 会用于支付给团队成员、投资人以及顾问等，下个章节会有详细的信息。这些数值都是经过非常仔细的选择，从而让我们可以完成开发的目标，并且启动Stegos生态系统。
 
-Stegos will follow strict KYC/AML procedures during all stages of fundraising, with funds used to, among other things:
+Stegos会在所有融资以及资金使用阶段都会有严格的KYC/AML流程，资金主要的用途：
 
 \begin{itemize}
-	\item Expand the Stegos ecosystem through educational programs
-	\item Build a world-class research and development (R\&D) team
-	\item Accelerate blockchain adoption across the mass-market and enterprise
-	\item Aggressively pursue development and acquire the best talent
+	\item 通过教育项目扩大Stegos生态系统
+	\item team打造世界级别的研发 (R\&D)
+	\item 急速区块链在不同市场和企业的应用
+	\item 推动开发并且吸引最好的人才
 \end{itemize}
 
-The Stegos vision is ambitious, with equally ambitious goals!
+Stegos的愿景是雄心勃勃的，有着同样雄心勃勃的目标！
 
-\section{Token allocation}
+\section{代币分配}
 
 \begin{figure}[h!]
 \centering
@@ -681,12 +683,12 @@ The Stegos vision is ambitious, with equally ambitious goals!
 \newcount\ind \ind=-1
 \begin{tikzpicture}[nodes = {font=\sffamily}]
 \foreach \percent/\name in {
-	51.25/Sold to the public,
-	16.75/Development,
-	10.0/Marketing \& Ecosystem,
-	10.0/Reserve,
-	10.0/Team,
-	2.0/Advisors \& Key Backers
+	51.25/公开销售,
+	16.75/技术开发,
+	10.0/市场 \& 生态系统,
+	10.0/预留,
+	10.0/团队,
+	2.0/顾问 \& 核心支持者
 } {
 	\ifx\percent\empty\else               % If \percent is empty, do nothing
 	\global\advance\cyclecount by 1     % Advance cyclecount
@@ -718,23 +720,23 @@ The Stegos vision is ambitious, with equally ambitious goals!
 \begin{table}[ht!]
 \centering
 \begin{tabular}{@{\extracolsep{4pt}}ll}
-	\toprule[2pt] Proportion & Purpose \\ 
+	\toprule[2pt] 比例 & 目标 \\ 
 	\midrule[2pt]
-	51.25\% & Sold to the public \\
-	16.75\% & Development \\
-	10\% & Marketing \& ecosystem \\
-	10\% & Reserve \\
-	10\% & Team \\
-	2\% & Advisors and key backers \\
+	51.25\% & 公开销售 \\
+	16.75\% & 技术开发 \\
+	10\% & 市场 \& 生态系统 \\
+	10\% & 预留 \\
+	10\% & 团队 \\
+	2\% & 顾问以及核心支持者 \\
 	\bottomrule[2pt]
 \end{tabular}
 \caption{Token allocation} 
 \end{table}
 
-\section{Emission}
-STG token emission will start at 14\% of the initial supply during the first 4 years and halve every 4 years thereafter. The newly created tokens will be used for block rewards and the validator service award (Section \ref{sec:service-award}).
+\section{代币发行}
+STG代币释放会从在前4年以初始代币的14\% 开始，然后每4年进行减半。全新创建的代币会用于区块奖励以及验证节点的服务奖励 (Section \ref{sec:service-award})。
 
-\section{Token sales}
+\section{代币销售}
 
 \pgfkeys{
 	/pgf/fpu, 
@@ -891,45 +893,45 @@ STG token emission will start at 14\% of the initial supply during the first 4 y
 	\$\pgfmathprintnumber[/ThreeDC]{#1}
 }
 
-Previous and future token sales:
+以前和未来的代币销售:
 \bigskip
 
 \begin{table}[htp!]
 \centering
 \begin{tabular}{@{\extracolsep{4pt}}lllllll}
 	\toprule[1pt] 
-	{} & \multicolumn{6}{c}{Completed token sales} \\
+	{} & \multicolumn{6}{c}{已完成代币销售} \\
 	\cmidrule{2-7}
-	Round & Tokens & Price & \% Tokens & \% for Sale & Amount & \% Raise \\
+	轮次 & 代币数量 & 价格 & \% 代币 & \% for 销售 & 数量 & \% 融资 \\
 	\midrule[1pt]
-	Seed & \pAmt{\SeedTokens} & \pPrice{\SeedPrice} & \pPct{\SeedAlloc} & \pPct{\SeedPctSold} & \$\pAmt{\SeedAmt} & \pPct{\SeedPctRaise} \\
-	Round 1 & \pAmt{\ROneTokens} & \pPrice{\ROnePrice} & \pPct{\ROneAlloc} & \pPct{\ROnePctSold} & \$\pAmt{\ROneAmt} & \pPct{\ROnePctRaise} \\
-	Round 2 & \pAmt{\RTwoTokens} & \pPrice{\RTwoPrice} & \pPct{\RTwoAlloc} & \pPct{\RTwoPctSold} & \$\pAmt{\RTwoAmt} & \pPct{\RTwoPctRaise} \\
+	种子轮 & \pAmt{\SeedTokens} & \pPrice{\SeedPrice} & \pPct{\SeedAlloc} & \pPct{\SeedPctSold} & \$\pAmt{\SeedAmt} & \pPct{\SeedPctRaise} \\
+	第一轮 & \pAmt{\ROneTokens} & \pPrice{\ROnePrice} & \pPct{\ROneAlloc} & \pPct{\ROnePctSold} & \$\pAmt{\ROneAmt} & \pPct{\ROnePctRaise} \\
+	第二轮 & \pAmt{\RTwoTokens} & \pPrice{\RTwoPrice} & \pPct{\RTwoAlloc} & \pPct{\RTwoPctSold} & \$\pAmt{\RTwoAmt} & \pPct{\RTwoPctRaise} \\
 	\bottomrule[1pt]
 	Total & \pAmt{\SoldTokens} & {} & \pPct{\SoldAlloc} & \pPct{\TotalPctSold} & \$\pAmt{\SoldAmt} & \pPct{\TotalPctRaise} \\
 	\toprule[1pt] 
-	{} & \multicolumn{6}{c}{Planned exchange token sales} \\
+	{} & \multicolumn{6}{c}{计划代币销售} \\
 	\cmidrule{2-7}
-	Round & Tokens & Price & \% Tokens & \% for Sale & Amount & \% Raise \\
+	轮次 & 代币数量 & 价格 & \% 代币 & \% for 销售 & 数量 & \% 融资 \\
 	\midrule[1pt]
-	Stage 1 & \pAmt{\ExchOneTokens} & \pPrice{\ExchOnePrice} & \pPct{\ExchOneAlloc} & \pPct{\ExchOnePctSale} & \$\pAmt{\ExchOneAmt} & \pPct{\ExchOnePctRaise} \\
-	Stage 2 & \pAmt{\ExchTwoTokens} & \pPrice{\ExchTwoPrice} & \pPct{\ExchTwoAlloc} & \pPct{\ExchTwoPctSale} & \$\pAmt{\ExchTwoAmt} & \pPct{\ExchTwoPctRaise} \\
+	第一轮 & \pAmt{\ExchOneTokens} & \pPrice{\ExchOnePrice} & \pPct{\ExchOneAlloc} & \pPct{\ExchOnePctSale} & \$\pAmt{\ExchOneAmt} & \pPct{\ExchOnePctRaise} \\
+	第二轮 & \pAmt{\ExchTwoTokens} & \pPrice{\ExchTwoPrice} & \pPct{\ExchTwoAlloc} & \pPct{\ExchTwoPctSale} & \$\pAmt{\ExchTwoAmt} & \pPct{\ExchTwoPctRaise} \\
 	\bottomrule[1pt]
-	Total & \pAmt{\ExchTokens} & {} & \pPct{\ExchAlloc} & \pPct{\ExchPctSale} & \$\pAmt{\ExchAmt} & \pPct{\ExchPctRaise} \\
+	共计 & \pAmt{\ExchTokens} & {} & \pPct{\ExchAlloc} & \pPct{\ExchPctSale} & \$\pAmt{\ExchAmt} & \pPct{\ExchPctRaise} \\
 	\addlinespace
 	\toprule[2pt] 
 	\midrule[0pt]
-	Global Total & \bm{\mathbf{\pAmt{\TotalTokens}}} & {} & \bm{\mathbf{\pPct{\TotalAlloc}}} & \bm{\mathbf{\pPct{\TotalPctSale}}} & \bm{\mathbf{\$\pAmt{\TotalAmt}}} & \bm{\mathbf{\pPct{\PctRaise}}} \\
+	整体共计 & \bm{\mathbf{\pAmt{\TotalTokens}}} & {} & \bm{\mathbf{\pPct{\TotalAlloc}}} & \bm{\mathbf{\pPct{\TotalPctSale}}} & \bm{\mathbf{\$\pAmt{\TotalAmt}}} & \bm{\mathbf{\pPct{\PctRaise}}} \\
 	\bottomrule[2pt]
 	
 \end{tabular}
-\caption{Token sales} 
+\caption{代币销售} 
 \end{table}
 
 \newpage
-\section{Token lockup and vesting}
+\section{代币锁仓和释放}
 
-A vesting schedule will apply to tokens purchased during the private sale. These tokens will be gradually released after mainnet launch according to the following schedule:
+私募轮购买的代币会有锁仓和释放的计划，这部分代币会在主网上线后根据以下计划逐步释放：
 
 \bigskip
 
@@ -937,21 +939,21 @@ A vesting schedule will apply to tokens purchased during the private sale. These
 \centering
 \begin{tabular}{lccccccccccc}
 	\toprule[2pt] 
-	{} & \multicolumn{11}{c}{Months after Mainnet Launch} \\
+	{} & \multicolumn{11}{c}{主网上线后的月份} \\
 	\cmidrule{2-12}
 	{} & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 \\
 	\midrule[2pt]
-	Seed & {} & {} & {} & 12.5\% & 12.5\% & 12.5\% & 12.5\% & 12.5\% & 12.5\% & 12.5\% & 12.5\% \\
-	Round 1 & 50\% & 10\% & 10\% & 10\% & 10\% & 10\% & {} & {} & {} & {} & {} \\
-	Round 2 & 70\% & 10\% & 10\% & 10\% & {} & {} & {} & {} & {} & {} & {} \\
+	种子轮 & {} & {} & {} & 12.5\% & 12.5\% & 12.5\% & 12.5\% & 12.5\% & 12.5\% & 12.5\% & 12.5\% \\
+	第一轮 & 50\% & 10\% & 10\% & 10\% & 10\% & 10\% & {} & {} & {} & {} & {} \\
+	第二轮 & 70\% & 10\% & 10\% & 10\% & {} & {} & {} & {} & {} & {} & {} \\
 	\bottomrule[2pt]
 \end{tabular}
-\caption{Vesting schedule} 
+\caption{解锁细则} 
 \end{table}
 
-50\% of team tokens will be locked for 12 months from mainnet launch. The rest may be sold in small regular batches, according to the financing needs of the company.
+团队代币的50\% 会从主网上线时锁仓12个月，其余的可能会根据公司的资金需求进行小批量售卖。
 
-Locked tokens cannot be transferred, but they can be used for staking.
+锁定的代币无法转移，但是可以用于权益抵押。
 
 \comment{
 \chapter{Partners}
@@ -978,82 +980,82 @@ Locked tokens cannot be transferred, but they can be used for staking.
 \end{table}
 }
 
-\chapter{Legal Disclaimer}
+\chapter{法律声明}
 
-No part of this white paper constitutes legal, financial, business, or tax advice, and you should consult your own legal, financial, tax, or other professional adviser before engaging in any activity in connection herewith. Stegos AG (“Stegos”), its affiliates, and the Stegos team members shall not be liable for any kind of direct or indirect damage, loss, or liability whatsoever which you may suffer or incur in connection with accessing this white paper or any other materials published by Stegos. 
+白皮书没有任何部分构成法律、商业或者税收建议，请在进行任何操作之前，咨询自己的法律、金融、税务或者其他专业人士。Stegos AG (“Stegos”)以及附属机构，Stegos团队成员不为任何通过Stegos发布的白皮书或者其他材料，直接或者间接的损害、损失或者债务负责。
 
-There is no official translation of this white paper from its original English, and recipients of foreign language translations are strongly cautioned that any information contained therein may conflict with the information in this white paper. 
+对于Stegos白皮书的英文版本没有任何官网的翻译版本，任何其他语言的翻译请格外注意，因为其中的信息可能会和此白皮书有冲突。
 
-By accessing this white paper or any part thereof, you represent and warrant to Stegos, its affiliates, and the Stegos team that you acknowledge, understand, and agree that: 
+通过访问本白皮书或其任何部分，您向Stegos、其关联公司和Stegos团队声明并保证，您承认、理解并同意：
 
 \begin{enumerate}[label=(\alph*)]
-	\item the STG tokens (the “Tokens”) described herein may have no value, there is no guarantee or representation of future value or liquidity for the Tokens, and the Tokens are not intended for speculative investment; 
+	\item 本文中指的STG代币（“代币”）并没有任何价值，并且也不保证其未来的价值和流动性，并且此代币并非是投机；
+	
+	\item Stegos以及其附属公司，Stegos团队成员不会为代币价值，代币的转移以及流动性，以及任何第三方代币销售负责；
+	
+	\item 对于代币购买的任何决定，你不会依赖于此白皮书中的任何声明；
+	
+	\item 你自己需要确认符合法律、监管要求以及任何法律限制；
+	
+	\item 这里的信息只适用于瑞士法律，并且管辖地为瑞士楚格；
+	
+	\item Stegos以及其附属公司，以及Stegos团队，可能会因为未来的法律问题，代币销售活动（TGE）或者其他类似活动可能会被限制，因此可能会通过除了Stegos以外的合法机构发行代币。
+	
+	\item Stegos以及其附属公司，以及Stegos团队可能会被禁止进行代币销售或者在二级市场进行售卖，也可能会因为法律原因无法在某些交易平台进行交易。
 
-	\item Stegos, its affiliates, and the Stegos team members shall not be responsible for or liable for the value of the Tokens, the transferability and/or liquidity of the Tokens, and/or the availability of any market for the Tokens through third parties or otherwise; 
-
-	\item in any decision to acquire Tokens, you have not relied on any statement set out in this white paper; 
-
-	\item you will and shall at your own expense ensure compliance with all laws, regulatory requirements and restrictions applicable to you; 
-
-	\item the information contained herein shall be subject solely to Swiss law, and the place of jurisdiction shall be Zug, Switzerland; 
-
-	\item Stegos, its affiliates, and the Stegos team, as a result of future applicable law, decree, regulation, treaty, or administrative act, may be restricted or limited to hold a token generation event (“TGE”) or any similar event as currently planned, and may elect, at their discretion, to issue Tokens through or by a legal entity other than Stegos; 
-
-	\item Stegos, its affiliates, and the Stegos team may be prohibited from offering any Tokens at either the TGE or in a secondary market to certain jurisdictions and their subjects, and may have to restrict trading of the Tokens on certain trading platforms as a result of applicable law, decree, regulation, treaty, or administrative act; and 
-
-	\item you may not be eligible to acquire any Tokens if you are a citizen, national, resident (tax or otherwise), domiciliary and/or green card holder of a geographic area or country where it is likely that the sale or distribution of the Tokens would be construed as the sale of a security (howsoever named) or investment product, and/or in which access to or participation in any token distribution event or the Stegos platform is prohibited by applicable law, decree, regulation, treaty, or administrative act. 
-
+	\item 如果你所在国家将代币销售认为是证券销售，那么你也许无法获得任何代币，也可能会因为你当地的法律而无法参与代币销售，Stegos平台也可能会因此禁止销售代币。
+	
 \end{enumerate}
 
-This white paper shall not be construed to be an invitation or solicitation to enter into an investment or participate in the sale of a security (howsoever named) or investment product in any jurisdiction. The information in this white paper is given for general illustrative and discussion purposes only, and Stegos does not provide any warranty as to the accuracy and completeness of this information. Stegos reserves the right to change the information contained herein at its sole discretion. The information set out in this white paper is not legally binding upon Stegos, its affiliates, and the Stegos team members. The agreement for any issuance or distribution of the Tokens shall be governed by a separate agreement setting out the terms and conditions thereof. In the event of any inconsistencies between such an agreement and this whitepaper, the terms and conditions of the agreement shall prevail. 
+本白皮书不得解释为邀请或招揽在任何司法管辖区进行投资或参与证券（无论名称如何）或投资产品的销售。本白皮书中的信息仅供一般说明和讨论之用，Stegos对本信息的准确性和完整性不作任何保证。Stegos保留自行决定更改此处所含信息的权利。本白皮书所载信息对Stegos及其附属公司和Stegos团队成员不具有法律约束力。代币的任何发行或分配协议应由一份单独的协议管辖，该协议规定了相关条款和条件。如果此类协议与本白皮书之间存在任何不一致之处，应以协议的条款和条件为准。
 
 \newpage \appendix
 \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
 \addappheadtotoc
 
-\chapter{Transactions}
+\chapter{交易和转账}
 
 \section{UTXO}
-For illustrative purposes, suppose that some coins have been sent from Alice to Bob. Alice’s public key is $P_A$, while Bob’s secret key is $s_B$ and his public key is $P_B$. To help preserve anonymity, all public keys in Stegos are cloaked with a random value chosen from a very large finite field, $Z_r$.
+为了便于说明，假设Alice向Bob转账代币。Alice的公钥是$P_A$，Bob的秘钥是$s_B$，而且他的公钥是$P_B$。为了保证匿名性，Stegos里的公钥是都是从很大的有限数中选取的随机数，$Z_r$。
 
-When Alice sends coins to Bob, she cloaks their amount with a Pedersen commitment, which is both binding and hiding. It binds Alice to her commitment so that she can never alter the amount of coins. The commitment also hides the amount from the general public, while simultaneously providing proof to the public that the amount is legitimate. Only Alice and Bob know how many coins are being transferred. 
+当Alice向Bob转账，她会通过Pedersen承诺把数字隐藏，这是绑定且隐藏的。它会将Alice和她的承诺绑定，从而让她无法改变代币的数量。这个承诺也可以向公众隐藏代币数量，也会同步像公众提出证据，表示这个代币的数量是合法的。只有Alice和Bob知道转移了多少代币。
 
-\subsection{Pedersen commitment and Bulletproof} To form a Pedersen commitment, Alice multiplies the amount by a generator, $A$, for the elliptic curve group, $E_r$, of prime order $r$. To that, she cloaks the commitment by adding a multiple, $\gamma$, of the publicly known generator point, $G$, with the multiple being chosen randomly from the finite field, $Z_r$. Generators $A$ and $G$ must have no known relationship. Placing the cloaking factor on the main generator curve will become important as we proceed. This is the same curve which holds all public keys. 
+\subsection{Pedersen Commitment 以及Bulletproof} 为了形成Pedersen承诺，Alice将椭圆曲线组$E_r$的主要订单$r$的金额乘以生成器$A$。因此，她可以通过增加公开可知的生成器$G$中的乘数$\gamma$，这个乘数是从有限区域$Z_r$中随机选择，从而掩盖承诺。生成器$A$和$G$必须没有已知的关系。将掩盖系数放入主要的生成器曲线中是非常重要，这也是持有所有公钥的曲线。
 
-The Pedersen commitment is thus:
+因此，Pedersen commitment会变成:
 $$ C(x, \gamma) = x \, A + \gamma \, G \in E_r$$
 $$x, \gamma \in Z_r,$$
 
-where $x$ denotes the number of coins being transferred, $A$ is the amount-curve generator, and $G$ is the principal generator. We denote the commitment by $C(x, \gamma)$. 
+其中$x$ 代表了转移代币的数量，$A$是数量曲线生成器，同时$G$是核心生成器。我们用$C(x, \gamma)$代表这个commitment.
 
-This commitment value will be wrapped inside a Bulletproof range proof on $x$, which also proves that the amount lies within a legitimate range of values, typically a 64-bit number.
+这个commitment的数值会包装在Bulletproof的区间证明$x$， 同时也证明了这个数值是在合理64字符的范围内。
 
-\subsection{Destination address cloaking} Alice then cloaks Bob’s public key with a factor, $\delta \in Z_r$, so that instead of Bob’s original public key, $P_B$, she will put into UTXO $P_{B, \delta} = P_B + \delta \, G$.
+\subsection{目标地址隐藏} Alice然后会通过系数$\delta \in Z_r$去隐藏Bob的公钥，而不是Bob初始的公钥$P_B$，她会输入UTXO $P_{B, \delta} = P_B + \delta \, G$。
 
-\subsection{Encrypted payload} Alice must pass values for $x$ and cloaking factors $\gamma$ and $\delta$ to Bob. She can include this information in the \textit{encrypted payload} of the UTXO. Besides the values mentioned above, the encrypted payload may also contain arbitrary data that Alice wants to share with Bob. 
+\subsection{加密有效载荷} Alice必须要传递$x$的数值，并且向Bob隐藏$\gamma$和$\delta$参数。她可以将这个信息包含到UTXO的\textit{加密有效载荷}。除了上面所说的数值，加密有效载荷也需要包含Alice想要和Bob分享的随机数。
 
-To generate the encrypted payload, Alice must choose random values $\alpha, k \in Z_r$ that will be used to create and cloak a symmetric data encryption key.
-The actual symmetric key for the encrypted data object will be $H(k \, G)$. In order to pass it safely via the blockchain to Bob, Alice needs to cloak it with $\alpha$ and store it in the UTXO as the following tuple: $$\mathit{Key}_{\alpha} = (\alpha \, P_{B} + k \, G, \alpha \, G )$$ 
+为了生成加密有效载荷，Alice必须要选择随机数$\alpha, k \in Z_r$会用于创建并隐藏对称数据秘钥。
+实际的对称秘钥将会是$H(k \, G)$。为了将数据安全地通过区块链传递给Bob，Alice需要通过 $\alpha$ 将其隐藏，并且存储在以下的UTXO中：$$\mathit{Key}_{\alpha} = (\alpha \, P_{B} + k \, G, \alpha \, G )$$。
 
-Alice encrypts her payload with AES-128 using the $H(k \, G)$ key and places the encrypted payload into the UTXO as $E_B(x, \gamma, \delta)$.
+Alice会使用$H(k \, G)$秘钥，并通过AES-128加密她的有效载荷，同时也会将加密有效载荷放入$E_B(x, \gamma, \delta)$的UTXO。
 
-When Bob receives the UTXO later on, he will extract $\mathit{Key}_{\alpha}$ from it, multiply the second element of the tuple by his secret key $s_B$, getting $s_B \, \alpha \, G = \alpha \, P_B$, then subtract that from the first element to find $k \, G$. He then produces $H(k \, G)$, thus computing the symmetric key, and decrypts the payload that Alice sent to him.
+当Bob收到UTXO后，他会从$\mathit{Key}_{\alpha}$中提取它，并将他的秘钥$s_B$和数组的第二个元素相乘，最终得到$s_B \, \alpha \, G = \alpha \, P_B$，然后减去第一个元素去找到$k \, G$。然后，他可以找到$H(k \, G)$，加上计算对称秘钥，然后解密Alice发给他的有效载荷。
 
-\subsection{TTL and Data Size} Alice sets the TTL (time-to-live) and $Size_{data}$ slots of the UTXO to zero, indicating that this is a \textit{monetary UTXO}. 
+\subsection{TTL以及数据规模} Alice会设置TTL（生存时间）以及UTXO的$Size_{data}$为零，从而显示这里是\textit{monetary UTXO}。
 
-\subsection{UTXO ID} Alice forms a UTXO $\mathit{ID}$ by hashing the the whole UTXO object sans the ID slot, which contains the cloaked version of Bob’s public key, $P_{B, \delta}$, the Pedersen commitment and Bulletproof, TTL, $Size_{data}$, and the encrypted payload.
+\subsection{UTXO ID} Alice会通过将整个UTXO进行哈希算法，从而形成UTXO $\mathit{ID}$，其中包含了Bob公钥的隐藏版本$P_{B, \delta}$、Pedersen commitment以及Bulletproof、TT、$Size_{data}$以及加密载荷。
 
-The UTXO $\mathit{ID}$ becomes a unique identifier, since, if all else were equal, the $\gamma$ and $\delta$ factors were randomly chosen from field $Z_r$.
+UTXO $\mathit{ID}$ 成为了独特的标识符，因此如果所有其他的都是相等的，那么$\gamma$ 和 $\delta$参数就会随机从$Z_r$中选择。
 
-\subsection{UTXO structure}
-Thus the resulting structure of the UTXO object will be the following:
+\subsection{UTXO结构}
+因此，UTXO的最终结构是如下：
 
 \begin{multline*}
 UTXO = (ID, P_{B, \delta}, Bp, TTL, Size_{data},\\
 Key_{\alpha}, E_B(x, \gamma, \delta))
 \end{multline*}
 
-where
+其中
 
 \begin{align*}
 ID &= H(P_{B, \delta}, Bp, TTL, Size_{data}, \\ 
@@ -1072,53 +1074,53 @@ Key_{\alpha} &= (\alpha \, P_{B} + k \, G, \alpha \, G ) \\
 E_B(x, \gamma, \delta) &= \textit{AES-128 encrypted payload}
 \end{align*}
 
-Neither Alice's nor Bob's public key is shown anywhere. We only present a cloaked version of Bob’s key. And since $\delta$ is a secret value, nobody can recover the actual public key underlying the cloaked version. 
+Alice和Bob的公钥都不会在任何地方显示。我们只会展示Bob公钥的隐藏版，而且由于$\delta$的数值是加密的，没人可以通过这个数值获得真正的公钥。
 
-Therefore Bob may publish his public key openly, e.g., on his website or in an invoice, without worrying that his identity will be linked to the recipient of the payment on the Stegos blockchain, because his public key will always appear in Stegos UTXOs in cloaked from — as a completely new and random number.
+因此，Bob可以在自己的网站或者发票上公开自己的公钥，而不用担心自己的身份会被查询到，因为他的公钥在Stegos的UTXO里面总是隐藏的，并且是以全新且随机的数字。
 
-\section{Transaction Structure}
-When Bob wants to spend his new tokens, he must form a transaction containing a list of inputs (TXINs) and outputs (TXOUTs). TXINs are nothing more than the $\mathit{ID}$s referring to other UTXOs. TXOUTs are a list of new UTXOs. He must also offer a valid signature on the entire transaction, which simultaneously proves his ownership of all TXIN’s, proves that the transaction carries zero net balance of funds between TXINs, TXOUTs and fees, and protects the contents of his transaction against mutation by MITM attackers.
+\section{交易转账架构}
+当Bob想要花费他的新代币时，他必须要形成包含输入(TXINs)和输出(TXOUTs)的列表。TXINs是对应其他UTXO的$\mathit{ID}$s，而TXOUTs是全新UTXO的列表。他也必须要在整个交易中提供有效签名，这也同时证明了他对于所有TXINs的拥有权，证明了交易中承载了TXINs、TXOUTs和手续费间的资金净余额为零，并且防止了MITM攻击者。
 
-A UTXO can only be spent in its entirety, and if it carries excess value for his purposes, he will produce a TXOUT with change back to himself, thereby creating a new UTXO. Bob must show that the sum of all inputs to his transaction equals the sum of all outputs plus fees. He can do so with Pedersen commitments so that his transaction is binding on him, while also disclosing nothing about the actual amounts involved.
+UTXO只能整体进行消费，如果它有了多余的数值，那么会产生TXOUT并且返回到他自己，然后创建新的UTXO.Bob必须要展示其交易中所有输入的整合等于所有输出的总和加手续费。他可以通过Pedersen commitments完成这个算法，从而让所有的交易数据都和他整合，但是也不会有任何实际的数量泄露。
+ 
+为了完成签名，他会将从代表他UTXO的特定TXINs列表$\mathit{ID}$s中所有$\delta$的隐藏系数都加起来，并且还会加上从Pedersen commitments所有的$\gamma$ 隐藏系数，其是从相同UTXO中的Bulletproofs获得的，同时减去他自己TXOUT UTXOs中的隐藏系数$\gamma$。
 
-To form his signature, he adds together all the $\delta$ cloaking factors from the UTXOs specified by his TXINs list of $\mathit{ID}$s, adds in all the $\gamma$ cloaking factors from the Pedersen commitments in the Bulletproofs from those same UTXOs, and subtracts the $\gamma$ cloaking factors used in his own TXOUT UTXOs. 
-
-Suppose Bob uses $N$ TXINs. His own public key, $P_B = s_B \, G$. Then his effective secret key for the signature becomes:
+假设Bob使用了$N$ TXINs，而且他自己的公钥$P_B = s_B \, G$。那么，他的有效秘钥签名就成为了：
 $$s_{\mathit{eff}} = N \, s_B + \sum_{i \in \text{ins}} {\delta_i} + \sum_{i \in \text{ins}}{\gamma_i} - \sum_{j \in \text{outs}}{ \gamma_j}$$
 
-Using this effective secret key, he produces a Schnorr signature pair, $(u, K)$, after choosing $k \in Z_r$ at random:
+使用这个有效秘钥，在随机选择$k \in Z_r$，他会产生Schnorr签名交易对$(u, K)$：
 $$K = k \, G$$
 $$u = k + H_r(K, P_{eff}, H(T)) \, s_{\mathit{eff}}$$
 $$Sig(s_{eff},T) = (u, K)$$
 so that validators can see that:
 $$u \, G = K + H_r(K, P_{eff}, H(T)) \, P_{eff}$$
 $$P_{\mathit{eff}} = \sum_{i \in \text{ins}}{P_i} + \sum_{i \in \text{ins}}{C_i} - \sum_{j \in \text{outs}}{C_j} - \mathit{Fee} \, A$$
-where $T$ represents the entire transaction record, sans signature. The function $H_r(x)$ represents the hash $H(x)$ mapped onto the field $Z_r$.
+其中$T$代表了整个交易记录，扫描签名。$H_r(x)$ 函数代表了将$H(x)$哈希映射到$Z_r$领域。
 
-Let’s examine the commitment terms. Pedersen commitments are additively homomorphic:
+让我们检查下这些条件。Pedersen的commitments是叠加同态的：
 $$C(x_1, \gamma_1) + C(x_2, \gamma_2) = C(x_1 + x_2, \gamma_1 + \gamma_2)$$
 
-Hence, if Bob’s transaction is valid, the amount terms in the effective public key show a zero balance on the $A$ curve, after the $\mathit{Fee}$. What remains is entirely on the $G$ curve. The validator sum becomes another public key on the $G$ curve, exactly matching his own computed effective secret key, $s_{\mathit{eff}}$. Only Bob can have formed a valid signature since it relies on his secret key. It is unforgeable. Both Alice and Bob know all the other secret terms, $\gamma$s and $\delta$s. Nobody else knows any of the secret values.
+因此，如果Bob的交易是有效的，在 $\mathit{Fee}$操作后，有效公钥的数字在$A$ 曲线上显示为零余额，剩下的都是在$G$曲线。验证节点综合成为了$G$曲线上另外的公钥，这和他自己的有效秘钥$s_{\mathit{eff}}$完全符合。只有Bob可以获得有效的签名，因为它依赖于他的秘钥，这是无法忘记的。Alice和Bob都知道其他所有秘密的条款，$\gamma$s 和 $\delta$s。没有其他人知道任何秘密数值。
 
-Suppose Bob now wants to send the coins he received from Alice on to Charlie, after deducting fees. To do so, Bob forms a UTXO that uses a different blinding factor, $\gamma_2$, and different key cloaking value, $\delta_2$, and which contains amount, $(x - \mathit{Fee})$. Bob must form a new Bulletproof on the amount, and encrypt these values into a payload that only Charlie can read:
+假设Bob现在想把从Alice处拿到的代币在扣除手续费后转移给Charlie。为了这样做，Bob形成了使用不同的UTXO系数$\gamma_2$，以及不同的秘钥隐藏数值$\delta_2$，其中包含了$(x - \mathit{Fee})$。Bob必须要形成全新的Bulletproof，同时也会将这些数值进行加密，而且只有Charlie可以看到：
 
 \begin{multline*}
 ID’ = H(P_{S, \delta_2}, Bp’, TTL, Size_{data}, \\
 Key_{\alpha_2}, E_S(x - Fee, \gamma_2, \delta_2))
 \end{multline*}
 
-where $P_{C, \delta_2}$ is Charlie’s cloaked public key for this transaction, $TTL$ and $Size_{data}$ are zero, and $Key_{\alpha_2}$ is a cloaked symmetric key. 
+其中 $P_{C, \delta_2}$ 是Charlie的隐藏公钥，$TTL$ 和 $Size_{data}$是零，同时$Key_{\alpha_2}$ 是隐藏的对称秘钥。
 
-Charlie can spend this UTXO by providing a valid transaction signature against the UTXO \textit{ID’}, just like Bob did for his own input. 
+Charlie能够通过提供一个\textit{ID’}的有效交易签名来花费这个UTXO，就好像Bob对自己输入数据那么做。
 
-Bob’s TXOUT will now look like this:
+Bob的TXOUT现在看起来如下：
 
 \begin{multline*}
 \text{TXOUT} = (ID’, P_{S, \delta_2}, Bp’, TTL, Size_{data},\\ 
 Key_{\alpha_2}, E_S(x - Fee, \gamma_2, \delta_2))
 \end{multline*}
 
-To wrap up, Bob publishes the transaction:
+总地来说，Bob发布了如下的交易：
 
 \begin{align*}
 \text{T} = \{&\text{TXIN} : \{\mathit{ID}\}, \\
@@ -1129,34 +1131,34 @@ To wrap up, Bob publishes the transaction:
 &\text{SIG} : \mathit{Sig}(s_B, T)\}
 \end{align*}
 
-The first line is Bob’s TXIN referencing the UTXO produced for him by Alice. The second line is the TXOUT - a new UTXO aimed at Charlie. The third line shows the fees paid for this transaction, in plaintext form. 
+Bob的TXIN首行代表了Alice的UTXO，第二行是TXOUT，这是Charlie的全新UTXO。第三行显示了这个交易手续费，并且是纯文本格式。
 
-The fourth line shows what value of $\gamma$ adjustment, on the $G$ curve, is needed to see that the sum of input commitments equals the sum of output commitments, proving a zero net balance between TXINs and TXOUTs and $Fee$. And this term will be added to a block sum when the transaction is absorbed into the blockchain, to show that entire blocks, which may contain many UTXOs, continue to show a zero balance.
+第四行显示了在$G$曲线上的$\gamma$数值，其中面试了整体输入总和等于输出总和，最终TXINs和TXOUTs以及手续费的净余额为零。而且，在交易进入区块链的时候，这个条件会加入到区块总和，从而显示整个区块，会包含很多UTXO，并且继续显示为零余额。
 
-The final line is Bob’s signature asserting ownership of the entire transaction which is based on the hash of all the stated TXINs, TXOUTs, $Fee$, and $\gamma_{adj}$ term. This final signature also serves as a checksum against mutation of the contents of this transaction. If anything becomes changed in this record, the signature won’t check. Hence Stegos transactions are non-malleable.
+最后一行是Bob的签名，其中表示了整个交易的拥有权，这是基于所有TXIN、TXOUT、手续费以及$\gamma_{adj}$的哈希值。最终的签名也会对交易内容突变作出检查。如果任何东西在记录中改变，那么签名就不会进行检查。因此，Stegos交易是不可改变的。
 
-\chapter{Snowball}\label{app:snowball}
+\chapter{雪球}\label{app:snowball}
 
-\section{Forming the pool of senders}
-Each epoch, besides selecting new witnesses and a leader, all validators select a node among them which must serve as a \textit{Bulletin Board} in ValueShuffle protocol and include the public key of this node into the sealed keyblock for the new epoch. We call that Bulletin Board node \textit{a facilitator}.
+\section{形成发送者池}
+除了选择全新的见证人和领导者的每个epoch，所有验证节点会在其中选择节点，它们必须要在ValueShuffle协议中作为\textit{Bulletin Board}，而且需要将这个节点的公钥包含在全新epoch的密封keyblock。我们将Bulletin Board节点称之为\textit{facilitator}。
 
-Each node intending to submit a transaction should broadcast a \textit{Transaction Intent} message with a fresh ephemeral public key along with the signature proof of validity.
+每个申请交易的节点应该广播\textit{交易意图}信息，同时还有全新的公钥以及有效性签名认证。
 
-\textit{Facilitators} should listen to transaction intent messages from the nodes and pool public keys from those messages into collections of $K$ keys each. $K$ defines a cardinality of the anonymity set by defining how many participants should form a transaction mixing pool. This is a tunable parameter which can be set for an each epoch of the blockchain. 
+\textit{Facilitators} 应该听取节点的交易意图信息以及每个$K$秘钥的公钥。$K$通过定义应该有多少参与者组成一个交易混合池来定义匿名集的基数。这是一个可调参数，可以为区块链的每个epoch的设置。
 
-Upon collection of $K$ keys or on the timeout of $T$ seconds, \textit{the facilitator} broadcasts a \textit{Transactions Pool} message (signed with its private key), containing all collected ephemeral public keys and corresponding signatures.
+在收集$K$密钥或超时$T$秒时，\textit{facilitator}会广播一条\textit{交易池}消息（用其私钥签名），其中包含所有收集到的临时公钥和相应的签名。
 
-Each node that recognizes its key in \textit{Transactions Pool} messages should sort the collection of keys from it in ascending numerical order, form the hash of the collection, and use that hash as a random seed for the \textit{Pooled Transactions Session}.
+每个能够识别\textit{交易池}消息的秘钥都应该进行排序，形成信息收集的哈希，然后使用这个哈希作为\textit{合并交易会话}的随机种子。
 
-\textit{A pool leader} is elected by participating nodes by forming the XOR of the hash value defined above with the public key of the each pool participant and, if the resulting value is the minimum in the list, then that node should be chosen as a \textit{pool leader}.
+\textit{交易池领导}由参与节点通过使用每个池参与者的公钥形成上面定义的哈希值的XOR来选择，如果结果值是列表中的最小值，则该节点应选择为\textit{交易池领导}。
 
-\textit{A pool leader} is responsible for publication of a final pooled transaction, which we call a \textit{super-transaction}.
+\textit{交易池领导}负责最终交易的发布，我们称为\textit{超级转账}。
 
-\section{Establishing the pooled transaction session}
-All communications, including broadcasting, within the pooled transactions session should be contained within the group of the pool participants. All nodes in the pool will broadcast their lists of TXINs along with signatures validating ownership of their TXINs. Every participant can validate the lists from other participants by verifying the signature attesting to TXIN ownership. Participants should check that the public key referenced by the TXIN $ID$ is from one of the group members.
+\section{建立合并交易部分}
+所有交易池部分的通信，包括广播，都 应该包含所有参与者，其中所有节点都会广播他们的TXIN列表，同时还有签名去认证他们是TXIN的所有权。每个参与者都能通过验证签名来对列表进行认证，参与者应该对每个人的TXIN $ID$进行验证，确保公钥和其相匹配。
 
-\subsection{Collecting inputs} 
-A valid signature on the TXINs from one participant is formed by creating a Schnorr signature on the sum of the cloaked public keys shown in the UTXOs referenced in the TXINs:
+\subsection{整合输入数据} 
+一个参与者在txins上的有效签名是通过在txins中引用的utxos中显示的隐藏公钥的总和上创建schnorr签名形成的：
 
 \begin{align*}
 TXIN &= \{ID_1, ID_2, ..., ID_N\}\\
@@ -1167,54 +1169,54 @@ P_{cmp} &= N P + (\sum_i{\delta_i})\, G = s_{cmp} \, G\\
 u &= k + H_r(K, P_{cmp}, H(ID_1, ID_2, ..., ID_N)) \, s_{cmp},
 \end{align*}
 
-where the sum is over the list of TXINs, $s$ is the owner’s secret key, $P = s \, G$ is the corresponding public key, and the $\delta_i$ are the cloaking factors used on the public key of the owner. $N$ is the number of TXINs in the list. The value $k$ is chosen randomly from the field, $Z_r$. 
+其中sum是超过了TXIN的列表，$s$是拥有者的秘钥，$P = s \, G$ 是对应公钥，而且$\delta_i$是公钥隐藏参数。$N$是列表中TXIN的数量，$k$的数值会从$Z_r$中随机选出。
 
-Signature verification is accomplished by seeing that:
+通过以下方式，签名验证会完成：
 $$u \, G = K + H_r(K, \sum_i{P_i}, H(ID_1, ID_2, ..., ID_N)) \, \sum_i{P_i}$$
-where $P_i$ are the cloaked public keys shown in the UTXOs corresponding to each $ID_i$. This signature proves ownership of the stated UTXOs referenced in TXINs.
+其中$P_i$ 是隐藏的公钥，并且和每个$ID_i$对应，这个签名保证了显示UTXO所对应TXIN的所有权。
 
-Nothing in this broadcast identifies the sender, but one cannot count on that to hold. In the event of misbehavior, a blame cycle will require each node to submit all their shared secret keys, which effectively reveals their full transactions. A restart will compute new TXOUTs, so that a successful run ensures anonymity of participants. But if a blame cycle is performed, there is no way to cloak the associations to TXINs again.
+此广播中的任何内容都不能识别发件人，但不能指望保持该状态。在错误行为的情况下，一个指责周期将要求每个节点提交其所有共享的秘密密钥，这将有效地揭示它们的完整事务。重新启动将计算新的TXOUT，这样成功的运行将确保参与者的匿名性。但是如果一个怪罪循环被执行，就没有办法再掩盖与TXIN的关联。
 
-Once contributions have been received from each participant, or a timeout occurs, the resulting pool of TXINs is known to all participants. Since these are merely UTXO $ID$s pointing into the immutable blockchain, no further changes can occur to this list except for removal of individual TXIN references as some participants are found to go offline during the protocol, or else when a cheater is detected and subsequently excluded for a restart of the protocol.
+一旦从每个参与者那里收到了贡献，或者发生了超时，所有参与者都知道最终的txin池。由于这些仅仅是指向不可变区块链的UTXO$ID$s，因此除了删除单个TXIN引用之外，此列表不会发生进一步的更改，因为在协议期间发现一些参与者脱机，或者当检测到作弊者并随后排除以重新启动协议时。
 
-\subsection{Establishing pair-wise shared keys} 
-All participants will establish pair-wise shared secret keys between themselves and every other participant of the pooled transactions session. These shared keys are used to form cloaking factors in the anonymizing protocol, such that, only after pooling results from all participants will the collection of data shared among them become apparent. Until that time, all information remains cloaked. After that time the data will be known, but no associations can be inferred regarding who supplied which portions of the data. 
+\subsection{建立成对共享秘钥} 
+所有参与者将在他们自己和集合交易会话的每个其他参与者之间建立成对的共享密钥。这些共享密钥用于在匿名协议中形成隐藏因素，这样，只有在汇集所有参与者的结果之后，他们之间共享的数据收集才会变得明显。在那之前，所有的信息都是隐藏的。在此之后，将知道数据，但无法推断出谁提供了数据的哪些部分。
 
-For the protocol to work, pairs of users must always use the same shared secret cloaking key when interacting. Only then will the sum of all cloaking factors, from all participants, cancel out in the DiceMix arrays. But users are prevented from seeing each other’s secrets since the total cloaking factor also sums contributions related to all other participants, and those keys are unknown to the other party.
+为了使协议工作，在交互时，成对的用户必须始终使用相同的共享秘密隐藏密钥。只有这样，来自所有参与者的所有隐藏因子的总和才会在骰子混合数组中取消。但是用户不能看到彼此的秘密，因为总隐身因素也包括与所有其他参与者相关的贡献，而这些密钥对另一方来说是未知的。
 
-Shared keys can be securely established between every pair of participants using a Diffie-Hellman secure key exchange\cite{c21}. With two participants, $A$ and $B$, this can be established by having $A$ send to $B$
+分享的秘钥会通过Diffie-Hellman安全秘钥交换\cite{c21}的方式在每对参与者间秘密建立，并且这可以通过让$A$转账给$B$来完成建立。 
 $$A \rightarrow B: (\alpha \, P_B, Sig(P_A))$$
-for $\alpha$ randomly chosen by $A$, and where $Sig(P_A)$ securely authenticates this information as having come from $A$. The signature includes the public key, $P_A$. 
+$A$随机选择了$\alpha$，并且其中$Sig(P_A)$安全地验证了这个信息是从$A$获得。这个签名包含了公钥，$P_A$。
 
-Then $B$ responds to $A$ with
+然后，$B$会回应$A$：
 $$B \rightarrow A: (\beta \, P_A, Sig(P_B))$$
-with $\beta$ being chosen randomly by $B$. 
+$\beta$ 会从 $B$ 中随机选择。
 
-After the exchange, the shared key is a hash of the product:
+交换过后，分享的秘钥是产品的哈希值：
 $$key = H(\alpha \beta \, G)$$ 
 
-But since neither side knows both factors, at $A$ we compute:
+但是由于双方都不知道系数，我们可以在$A$处进行计算：
 $$\beta \, G = (\beta \, P_A) / s_A$$
-since $P_A = s_A \, G$. And at $B$ we compute
+因为 $P_A = s_A \, G$. 而且在$B$处我们计算：
 $$\alpha \, G = (\alpha \, P_B) / s_B$$
-Then each side can multiply their result by their chosen randomness to reveal $(\alpha \beta \, G)$. Nobody watching the exchange can deduce the shared secret key.
+然后，每方都会将他们选择的随机数乘以结果，从而得到$(\alpha \beta \, G)$。没人可以看到交换过程，这样会避免秘钥分享。
 
-\subsection{Producing DiceMix arrays for outputs} 
-Next, each participant computes their TXOUTs with \textit{fresh randomness}, chooses random $k$-factors for an eventual collective Schnorr signature, and produces both a DiceMix array containing the fragmented TXOUTs and cloaked running sums of their $\gamma_{adj}$ and $K$-signature values. The hash commitment of this information is signed and broadcast to all participants. This commitment will be used to verify information during the following passes to verify that information was properly transmitted.
+\subsection{为输出数据生成DiceMix排列} 
+接下来，每个参与者用\textit{全新的随机数}，为最终的集体schnorr签名选择随机的$k$因子，并生成包含碎片txout的dicemix数组，并隐藏其$\gamma_{adj}$和$K$签名值的运行总和。此信息的散列承诺将被签署并广播给所有参与者。此承诺将用于在以下传递过程中验证信息，以验证信息是否正确传输。
 
-The DiceMix array contains successive powers of TXOUTs fragments, cloaked with self-canceling seeds that zero-out after all participants pool their results from the next pass. After forming the DiceMix array and running sums, this information is signed and broadcast to all participants. Anonymity is assured because of the DiceMix cryptographic mixing process. Even though all participants can see, from the accompanying signature, who delivered a DiceMix array, they cannot see which components of the collection were contributed by any given participant. The entire collection is revealed only after summing the DiceMix arrays from all participants.
+DiceMix数组包含TxOut片段的连续幂次，在所有参与者汇集下一次传递的结果后，用自取消种子隐藏。在形成骰子混合数组并运行和之后，这些信息被签名并广播给所有参与者。由于DiceMix密码混合过程，匿名性得到了保证。即使所有参与者都能从附带的签名中看到谁传递了一个骰子混合数组，他们也看不到集合中的哪些组件是由任何给定的参与者贡献的。只有当所有参与者的骰子组合数组相加后，才会显示整个集合。
 
-The individual $K$-signature terms from each participant are summed in a blind sum. We do this to prevent combinatorial exploration, once signature $u$-values are disclosed, which could lead to associations between TXINs and TXOUTs.
+每个参与者的每个$K$签名项都是一个盲和。我们这样做是为了防止组合探索，一旦签名$U$值被公开，这可能导致TXINS和TXOUT之间的关联。
 
-\subsection{Forming the super-transaction} 
-On receipt of all DiceMix arrays and the running sums, each participant can form the polynomial, using Newton’s Identities, whose roots are the individual contributions. Solving that polynomial for its roots reveals each component of participants’ TXOUTs. These TXOUTs are reassembled, and a \textit{super-transaction} is formed containing all TXINs, TXOUT’s, the $\gamma_{adj}$ sum needed to show zero balance, and the $K$-signature sum needed for a collective Schnorr signature.
+\subsection{形成超级转账} 
+在收到所有骰子组合数组和运行总和后，每个参与者可以使用牛顿恒等式形成多项式，其根是单个贡献。求解多项式的根可以揭示参与者的txout的每个分量。重新组合这些txout，形成一个\textit{超级转账}，其中包含显示零余额所需的所有TXIN、TXOUT、$\gamma_{adj}$和一个集合schnorr签名所需的$K$签名和。
 
-Each participant validates the entire transaction for correctness by examining the $\gamma$ sums for zero balance, and verifying the TXOUTs Bulletproofs. They must also find their own contributions in the lists of TXINs and TXOUTs. If the super-transaction does not properly validate then someone has cheated, and we enter a \textit{blame discovery cycle}. Otherwise we proceed to the formation of the collective signature. 
+每个参与者通过检查$gamma$和的零余额，并验证TXOUT项目符号证明，来验证整个交易的正确性。他们还必须在TXIN和TXOUT列表中找到自己的贡献。如果超级交易没有正确验证，那么就有人作弊了，我们输入一个\textit{错误发现周期}。否则，我们就开始形成集体签名。
 
-\subsection{Forming the collective Schnorr signature} 
-Knowing the super-transaction and the collective $K_{sum}$ signature term, each participant broadcasts their $u$-signature component to be summed with those of other participants, yielding a collective Schnorr signature on the whole super-transaction.
+\subsection{形成共有Schnorr签名} 
+知道超级交易和集体$K_{sum}$ 签名条件后，每个参与者广播其$u$签名组件，与其他参与者的组件相加，从而在整个超级交易上生成集体Schnorr签名。
 
-Signature formation on the super-transaction for each participant is done as follows:
+每个参与者的超级交易中的签名形成都是如下完成：
 
 \begin{align*}
 T &= \text{super-transaction} \\
@@ -1226,21 +1228,21 @@ P_{sum} &= \sum_i{P_{cmp,i}}\\
 u_i &= k_i + H_r(K_{sum} , P_{sum},  H(T)) \,  s_{cmp,i}\\
 \end{align*}
 
-where index $i$, labels each participant, index $j$, labels every TXIN, for $N$ of them, belonging to the participant, and index $k$, labels each TXOUT belonging to that participant. On summation from all participants, the multi-signature $(u_{sum}, K_{sum})$ represents a valid signature on the super-transaction in the same manner that would hold if this were a simple transaction.
+其中，索引$i$标记每个参与者，索引$j$标记每个TXIn，其中$N$标记属于参与者，索引$k$标记属于该参与者的每个TXOUT。所有参与者汇总后，多签名$(u_{sum}, K_{sum})$表示超级交易上的有效签名，其方式与如果这是简单交易时的方式相同。
 
-\subsection{Publishing the super-transaction} 
-At the end of this final signature pass, each participant should have a super-transaction that can be validated by public witnesses. But all connections between TXINs and TXOUTs will have been broken. All that anyone can see is that all TXINs are being spent, and each TXOUT must have derived from one or more of those TXIN, but no way to see which ones are associated. \textit{The session leader} then sends the super-transaction into the network using gossip protocol for validation and inclusion into the block.
+\subsection{发布超级转账} 
+在这个最后的签名通行证结束时，每个参与者都应该有一个超级交易，可以由公共证人验证。但是TXIN和TXOUT之间的所有连接都将断开。任何人都能看到的是，所有的TXIN都被消耗掉了，每个TXOUT必须从这些TXIN中的一个或多个派生出来，但是没有办法知道哪些是相关联的。\textit{这部分的领先者} 会话负责人，然后使用八卦协议将超级交易发送到网络中进行验证并包含到块中。
 
-\subsection{The blame cycle} 
-If a blame cycle must happen, each participant must divulge their shared secret keys. Then all other nodes can verify that all stages of the computation were performed correctly, according to the information sent previously. We then have known associations between TXINs and TXOUTs. Any participant which cannot or will not do this is blamed for the fault, and the protocol restarts after taking note of the TXINs associated with the cheating node.
+\subsection{blame循环} 
+如果一定要发生blame循环，每个参与者必须泄露他们共享的秘密密钥。然后，根据先前发送的信息，所有其他节点都可以验证计算的所有阶段是否正确执行。然后我们知道TXIN和TXOUT之间的关联。任何不能或不会这样做的参与者都会被归咎于故障，并且协议会在记录与欺骗节点相关联的TXIN后重新启动。
 
-But since secret shared keys were divulged during blame discovery, all participants must restart the protocol from the point of establishing new shared keying.
+但是，由于秘密共享密钥在发现过失时被泄露，所有参与者必须从建立新的共享密钥的角度重新启动协议。
 
-\chapter{Overview of privacy coins}\label{app:privacy-coins}
+\chapter{隐私币综述}\label{app:privacy-coins}
 
-In this chapter we give a brief overview of most prominent privacy coins and analyze their privacy-protecting and performance characteristics.
+在这一章中，我们简要介绍了最突出的隐私硬币，并分析了它们的隐私保护和性能特点。
 
-\section{Comparison of privacy coins}
+\section{隐私币比较}
 
 \begin{table}[ht!]
 \centering
@@ -1256,66 +1258,65 @@ In this chapter we give a brief overview of most prominent privacy coins and ana
 	Stegos & Yes & Yes & Yes & Yes & Yes & No & PoS & No  & Yes \\
 	\bottomrule[2pt]
 \end{tabular}
-\caption{Features of privacy coins} 
+\caption{隐私币的特性} 
 \end{table}
 
 \begin{enumerate}
-	\item Unlinkability. For any two outgoing transactions, it is impossible to prove they were sent to the same person\cite{c2}.
-	\item Untraceability. For each incoming transaction, all possible senders are equiprobable\cite{c2}.
-	\item Confidentiality. Protection from analyzing blockchain data (e.g., transaction details, including   	
-	\item Pruning. Spent coins can be pruned from the blockchain and the blockchain can be compacted.
-	\item Sharding. A transaction verification and block-sealing process that can be partitioned between participants or groups of participants.
-	\item Interactivity. Senders and recipients of transactions must interact with each other \textit{off-chain} before posting a transaction to the blockchain.
-	\item Trusted Setup. Blockchain participants need to trust someone to generate some initial parameters and then destroy those parameters.
-	\item Consensus
+	\item 非链接性。 对于任何2个输出的交易，不可能证明它们转向了同一个人\cite{c2}。
+	\item 不可追踪性。对于任何进入的转账，所有可能的发出者都是等概率的\cite{c2}。
+	\item 隐私性。通过分析区块链数据进行保护（例如，交易细节等）。  	
+	\item 修剪。发出的代币可以通过区块链进行修剪，并且区块链可以压缩。
+	\item 分片。可以在参与者或参与者组之间划分的事务验证和块密封过程。
+	\item 交互性。交易的发送方和接受者在将交易发布到区块链之前，必须在链外进行交互。
+	\item 可信的设置。区块链参与者需要构建信任，从而可以产生初始参数，然后销毁这些参数。
+	\item 共识算法
 	\begin{enumerate}
-		\item PoW. Proof-of-Work, an original consensus protocol for Bitcoin, where each node participating in the protocol should present a piece of data which is difficult (costly, time-consuming) to produce but easy for others to verify and which satisfies certain requirements. Due to complexity of computations needed and amount of miners, the current energy consumption by Bitcoin PoW consensus is approximately 73TWh per year\footnote{https://digiconomist.net/bitcoin-energy-consumption}.
-		\item PoS. Proof-of-Stake is a consensus algorithm, where the creator of the next block is chosen via various combinations of random selection, wealth, age and staked funds. PoS blockchains can be more energy efficient than currencies based on PoS algorithms\footnote{http://cfa-consulting.ch/dlfiles/NxtEnergyandCostEfficiencyAnalysis.pdf}.
+		\item PoW。工作量证明，作为比特币的共识协议，其中的节点需要解决很困难的问题（消耗费用和时间），从而可以挖出区块，但是真很容易进行验证。由于计算的复杂性，矿工每年消耗的能源大约是73TWh每年\footnote{https://digiconomist.net/bitcoin-energy-consumption}。
+		\item PoS。权益证明是一种共识算法，下个区块的产生是通过不同因素进行随机选择，这些因素包括持有代币的数量、时间以及抵押的资金。PoS区块链对环境更加友好。\footnote{http://cfa-consulting.ch/dlfiles/NxtEnergyandCostEfficiencyAnalysis.pdf}.
 	\end{enumerate}
-	\item Apps. Data can be sent as quickly and easily as payments. A wide variety of applications can communicate by exchanging data messages. 
+	\item Apps。数据和支付都可以很快速和容易地进行传输，很多应用可以通过交换数据信息而进行沟通。
 \end{enumerate}
 
-\section{Description of privacy coins}
+\section{隐私币描述}
 
-\subsection{Monero} Monero originated as a Bytecoin fork in 2014 under the name Bitmonero. Monero uses a UTXO model and PoW consensus, and employs the ring signatures method based on the CryptoNote protocol\cite{c2}. In 2017, Monero implemented RingCT\cite{c3}, an improved version of ring signatures. RingCT enables confidentiality of amounts and untraceability of transactions. In combination with the stealth addresses (also introduced in the original CryptoNote paper), which provide unlinkability of recipients, this provides full privacy and confidentiality.
+\subsection{门罗币} Monero最初是在2014年以Bitmonero的名义作为一个字节码分支出现的。Monero使用了一个UTXO模型和POW共识，并使用了基于CryptoNote协议\cite{c2}的环签名方法。2017年，Monero实施了RingCT\cite{c3}，一个改进版的Ring签名。RINGCT可以对交易的金额和不可追踪性进行保密。结合隐形地址（也在原始的CryptoNote白皮书中介绍），它提供了收件人的不链接性，这提供了完全的隐私和保密性。
 
-Monero’s blockchain cannot be compacted because spent UTXOs cannot be pruned from it. Keeping all UTXOs forever is one of the requirements of the RingCT protocol, which obfuscates the fact that particular UTXOs mentioned in transaction inputs were actually spent. 
-Despite the recent introduction of Bulletproofs\cite{c4}, which replaced Monero’s original zero-knowledge range proofs and reduced a simple transaction size from 13KB down to 2.5KB, the problem of their ever-growing blockchain cannot be solved. 
+Monero的区块链不能被压缩，因为用过的UTXO不能从中删除。永久保存所有的utxo是ringct协议的一个要求，它混淆了事务输入中提到的特定utxo实际上已经被使用的事实。尽管最近推出了Bulletproofs\cite{c4}，这取代了Monero最初的零知识范围证明，并将简单的交易规模从13kb减少到2.5kb，但他们不断增长的区块链问题无法解决。
 
 
-\subsection{ZCash} ZCash originated in 2016 as a Bitcoin fork and thus uses a UTXO model and PoW consensus. ZCash aims to fix Bitcoin's flaws via a focus on privacy. The project builds on work done on Zerocoin\cite{c5} and addresses some of its faults, such as the size of the proofs, which ZCash decreases to 1KB and speeds up the verification.
+\subsection{大零币} Zcash起源于2016年，作为比特币分叉币，因此使用了UTXO模型和POW共识。Zcash旨在通过关注隐私来修复比特币的缺陷。该项目建立在Zerocoin\cite{c5}上完成的工作基础上，并解决了其中的一些错误，例如证明文件的大小，zcash减少到1KB，加快了验证速度。
 
-To establish confidentiality and untraceability, ZCash implements zk-SNARKS \cite{c6}. To provide unlinkability of recipients, ZCash employs stealth addresses.
+为了建立保密性和不可追踪性，Zcash实施了零知识证明 \cite{c6}。为了提供收件人的不链接性，Zcash使用了隐藏地址。
 
-zk-SNARKS enable a large anonymity set of all minted coins\footnote{The \textit{anonymity set} is the set of participants who could be a sender in ZCash transaction, as seen by a global observer who has compromised a set of nodes.}, providing a high degree of privacy. However, the size of up to 2KB for an average transaction, combined with an ever-growing accumulator which must hold the serial numbers of all spent coins and thus cannot be pruned, makes ZCash much less scalable. The issue of scalability is the main reason why privacy is currently optional, not default. At the time of writing, less than 25\% of all transactions were shielded.
+零知识证明可以将匿名性给予所有铸币\footnote{The \textit{匿名集}是在zcash交易中可能是发送者的参与者集，正如一个破坏了一组节点的全局观察者所看到的那样。}，这样可以提供很高的隐私性。然而，平均每笔交易的规模高达2千字节，再加上一个不断增长的累加器，它必须保存所有用过的硬币的序列号，因此不能进行删减，这使得zcash的可扩展性大大降低。可伸缩性问题是隐私当前是可选的，而不是默认的主要原因。在写入时，不到25\%的交易被屏蔽。
 
-A further questionable part of the zk-SNARKS protocol is the initial trusted setup. ZCash utilizes a multi-party ceremony involving several trusted people. This is controversial, as users must trust that all of these people destroyed their initial parameters and also trust that the ceremony was carried out correctly. 
+zk-snarks协议的另一个可疑部分是初始的可信设置。Zcash利用了一个多部分的方式，涉及几个值得信赖的人。这是有争议的，因为用户必须相信所有这些人都破坏了他们的初始参数，并且相信整个方式是正确进行的。
 
-\subsection{Dash} Dash was originally a codebase fork from Litecoin (which is in turn a codebase fork of Bitcoin) and launched as XCoin in January 2014. Dash uses the UTXO model and PoW consensus. 
+\subsection{达世币} Dash最初是莱特币的一个代码基分叉（因此也是比特币的一个分叉），并于2014年1月作为XCoin推出。Dash使用UTXO模型和POW共识。
 
-In addition to standard nodes and miners, Dash has \textit{masternodes}, which must have static IP address and meet particular requirements for CPU, RAM, and disk space. Each masternode must own at least 1000DASH. A Proof-of-service protocol ensures that masternodes have the most current blockchain protocol and are online. 
+除了标准的节点和矿工，Dash有\textit{主节点}，这个节点必须要有静态的IP地址，同时也满足CPU、RAM和硬盘空间的需求。每个主节点必须拥有至少1000DASH，服务证明协议可以保证主节点有最多目前的区块链协议，并且保持在线。
 
-It is important to note that privacy is optional in Dash and the high volume of transactions is driven mainly by fast public transactions called \textit{InstantSend}, which are provided by masternodes.
+需要注意到在Dash中隐私是可选的，并且通过主节点的\textit{InstantSend}功能，Dash可以承载大量的交易。
 
-\textit{PrivateSend} is an implementation of CoinJoin, the untraceability solution first proposed for Bitcoin by Bitcoin Core developer Gregory Maxwell\footnote{https://bitcointalk.org/index.php?topic=279249.0}. In PrivateSend, three users add their coins together in one big transaction which sends the coins to freshly generated addresses belonging to the same three users. As such, the coins are effectively mixed between the three participants, breaking the blockchain trail of ownership between them. This process can be automatically repeated up to eight times, with (hopefully) different mixing participants, for extra privacy.
+CoinJoin部署了\textit{PrivateSend}功能，这是由比特币核心开发者Gregory Maxwell\footnote{https://bitcointalk.org/index.php?topic=279249.0}首次提出的不可追踪解决方案。在PrivateSend中，三个用户将他们的代币合成一个大额转账，然后将代币发送至全新生成的地址。因此，这些代币就会在三个参与者间混合，打破了他们之间的所有权轨迹。这个流程可以自动重复8次，并且是根据不同的参与者，这样做可以保证非常高的隐私性。
 
-Dash does not provide confidentiality of amounts in either InstantSend or PrivateSend. In addition, the CoinJoin protocol requires the inputs of users involved in each round of the mixing protocol to have identical denominations. This requirement is impossible to fulfill while cloaking amounts. 
+Dash不会提供InstantSend或者PrivateSend里面的隐私性。而且，CoinJoin协议需要用户的输入数据都有相同金额，这个要求对于隐藏金额来说是不可能的。
 
-As a further privacy vulnerability, users of Dash have to trust that masternodes will keep users’ IP addresses undisclosed and unlinked to users’ UTXOs when sending transactions.
+作为进一步的隐私漏洞，Dash的用户必须相信主节点在发送交易时会保持用户的IP地址不被公开，并且与用户的UTXO不链接。
 
-\subsection{MimbleWimble} MimbleWimble is a protocol proposed by an anonymous user in a Bitcoin developers chat room by the name of Tom Elvis Jedusor, who left a link to a paper\footnote{https://download.wpsoftware.net/bitcoin/wizardry/mimblewimble.txt} outlining a protocol to significantly enhance the scalability and privacy of the Bitcoin network.
+\subsection{MimbleWimble} Mimblewimble是一个匿名用户在比特币开发者聊天室中以Tom Elvis Jedusor的名义提出的协议，他在文章\footnote{https://download.wpsoftware.net/bitcoin/wizardry/mimblewimble.txt}上留下了一个链接，概述了一个协议，以显著提高比特币网络的可扩展性和隐私性。
 
-Mimblewimble is based on the ideas of Greg Maxwell’s design for Confidential Transactions\footnote{https://people.xiph.org/\texttt{\~}greg/confidential\_values.txt}, except in MimbleWimble it is the recipient who generates the random blinding factor used to cloak the amount of the transaction. This blinding factor is then used as proof of ownership by the recipient, therefore functioning simultaneously as the recipient’s public key. Therefore, MimbleWimble provides confidentiality of amounts and unlinkability of recipients in its transactions.
+mimblewimble基于Greg Maxwell的机密交易设计思想\footnote{https://people.xiph.org/\texttt{\~}greg/confidential\_values.txt}，除了Mimblewimble之外，它的生成用于掩盖交易量的随机盲因子的接收者。然后，这个致盲因素被接收者用作所有权证明，因此同时作为接收者的公钥。因此，Mimblewimble在其交易中为接收者的数量和不可链接性提供了保密性。
 
-Untraceability of transactions in MimbleWimble builds on ideas from CoinJoin and is implemented by breaking transaction boundaries and storing only inputs and outputs of all transactions verified by miner in a newly mined block.
+Mimblewimble中交易的不可跟踪性建立在来自CoinJoin的思想基础上，通过打破交易边界和只在新挖掘的块中存储矿工验证的所有交易的输入和输出来实现。
 
-MimbleWimble implementations use the UTXO model and PoW consensus. Spent UTXOs can be pruned by recursively applying a simple pruning algorithm for each UTXO referenced in inputs of the new minted block.
+Mimblewimble实现使用UTXO模型和POW共识。对于新生成的块的输入中引用的每个UTXO，可以递归地应用一个简单的修剪算法来修剪用过的UTXO。
 
-However, there are several drawbacks in the design of Mimblewimble:
+但是，Mimblewimble中也有几个缺点：
 
 \begin{itemize}
-  \item {In order to create a transaction, senders and recipients must first interact with each other. The sender cannot post a transaction to the blockchain without first contacting the recipient with incomplete transaction data and waiting for a blinding factor in response.}
-  \item {Users must trust that miners will not trace the history of inputs and outputs in transactions, and will instead discard this data completely after mining a block. Since there is no guarantee of this, there is a threat to the coins’ fungibility and the privacy of users.}
+  \item {为了创建交易，发送者和接收者必须首先进行交互。发送方不能将交易过账到区块链，除非先用不完整的交易数据联系接收者，然后等待一个盲目因素的响应。}
+  \item {用户必须相信，矿工不会跟踪事务中输入和输出的历史记录，而是在挖掘块后完全丢弃此数据。由于无法保证这一点，对代币的可替换性和使用者的隐私权构成了威胁。}
 \end{itemize}
 
 
@@ -1376,4 +1377,5 @@ in Advances in Cryptology — CRYPTO’ 89, 1990, Springer, pages 239–252.
 	
 \end{thebibliography}
 
+\end{CJK*}
 \end{document}
